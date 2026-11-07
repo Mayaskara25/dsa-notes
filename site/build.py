@@ -92,6 +92,10 @@ def main():
     ver = version()
     chrome_t = open(os.path.join(SITE, "unit-chrome.html"), encoding="utf-8").read()
     index_t = open(os.path.join(SITE, "index.html"), encoding="utf-8").read()
+    theme_js = open(os.path.join(SITE, "theme-links.js"), encoding="utf-8").read()
+    # runs after each guide's own OS-preference script, so an explicit ?theme= wins before first paint
+    theme_head = ("<script>(function(){try{var t=new URLSearchParams(location.search).get('theme');"
+                  "if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>\n")
 
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
@@ -126,9 +130,9 @@ def main():
                   .replace("{{REPO}}", cfg["repo"]).replace("{{UNIT_N}}", str(n))
                   .replace("{{UNIT_TITLE_JS}}", u["title"].replace("\\", "\\\\").replace('"', '\\"'))
                   .replace("{{DOWNLOAD_NAME}}", html.escape(u["source"], quote=True)))
-        page = c.replace("</head>", '<meta name="robots" content="noindex, nofollow">\n</head>', 1)
+        page = c.replace("</head>", '<meta name="robots" content="noindex, nofollow">\n' + theme_head + "</head>", 1)
         i = page.rfind("</body>")
-        page = page[:i] + chrome + "\n" + page[i:]
+        page = page[:i] + chrome + "\n<script>" + theme_js + "</script>\n" + page[i:]
         os.makedirs(os.path.join(OUT, f"unit-{n}"))
         open(os.path.join(OUT, f"unit-{n}", "index.html"), "w", encoding="utf-8").write(page)
 
@@ -154,7 +158,8 @@ def main():
              .replace("{{SUBTITLE}}", html.escape(cfg["subtitle"])).replace("{{UPDATED_HUMAN}}", human(latest))
              .replace("{{VERSION}}", ver).replace("{{REPO}}", cfg["repo"])
              .replace("{{UNITS}}", "\n".join(cards)).replace("{{CHANGELOG}}", "\n".join(log))
-             .replace("{{LABS}}", "\n".join(labs)).replace("{{SEARCH_JSON}}", sj))
+             .replace("{{LABS}}", "\n".join(labs)).replace("{{THEME_LINKS}}", theme_js)
+             .replace("{{SEARCH_JSON}}", sj))
     left = re.findall(r"\{\{[A-Z_]+\}\}", index)
     if left:
         err(f"index: unfilled placeholders {left}")

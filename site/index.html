@@ -64,8 +64,9 @@ h2.h{font-size:13px;font-family:'Inter',system-ui,sans-serif;text-transform:uppe
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-faint)}
 </style>
 <meta name="color-scheme" content="light dark">
-<script>(function(){var m=false;try{m=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
-document.documentElement.setAttribute('data-theme',m?'dark':'light')})();</script>
+<script>(function(){var m=false,t=null;try{m=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+try{t=new URLSearchParams(location.search).get('theme')}catch(e){}
+document.documentElement.setAttribute('data-theme',(t==='light'||t==='dark')?t:(m?'dark':'light'))})();</script>
 </head>
 <body>
 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode"><span id="themeIco">🌙</span><span id="themeLbl">Dark</span></button>
@@ -125,6 +126,7 @@ document.documentElement.setAttribute('data-theme',m?'dark':'light')})();</scrip
 (function(){var r=document.documentElement,b=document.getElementById('themeToggle'),i=document.getElementById('themeIco'),l=document.getElementById('themeLbl');
  function paint(){var d=r.getAttribute('data-theme')==='dark';i.textContent=d?'☀️':'🌙';l.textContent=d?'Light':'Dark';b.setAttribute('aria-pressed',d)}
  b.addEventListener('click',function(){r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');paint()});paint()})();
+{{THEME_LINKS}}
 (function(){
   var data=[];try{data=JSON.parse(document.getElementById('search-data').textContent)}catch(e){}
   data.forEach(function(d){d.tl=d.t.toLowerCase();d.xl=d.x.toLowerCase();});
@@ -147,7 +149,7 @@ document.documentElement.setAttribute('data-theme',m?'dark':'light')})();</scrip
       out.appendChild(li)});
   }
   q.addEventListener('input',run);
-  q.addEventListener('keydown',function(e){if(e.key==='Enter'){var a=out.querySelector('a');if(a)location.href=a.href}
+  q.addEventListener('keydown',function(e){if(e.key==='Enter'){var a=out.querySelector('a');if(a)a.click()}
     if(e.key==='ArrowDown'){var a=out.querySelector('a');if(a){a.focus();e.preventDefault()}}});
   out.addEventListener('keydown',function(e){var a=document.activeElement;if(!a||a.tagName!=='A')return;var li=a.parentNode;
     if(e.key==='ArrowDown'&&li.nextSibling){li.nextSibling.querySelector('a').focus();e.preventDefault()}
