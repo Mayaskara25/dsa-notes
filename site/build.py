@@ -35,6 +35,25 @@ def human(d):
     return f"{dd} {date(y, m, dd):%b} {y}"
 
 
+def moved_banner(cfg, path=""):
+    """Deprecation bar shown on every page once site.json has "moved_to" set."""
+    url = cfg.get("moved_to", "").rstrip("/")
+    if not url:
+        return ""
+    href = html.escape(url + "/dsa/" + path, quote=True)
+    return ('<div role="note" style="position:sticky;top:0;z-index:100;background:#A66A0D;color:#fff;'
+            'font:600 14px/1.45 Inter,system-ui,sans-serif;padding:10px 16px;text-align:center">'
+            'These notes have moved, and this copy is no longer updated. '
+            f'<a href="{href}" style="color:#fff;text-decoration:underline">Open the new site →</a></div>\n')
+
+
+def inject_body(page, banner):
+    if not banner:
+        return page
+    m = re.search(r"<body[^>]*>", page)
+    return page[:m.end()] + "\n" + banner + page[m.end():] if m else page
+
+
 # ---------- validation (same checks as the notes-maker Tier-1 script) ----------
 TAGS = ["section", "div", "svg", "g", "table", "ul", "ol", "tr", "td", "th", "h1", "h2", "h3"]
 
@@ -133,6 +152,7 @@ def main():
         page = c.replace("</head>", '<meta name="robots" content="noindex, nofollow">\n' + theme_head + "</head>", 1)
         i = page.rfind("</body>")
         page = page[:i] + chrome + "\n<script>" + theme_js + "</script>\n" + page[i:]
+        page = inject_body(page, moved_banner(cfg, f"unit-{n}/"))
         os.makedirs(os.path.join(OUT, f"unit-{n}"))
         open(os.path.join(OUT, f"unit-{n}", "index.html"), "w", encoding="utf-8").write(page)
 
@@ -160,6 +180,7 @@ def main():
              .replace("{{UNITS}}", "\n".join(cards)).replace("{{CHANGELOG}}", "\n".join(log))
              .replace("{{LABS}}", "\n".join(labs)).replace("{{THEME_LINKS}}", theme_js)
              .replace("{{SEARCH_JSON}}", sj))
+    index = inject_body(index, moved_banner(cfg))
     left = re.findall(r"\{\{[A-Z_]+\}\}", index)
     if left:
         err(f"index: unfilled placeholders {left}")
