@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --body:#2A2C2F; --paper:#F6F4EE; --surface:#FFFFFF; --ink:#1C1E21; --ink-soft:#5B6169; --ink-faint:#8A8F96;
+  --line:#E4E0D3; --line-soft:#EDEAE0; --blue:#1D4E89; --blue-soft:#E8EFF8; --plum:#93316B; --amber:#A66A0D; --mark:#F7EEDD;
+  --radius:10px; --shadow:0 1px 2px rgba(28,30,33,.04),0 6px 20px rgba(28,30,33,.05);
+}
+:root[data-theme="dark"]{
+  --body:#D6D4CE; --paper:#14161A; --surface:#1D2025; --ink:#ECEAE4; --ink-soft:#A8ADB5; --ink-faint:#7C828B;
+  --line:#33373E; --line-soft:#2A2D33; --blue:#7FB0E8; --blue-soft:#1C2B3F; --plum:#E58BBD; --amber:#E0A94C; --mark:#3A2F18;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 20px rgba(0,0,0,.30);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--body);font:16px/1.6 'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:48px 20px 72px}
+header .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+header h1{font-size:38px;line-height:1.15;margin:6px 0 6px}
+header .sub{color:var(--ink-soft);margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:18px 0 0;font-size:13px;color:var(--ink-soft)}
+.meta b{color:var(--ink);font-weight:600} .meta code{font:500 12px 'JetBrains Mono',monospace}
+.theme-toggle{position:fixed;top:14px;right:16px;z-index:50;display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 12.5px 'Inter',system-ui,sans-serif;cursor:pointer;box-shadow:var(--shadow)}
+.theme-toggle:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.search{margin:30px 0 8px;position:relative}
+.search input{width:100%;font:16px 'Inter',system-ui,sans-serif;padding:13px 16px 13px 42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.search::before{content:"⌕";position:absolute;left:15px;top:9px;font-size:22px;color:var(--ink-faint)}
+.search .help{font-size:12.5px;color:var(--ink-faint);margin:7px 2px 0}
+#results{list-style:none;margin:10px 0 0;padding:0;display:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+#results li{border-bottom:1px solid var(--line-soft)} #results li:last-child{border-bottom:none}
+#results a{display:block;padding:11px 16px;color:var(--body)} #results a:hover,#results a:focus{background:var(--paper);text-decoration:none;outline:none}
+#results .rt{font-weight:600;color:var(--ink);font-size:14.5px} #results .ru{font:600 11.5px 'JetBrains Mono',monospace;color:var(--ink-faint);margin-right:8px}
+#results .rs{font-size:13px;color:var(--ink-soft);margin-top:2px} #results mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
+#results .none{padding:12px 16px;font-size:14px;color:var(--ink-soft)}
+h2.h{font-size:13px;font-family:'Inter',system-ui,sans-serif;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-faint);font-weight:700;margin:40px 0 12px}
+.units{display:flex;flex-direction:column;gap:10px}
+.unit{display:grid;grid-template-columns:64px 1fr auto;gap:4px 16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.unit .no{font:600 12px 'JetBrains Mono',monospace;color:var(--ink-faint);padding-top:4px}
+.unit h3{margin:0;font-size:19px} .unit h3 a{color:var(--ink)}
+.unit .topics{font-size:13.5px;color:var(--ink-soft);margin:3px 0 6px;line-height:1.5}
+.unit .stats{font-size:12px;color:var(--ink-faint)} .unit .stats span+span::before{content:" · "}
+.unit .acts{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.btn{display:inline-block;text-align:center;font:600 13px 'Inter',system-ui,sans-serif;padding:7px 14px;border-radius:7px;border:1px solid var(--line);color:var(--ink);background:var(--surface);white-space:nowrap}
+.btn:hover{border-color:var(--blue);text-decoration:none} .btn.primary{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+:root[data-theme="dark"] .btn.primary{color:#14161A}
+@media(max-width:620px){.unit{grid-template-columns:1fr}.unit .no{padding:0}.unit .acts{flex-direction:row}}
+.log{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.log li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line-soft);font-size:14px}
+.log li:last-child{border-bottom:none} .log time{font:500 12.5px 'JetBrains Mono',monospace;color:var(--ink-faint);padding-top:2px}
+.log .u{font:600 11px 'JetBrains Mono',monospace;color:var(--ink-soft);border:1px solid var(--line);border-radius:5px;padding:0 5px;margin-right:4px}
+@media(max-width:520px){.log li{grid-template-columns:1fr;gap:2px}}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);font-size:14px}
+.box h3{margin:0 0 8px;font-size:17px} .box ol,.box ul{margin:0;padding-left:20px} .box li{margin:3px 0}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-faint)}
+</style>
+<meta name="color-scheme" content="light dark">
+<script>(function(){var m=false;try{m=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+document.documentElement.setAttribute('data-theme',m?'dark':'light')})();</script>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode"><span id="themeIco">🌙</span><span id="themeLbl">Dark</span></button>
+<div class="wrap">
+<header>
+  <div class="eyebrow">{{COURSE}}</div>
+  <h1>{{TITLE}}</h1>
+  <p class="sub">{{SUBTITLE}}</p>
+  <div class="meta">
+    <span>Last updated <b>{{UPDATED_HUMAN}}</b></span>
+    <span>Version <code>{{VERSION}}</code></span>
+    <span><a href="https://github.com/{{REPO}}/issues" target="_blank" rel="noopener">Open reports ↗</a></span>
+  </div>
+</header>
+
+<div class="search" role="search">
+  <input id="q" type="search" placeholder="Search all units — e.g. circular queue, AVL rotation, Josephus" autocomplete="off" aria-label="Search all units">
+  <div class="help">Searches every section of all five units. Press Enter to open the top result.</div>
+  <ul id="results" aria-live="polite"></ul>
+</div>
+
+<h2 class="h">Units</h2>
+<div class="units">
+{{UNITS}}
+</div>
+
+<h2 class="h">What changed</h2>
+<ul class="log">
+{{CHANGELOG}}
+</ul>
+
+<h2 class="h">Help</h2>
+<div class="grid2">
+  <div class="box">
+    <h3>Found an error or something missing?</h3>
+    <ol>
+      <li>Open the unit and scroll to the section.</li>
+      <li>Press <b>✎ Suggest / report</b> at the bottom right.</li>
+      <li>Describe it and press <b>Continue</b>. Then press <b>Submit</b> on GitHub.</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h3>Lab programs</h3>
+    <ul>
+{{LABS}}
+    </ul>
+  </div>
+</div>
+
+<footer>
+  Study notes compiled from course material and standard references, for revision within our class. This is not an official college document, so check anything important against your lecture slides.
+  Source: <a href="https://github.com/{{REPO}}" target="_blank" rel="noopener">github.com/{{REPO}}</a>
+</footer>
+</div>
+<script id="search-data" type="application/json">{{SEARCH_JSON}}</script>
+<script>
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle'),i=document.getElementById('themeIco'),l=document.getElementById('themeLbl');
+ function paint(){var d=r.getAttribute('data-theme')==='dark';i.textContent=d?'☀️':'🌙';l.textContent=d?'Light':'Dark';b.setAttribute('aria-pressed',d)}
+ b.addEventListener('click',function(){r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');paint()});paint()})();
+(function(){
+  var data=[];try{data=JSON.parse(document.getElementById('search-data').textContent)}catch(e){}
+  data.forEach(function(d){d.tl=d.t.toLowerCase();d.xl=d.x.toLowerCase();});
+  var q=document.getElementById('q'),out=document.getElementById('results');
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function hl(s,words){var h=esc(s);words.forEach(function(w){if(w.length<2)return;h=h.replace(new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>')});return h}
+  function snippet(d,words){var i=-1;for(var k=0;k<words.length&&i<0;k++)i=d.xl.indexOf(words[k]);
+    if(i<0)return d.x.slice(0,140)+'…';var s=Math.max(0,i-60);return (s?'…':'')+d.x.slice(s,s+170)+'…'}
+  function run(){var v=q.value.trim().toLowerCase();out.innerHTML='';
+    if(v.length<2){out.style.display='none';return}
+    var words=v.split(/\s+/).filter(Boolean),res=[];
+    data.forEach(function(d){var sc=0,ok=true;words.forEach(function(w){var inT=d.tl.indexOf(w)>=0,inX=d.xl.indexOf(w)>=0;
+      if(!inT&&!inX)ok=false;sc+=(inT?10:0)+(inX?1:0)});
+      if(ok){if(d.tl.indexOf(v)>=0)sc+=20;if(!/^\d/.test(d.g))sc-=15;res.push([sc,d])}});
+    res.sort(function(a,b){return b[0]-a[0]});
+    out.style.display='block';
+    if(!res.length){out.innerHTML='<li class="none">No section matches “'+esc(v)+'”.</li>';return}
+    res.slice(0,12).forEach(function(p){var d=p[1],li=document.createElement('li');
+      li.innerHTML='<a href="'+d.u+'"><div><span class="ru">U'+d.n+(d.g?' · '+esc(d.g):'')+'</span><span class="rt">'+hl(d.t,words)+'</span></div><div class="rs">'+hl(snippet(d,words),words)+'</div></a>';
+      out.appendChild(li)});
+  }
+  q.addEventListener('input',run);
+  q.addEventListener('keydown',function(e){if(e.key==='Enter'){var a=out.querySelector('a');if(a)location.href=a.href}
+    if(e.key==='ArrowDown'){var a=out.querySelector('a');if(a){a.focus();e.preventDefault()}}});
+  out.addEventListener('keydown',function(e){var a=document.activeElement;if(!a||a.tagName!=='A')return;var li=a.parentNode;
+    if(e.key==='ArrowDown'&&li.nextSibling){li.nextSibling.querySelector('a').focus();e.preventDefault()}
+    if(e.key==='ArrowUp'){if(li.previousSibling)li.previousSibling.querySelector('a').focus();else q.focus();e.preventDefault()}});
+})();
+</script>
+</body>
+</html>

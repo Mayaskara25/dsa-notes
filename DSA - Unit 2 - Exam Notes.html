@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Unit 2 — Stacks — Exam Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --body:#2A2C2F; --paper:#F6F4EE; --surface:#FFFFFF; --ink:#1C1E21; --ink-soft:#5B6169; --ink-faint:#8A8F96;
+  --line:#E4E0D3; --line-soft:#EDEAE0;
+  --blue:#1D4E89; --blue-soft:#E8EFF8; --indigo:#4C3F91; --indigo-soft:#EEECF7;
+  --teal:#12796F; --teal-soft:#E4F3F0; --plum:#93316B; --plum-soft:#F6E9F0;
+  --amber:#A66A0D; --amber-soft:#F7EEDD;
+  --radius:10px; --shadow:0 1px 2px rgba(28,30,33,.04),0 6px 20px rgba(28,30,33,.05);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Newsreader',Georgia,serif;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+code,.mono,.formula{font-family:'JetBrains Mono',monospace}
+.shell{display:flex;min-height:100vh}
+.sidebar{width:290px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 18px 40px 22px}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.brand{display:flex;flex-direction:column;gap:2px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--line-soft)}
+.brand .eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.brand .title{font-family:'Newsreader',serif;font-size:20px;font-weight:600;line-height:1.25;margin-top:2px}
+.brand .sub{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+.navgroup{margin-bottom:14px}
+.navgroup .part-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:700;margin:16px 0 6px 4px}
+.navgroup a.navlink,.navlink{display:flex;align-items:center;gap:8px;font-size:13.6px;color:var(--ink-soft);padding:6px 8px;border-radius:7px;text-decoration:none}
+.navlink:hover{background:var(--paper);color:var(--ink)} .navlink .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--ink-faint)}
+.navlink.top-of-part{font-weight:600;color:var(--ink)}
+.main{flex:1;min-width:0} .page{max-width:900px;margin:0 auto;padding:56px 44px 90px}
+@media(max-width:760px){.sidebar{display:none}.page{padding:34px 20px 70px}}
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:70px 44px;max-width:1000px;margin:0 auto}
+.cover .kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:14px}
+.cover h1{font-size:44px;line-height:1.12;max-width:760px;margin:0 0 16px}
+.cover .desc{font-size:16.5px;color:var(--ink-soft);max-width:620px;margin-bottom:8px}
+.cover .meta{display:flex;gap:22px;flex-wrap:wrap;margin:26px 0 44px;font-size:13px;color:var(--ink-soft)}
+.cover .meta span{display:flex;align-items:center;gap:7px} .cover .meta b{color:var(--ink);font-weight:600}
+.index-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:640px){.index-grid{grid-template-columns:1fr}}
+.index-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:block;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;border-left:4px solid var(--card-color,var(--blue))}
+.index-card:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(28,30,33,.09);text-decoration:none}
+.index-card .num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);font-weight:600}
+.index-card h3{font-size:17px;margin:5px 0;color:var(--ink);font-weight:600} .index-card p{font-size:13px;color:var(--ink-soft);margin:0;line-height:1.5}
+.part-divider{margin:34px 0 12px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.section{scroll-margin-top:24px}
+.section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;padding-bottom:14px;border-bottom:2px solid var(--accent,var(--blue))}
+.section-head .tag{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--accent,var(--blue));background:var(--accent-soft,var(--blue-soft));padding:3px 9px;border-radius:6px}
+.section-head h1{font-size:30px;margin:0}
+.section-sub{color:var(--ink-soft);font-size:14.5px;margin:10px 0 28px}
+.section p{margin:0 0 14px;color:var(--body)} .section ul,.section ol{margin:0 0 16px;padding-left:22px;color:var(--body)} .section li{margin-bottom:6px}
+.section h2{font-size:22px;margin:34px 0 12px;padding-top:4px} .section h3{font-size:17.5px;margin:24px 0 10px;color:var(--accent,var(--blue))}
+.section strong{color:var(--ink);font-weight:600}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.3px}
+.callout .label{font-weight:700;color:var(--amber);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:block}
+.callout.clarify{border-left-color:var(--plum)}.callout.clarify .label{color:var(--plum)}
+.callout.key{border-left-color:var(--blue)}.callout.key .label{color:var(--blue)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:18px 0;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.8px;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+th{background:var(--paper);text-align:left;padding:10px 13px;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+td{padding:10px 13px;border-bottom:1px solid var(--line-soft);color:var(--body);vertical-align:top} tr:last-child td{border-bottom:none}
+.formula-block{background:#20232A;color:#E8EAED;border-radius:8px;padding:16px 20px;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:14px;overflow-x:auto;line-height:1.8;white-space:pre-wrap}
+.formula-block .c1{color:#7FB8E8}.formula-block .c2{color:#F2C88F}.formula-block .cm{color:#8A9099}
+.svg-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:20px 0;text-align:center;box-shadow:var(--shadow)}
+.svg-wrap .cap{font-size:12.5px;color:var(--ink-soft);margin-top:8px;font-style:italic} .svg-wrap svg{max-width:100%;height:auto}
+.qbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:22px 0 26px;box-shadow:var(--shadow);border-top:3px solid var(--accent,var(--blue))}
+.qbox .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.qbox .qsrc{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint)}
+.qbox .marks{font-size:11.5px;font-weight:700;color:var(--accent,var(--blue));background:var(--accent-soft,var(--blue-soft));padding:2px 9px;border-radius:5px}
+.qbox .qtext{font-weight:600;font-size:15.5px;margin-bottom:14px;color:var(--ink)}
+.qbox .ans-label{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--ink-faint);margin:14px 0 6px}
+.steps{counter-reset:step}.steps li{list-style:none;position:relative;padding-left:34px;margin-bottom:12px}
+.steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--accent-soft,var(--blue-soft));color:var(--accent,var(--blue));font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.backtotop{display:inline-block;margin-top:44px;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--paper);color:var(--ink-soft);border:1px solid var(--line);margin:2px 4px 2px 0}
+
+/* ---- dark theme ---- */
+:root[data-theme="dark"]{
+  --body:#D6D4CE; --paper:#14161A; --surface:#1D2025; --ink:#ECEAE4; --ink-soft:#A8ADB5; --ink-faint:#7C828B;
+  --line:#33373E; --line-soft:#2A2D33;
+  --blue:#7FB0E8; --blue-soft:#1C2B3F; --indigo:#A99CEB; --indigo-soft:#2A2642; --teal:#4FC1B3; --teal-soft:#15302D;
+  --plum:#E58BBD; --plum-soft:#3A2230; --amber:#E0A94C; --amber-soft:#3A2F18;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 20px rgba(0,0,0,.30);
+}
+/* diagrams: re-map the inline SVG palette for dark mode */
+:root[data-theme="dark"] svg [fill="#12796F" i]{fill:#4FC1B3}
+:root[data-theme="dark"] svg [fill="#1C1E21" i]{fill:#ECEAE4}
+:root[data-theme="dark"] svg [fill="#1D4E89" i]{fill:#7FB0E8}
+:root[data-theme="dark"] svg [fill="#2A2C2F" i]{fill:#D6D4CE}
+:root[data-theme="dark"] svg [fill="#4C3F91" i]{fill:#A99CEB}
+:root[data-theme="dark"] svg [fill="#5B6169" i]{fill:#A8ADB5}
+:root[data-theme="dark"] svg [fill="#8A9096" i]{fill:#8A9096}
+:root[data-theme="dark"] svg [fill="#93316B" i]{fill:#E58BBD}
+:root[data-theme="dark"] svg [fill="#A66A0D" i]{fill:#E0A94C}
+:root[data-theme="dark"] svg [fill="#E4F3F0" i]{fill:#15302D}
+:root[data-theme="dark"] svg [fill="#E8EFF8" i]{fill:#1C2B3F}
+:root[data-theme="dark"] svg [fill="#EEECF7" i]{fill:#2A2642}
+:root[data-theme="dark"] svg [fill="#F6E9F0" i]{fill:#3A2230}
+:root[data-theme="dark"] svg [fill="#F7EEDD" i]{fill:#3A2F18}
+:root[data-theme="dark"] svg [fill="#FFFFFF" i]{fill:#1D2025}
+:root[data-theme="dark"] svg [stroke="#12796F" i]{stroke:#4FC1B3}
+:root[data-theme="dark"] svg [stroke="#1D4E89" i]{stroke:#7FB0E8}
+:root[data-theme="dark"] svg [stroke="#4C3F91" i]{stroke:#A99CEB}
+:root[data-theme="dark"] svg [stroke="#5B6169" i]{stroke:#A8ADB5}
+:root[data-theme="dark"] svg [stroke="#8A9096" i]{stroke:#8A9096}
+:root[data-theme="dark"] svg [stroke="#93316B" i]{stroke:#E58BBD}
+:root[data-theme="dark"] svg [stroke="#A66A0D" i]{stroke:#E0A94C}
+:root[data-theme="dark"] svg [stroke="#E4E0D3" i]{stroke:#3C4047}
+:root[data-theme="dark"] .formula-block{background:#101216;border:1px solid var(--line)}
+:root[data-theme="dark"] .index-card:hover{box-shadow:0 8px 26px rgba(0,0,0,.5)}
+code,pre,.mono,.formula-block{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0}
+body,.sidebar,.card,table,.qbox,.callout,.index-card,.svg-wrap{transition:background-color .2s,color .2s,border-color .2s}
+.theme-toggle{position:fixed;top:14px;right:16px;z-index:50;display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 12.5px 'Inter',system-ui,sans-serif;cursor:pointer;box-shadow:var(--shadow)}
+.theme-toggle:hover{border-color:var(--blue)}
+.theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.theme-toggle .ico{font-size:15px;line-height:1}
+</style>
+<script>
+(function(){var m=false;try{m=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+document.documentElement.setAttribute('data-theme',m?'dark':'light');})();
+</script>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode"><span class="ico" id="themeIco">🌙</span><span id="themeLbl">Dark</span></button>
+<div class="shell">
+<nav class="sidebar">
+  <div class="brand">
+    <span class="eyebrow">IS233AI · Data Structures &amp; Applications</span>
+    <span class="title">Unit 2 — Exam Notes</span>
+    <span class="sub">Stacks · Expressions · Recursion</span>
+  </div>
+  <a class="navlink top-of-part" href="#index"><span class="dot"></span>Index</a>
+  <a class="navlink" href="#syllabus-map"><span class="dot"></span>Syllabus Map</a>
+  <div class="navgroup">
+    <div class="part-label">Part 1 — Stacks</div>
+    <a class="navlink" href="#sec-2-1"><span class="dot"></span>1.1 Stack Fundamentals &amp; Representation in C</a>
+    <a class="navlink" href="#sec-2-2"><span class="dot"></span>1.2 Operations on a Stack</a>
+    <a class="navlink" href="#stack-linked"><span class="dot"></span>1.3 Stack using a Linked List</a>
+    <a class="navlink" href="#sec-2-3"><span class="dot"></span>1.4 Applications of Stack &amp; Infix→Postfix Conversion</a>
+    <a class="navlink" href="#sec-2-4"><span class="dot"></span>1.5 Infix→Prefix Conversion</a>
+    <a class="navlink" href="#sec-2-5"><span class="dot"></span>1.6 Postfix Expression Evaluation</a>
+    <a class="navlink" href="#stack-prefix-eval"><span class="dot"></span>1.7 Prefix Expression Evaluation</a>
+    <a class="navlink" href="#stack-paren"><span class="dot"></span>1.8 Parenthesis Balancing</a>
+    <a class="navlink" href="#sec-2-6"><span class="dot"></span>1.9 Solved Numericals — Stacks</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Part 2 — Recursion &amp; Tower of Hanoi</div>
+    <a class="navlink" href="#sec-3-1"><span class="dot"></span>2.1 Introduction to Recursion</a>
+    <a class="navlink" href="#sec-3-2"><span class="dot"></span>2.2 Factorial Function &amp; Execution Trace</a>
+    <a class="navlink" href="#sec-3-3"><span class="dot"></span>2.3 Role of the Stack During Recursion Execution</a>
+    <a class="navlink" href="#sec-3-4"><span class="dot"></span>2.4 Recursive Binary Search</a>
+    <a class="navlink" href="#sec-3-5"><span class="dot"></span>2.5 Towers of Hanoi Problem</a>
+    <a class="navlink" href="#sec-3-6"><span class="dot"></span>2.6 More Recursion Examples</a>
+    <a class="navlink" href="#sec-3-7"><span class="dot"></span>2.7 Solved Numericals — Recursion</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Part 3 — Self-learning / Extended Topics</div>
+    <a class="navlink" href="#sl-stack-recursion"><span class="dot"></span>3.1 Recursion, Backtracking &amp; Undo/Redo with Stacks</a>
+    <a class="navlink" href="#sl-stack-variants"><span class="dot"></span>3.2 Custom Stack Variations</a>
+    <a class="navlink" href="#sl-stack-problems"><span class="dot"></span>3.3 Classic Stack Problems</a>
+    <a class="navlink" href="#sl-hanoi-stack"><span class="dot"></span>3.4 Iterative Tower of Hanoi (Stack)</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Reference</div>
+    <a class="navlink" href="#quick-revision"><span class="dot"></span>Quick Revision</a>
+    <a class="navlink" href="#question-bank"><span class="dot"></span>Question Bank</a>
+  </div>
+</nav>
+
+<div class="main">
+
+<header class="cover" id="index">
+  <div class="kicker">IS233AI · Data Structures and Applications · Unit 2</div>
+  <h1>Stacks &amp; Their Applications — Complete Exam Notes</h1>
+  <p class="desc">Every Unit II syllabus topic in one place: the stack ADT, array and linked implementations, infix/postfix/prefix conversion, postfix evaluation, prefix evaluation, parenthesis balancing and Tower of Hanoi (recursive and iterative), plus the self-learning topics — backtracking, undo/redo, Min stack, stock span and histogram.</p>
+  <div class="meta">
+    <span>📖 <b>20</b> topics</span>
+    <span>🧮 <b>25</b> worked examples</span>
+    <span>🖼️ <b>6</b> hand-built diagrams</span>
+    <span>⏱️ <b>09</b> syllabus hours</span>
+  </div>
+
+  <div class="part-divider">Part 1 — Stacks</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sec-2-1" style="--card-color:var(--blue)">
+      <span class="num">1.1</span>
+      <h3>Stack Fundamentals &amp; Representation in C</h3>
+      <p>LIFO principle, array-based struct representation, TOP pointer.</p>
+    </a>
+    <a class="index-card" href="#sec-2-2" style="--card-color:var(--blue)">
+      <span class="num">1.2</span>
+      <h3>Operations on a Stack</h3>
+      <p>Push, pop, peek, isEmpty, isFull — algorithms and C code.</p>
+    </a>
+    <a class="index-card" href="#stack-linked" style="--card-color:var(--blue)">
+      <span class="num">1.3</span>
+      <h3>Stack using a Linked List</h3>
+      <p>Dynamic stack: push at front, pop from front; array vs linked.</p>
+    </a>
+    <a class="index-card" href="#sec-2-3" style="--card-color:var(--blue)">
+      <span class="num">1.4</span>
+      <h3>Applications of Stack &amp; Infix→Postfix Conversion</h3>
+      <p>Where stacks are used, plus the infix-to-postfix algorithm with traces.</p>
+    </a>
+    <a class="index-card" href="#sec-2-4" style="--card-color:var(--blue)">
+      <span class="num">1.5</span>
+      <h3>Infix→Prefix Conversion</h3>
+      <p>The reverse-and-convert method, verified numerically.</p>
+    </a>
+    <a class="index-card" href="#sec-2-5" style="--card-color:var(--blue)">
+      <span class="num">1.6</span>
+      <h3>Postfix Expression Evaluation</h3>
+      <p>Stack-based evaluation algorithm with traced examples.</p>
+    </a>
+    <a class="index-card" href="#stack-prefix-eval" style="--card-color:var(--blue)">
+      <span class="num">1.7</span>
+      <h3>Prefix Expression Evaluation</h3>
+      <p>Right-to-left scan, C code and a verified trace.</p>
+    </a>
+    <a class="index-card" href="#stack-paren" style="--card-color:var(--blue)">
+      <span class="num">1.8</span>
+      <h3>Parenthesis Balancing</h3>
+      <p>Match (, [, { with a stack; five classification examples.</p>
+    </a>
+    <a class="index-card" href="#sec-2-6" style="--card-color:var(--blue)">
+      <span class="num">1.9</span>
+      <h3>Solved Numericals — Stacks</h3>
+      <p>Exam-style stack questions from both papers, worked end to end.</p>
+    </a>
+  </div>
+  <div class="part-divider">Part 2 — Recursion &amp; Tower of Hanoi</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sec-3-1" style="--card-color:var(--indigo)">
+      <span class="num">2.1</span>
+      <h3>Introduction to Recursion</h3>
+      <p>Base case, recursive case, decomposition and composition.</p>
+    </a>
+    <a class="index-card" href="#sec-3-2" style="--card-color:var(--indigo)">
+      <span class="num">2.2</span>
+      <h3>Factorial Function &amp; Execution Trace</h3>
+      <p>The canonical first example, traced call by call.</p>
+    </a>
+    <a class="index-card" href="#sec-3-3" style="--card-color:var(--indigo)">
+      <span class="num">2.3</span>
+      <h3>Role of the Stack During Recursion Execution</h3>
+      <p>How the call stack tracks recursive calls.</p>
+    </a>
+    <a class="index-card" href="#sec-3-4" style="--card-color:var(--indigo)">
+      <span class="num">2.4</span>
+      <h3>Recursive Binary Search</h3>
+      <p>Divide-and-conquer search, fully traced.</p>
+    </a>
+    <a class="index-card" href="#sec-3-5" style="--card-color:var(--indigo)">
+      <span class="num">2.5</span>
+      <h3>Towers of Hanoi Problem</h3>
+      <p>Syllabus application: recurrence 2ⁿ−1 and move traces for n=3, 4.</p>
+    </a>
+    <a class="index-card" href="#sec-3-6" style="--card-color:var(--indigo)">
+      <span class="num">2.6</span>
+      <h3>More Recursion Examples</h3>
+      <p>Fibonacci, GCD, sum of N, counting zeros.</p>
+    </a>
+    <a class="index-card" href="#sec-3-7" style="--card-color:var(--indigo)">
+      <span class="num">2.7</span>
+      <h3>Solved Numericals — Recursion</h3>
+      <p>Exam-style recursion questions, worked end to end.</p>
+    </a>
+  </div>
+  <div class="part-divider">Part 3 — Self-learning / Extended Topics</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sl-stack-recursion" style="--card-color:var(--plum)">
+      <span class="num">3.1</span>
+      <h3>Recursion, Backtracking &amp; Undo/Redo with Stacks</h3>
+      <p>Explicit stacks, backtracking, undo/redo, browser history.</p>
+    </a>
+    <a class="index-card" href="#sl-stack-variants" style="--card-color:var(--plum)">
+      <span class="num">3.2</span>
+      <h3>Custom Stack Variations</h3>
+      <p>Two stacks in one array, Min/Max stack, stack of plates.</p>
+    </a>
+    <a class="index-card" href="#sl-stack-problems" style="--card-color:var(--plum)">
+      <span class="num">3.3</span>
+      <h3>Classic Stack Problems</h3>
+      <p>Reverse a stack, Stock Span, Largest Rectangle in Histogram.</p>
+    </a>
+    <a class="index-card" href="#sl-hanoi-stack" style="--card-color:var(--plum)">
+      <span class="num">3.4</span>
+      <h3>Iterative Tower of Hanoi (Stack)</h3>
+      <p>Explicit-stack frames and the parity method; 7 moves for n=3.</p>
+    </a>
+  </div>
+  <div class="part-divider">Reference</div>
+  <div class="index-grid">
+    <a class="index-card" href="#quick-revision" style="--card-color:var(--ink)"><span class="num">QR</span><h3>Quick Revision</h3><p>One-page cheat sheet of every algorithm skeleton and key fact in this unit.</p></a>
+    <a class="index-card" href="#question-bank" style="--card-color:var(--ink)"><span class="num">QB</span><h3>Question Bank</h3><p>Past-paper questions indexed to where they are answered, plus likely self-learning questions.</p></a>
+  </div>
+</header>
+
+<section class="page section" id="syllabus-map" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">MAP</span><h1>Syllabus Map</h1></div>
+  <p class="section-sub">How the new Unit II syllabus headings map onto this guide's sections.</p>
+
+  <table>
+    <tr><th>Syllabus heading</th><th>Sub-topics named</th><th>Covered in</th></tr>
+    <tr><td rowspan="4"><strong>Stacks</strong></td><td>LIFO concept, abstract data type</td><td>§1.1</td></tr>
+    <tr><td>Operations: push, pop, peek</td><td>§1.2</td></tr>
+    <tr><td>Implementation using arrays and linked lists</td><td>§1.1, §1.2, §1.3</td></tr>
+    <tr><td>Applications: expression evaluation and conversion, parenthesis balancing, Tower of Hanoi</td><td>§1.4 – §1.8, §2.5, §3.4</td></tr>
+    <tr><td rowspan="6"><strong>Self-learning / Extended topics</strong></td><td>Eliminating recursion with a stack; Undo/Redo; backtracking (maze, N-Queens)</td><td>§3.1</td></tr>
+    <tr><td>Multiple stacks in a single array; Min/Max stack; stack of plates</td><td>§3.2</td></tr>
+    <tr><td>Browser history navigation</td><td>§3.1</td></tr>
+    <tr><td>Stock Span; Largest Rectangle in Histogram</td><td>§3.3</td></tr>
+    <tr><td>Reverse a stack without extra space</td><td>§3.3</td></tr>
+    <tr><td>Balanced parentheses checking</td><td>§1.8</td></tr>
+  </table>
+
+  <h2>Lab programs (Application of Stack)</h2>
+  <table>
+    <tr><th>Lab item</th><th>Covered in</th></tr>
+    <tr><td>Infix to postfix conversion</td><td><a href="#sec-2-3">§1.4</a></td></tr>
+    <tr><td>Infix to prefix conversion</td><td><a href="#sec-2-4">§1.5</a></td></tr>
+    <tr><td>Postfix expression evaluation</td><td><a href="#sec-2-5">§1.6</a></td></tr>
+    <tr><td>Prefix expression evaluation</td><td><a href="#stack-prefix-eval">§1.7</a></td></tr>
+    <tr><td>Tower of Hanoi (recursive)</td><td><a href="#sec-3-5">§2.5</a></td></tr>
+    <tr><td>Tower of Hanoi, iterative using an explicit stack</td><td><a href="#sl-hanoi-stack">§3.4</a></td></tr>
+    <tr><td>Part A: stack using an array (push, pop, display)</td><td><a href="#sec-2-1">§1.1</a>, <a href="#sec-2-2">§1.2</a></td></tr>
+  </table>
+
+  <div class="callout clarify">
+    <span class="label">How this version differs from the earlier Unit 1 notes</span>
+    The earlier Unit 1 notes combined introduction, stacks and recursion. The introduction moved to the new Unit I, so this guide keeps the stack sections and the recursion sections (recursion is retained because Tower of Hanoi, a named application, depends on it and on the role of the call stack). Part 2 is therefore supporting material beyond the syllabus wording. The earlier copy is in <code>old-syllabus/</code>.
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your earlier materials — added</span>
+    Parenthesis balancing (§1.8) and the linked-list stack (§1.3) were only mentioned in passing before; they are written out here from the new Unit II deck. Self-learning topics (Part 3) are brief and exam-oriented, and their outputs were checked in code.
+  </div>
+</section>
+
+
+<section class="page section" id="sec-2-1" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.1</span><h1>Stack Fundamentals &amp; Representation in C</h1></div>
+  <p class="section-sub">Stack definitions &amp; concepts · representing stacks in C</p>
+
+  <h2>Definition</h2>
+  <p>A <strong>Stack</strong> is a linear data structure that stores elements in a particular order in which operations are performed. Insertions and deletions happen only at one end, called the <strong>top</strong>. This gives the stack its defining behaviour: <strong>LIFO — Last In, First Out</strong> (equivalently <strong>FILO — First In, Last Out</strong>). The element inserted last is always the first one to be removed — exactly like a physical stack of plates: you can only add a plate to the top, and you can only remove the topmost plate.</p>
+
+  <h2>Representing a Stack in C</h2>
+  <p>The most common representation uses a fixed-size array along with an integer <code>top</code> that always points to the index of the most recently pushed element. An empty stack is represented by <code>top = -1</code>.</p>
+
+  <div class="formula-block"><span class="cm">// Array-based stack representation</span>
+<span class="c1">#define</span> SIZE 5
+<span class="c1">int</span> stack[SIZE];
+<span class="c1">int</span> top = -1;   <span class="cm">// -1 means empty</span></div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4C3F91"/></marker>
+      </defs>
+      <text x="20" y="30" font-family="Inter" font-size="13" fill="#5B6169">Index</text>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <text x="20" y="60" fill="#8A9096">0</text>
+        <text x="20" y="100" fill="#8A9096">1</text>
+        <text x="20" y="140" fill="#8A9096">2</text>
+        <text x="20" y="180" fill="#8A9096">3</text>
+        <text x="20" y="215" fill="#8A9096">4</text>
+      </g>
+      <g>
+        <rect x="60" y="42" width="180" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="150" y="65" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14">10</text>
+        <rect x="60" y="82" width="180" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="150" y="105" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14">20</text>
+        <rect x="60" y="122" width="180" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="150" y="145" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14">30</text>
+        <rect x="60" y="162" width="180" height="34" fill="#FFFFFF" stroke="#E4E0D3" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="150" y="185" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#8A9096">empty</text>
+        <rect x="60" y="200" width="180" height="16" fill="#FFFFFF" stroke="#E4E0D3" stroke-width="1.5" stroke-dasharray="4 3"/>
+      </g>
+      <path d="M250,157 L310,157" fill="none" stroke="#4C3F91" stroke-width="2" marker-end="url(#arrow2)"/>
+      <text x="320" y="145" font-family="Inter" font-size="13" font-weight="600" fill="#4C3F91">top = 2</text>
+      <text x="320" y="163" font-family="Inter" font-size="12" fill="#5B6169">(points to index of</text>
+      <text x="320" y="178" font-family="Inter" font-size="12" fill="#5B6169">the last-pushed element)</text>
+    </svg>
+    <div class="cap">Fig 1. Array representation of a stack of size 5, holding {10, 20, 30} — <code>top</code> tracks the index of the most recently pushed element; indices above it are unused.</div>
+  </div>
+
+  <h2>Key Terms</h2>
+  <table>
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td>Top</td><td>Pointer/index to the most recently inserted element — the only element directly accessible</td></tr>
+    <tr><td>Overflow</td><td>Attempting to push onto a stack that is already full (<code>top == SIZE-1</code>)</td></tr>
+    <tr><td>Underflow</td><td>Attempting to pop from a stack that is already empty (<code>top == -1</code>)</td></tr>
+  </table>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-2-2" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.2</span><h1>Operations on a Stack</h1></div>
+  <p class="section-sub">Push · Pop · Peek · isEmpty · isFull</p>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+        <marker id="arrow3b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#93316B"/></marker>
+      </defs>
+      <g>
+        <rect x="80" y="150" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="140" y="173" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">10</text>
+        <rect x="80" y="116" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="140" y="139" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">20</text>
+        <rect x="80" y="82" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="140" y="105" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">30 ← top</text>
+      </g>
+      <path d="M230,60 Q270,80 220,90" fill="none" stroke="#12796F" stroke-width="2" marker-end="url(#arrow3)"/>
+      <text x="250" y="50" text-anchor="middle" font-family="Inter" font-size="13" font-weight="600" fill="#12796F">push(40)</text>
+      <text x="250" y="65" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B6169">adds above top</text>
+
+      <path d="M220,100 Q270,115 230,135" fill="none" stroke="#93316B" stroke-width="2" marker-end="url(#arrow3b)"/>
+      <text x="270" y="150" text-anchor="middle" font-family="Inter" font-size="13" font-weight="600" fill="#93316B">pop()</text>
+      <text x="270" y="165" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B6169">removes top</text>
+
+      <g>
+        <rect x="420" y="150" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="480" y="173" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">10</text>
+        <rect x="420" y="116" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="480" y="139" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">20</text>
+        <rect x="420" y="82" width="120" height="34" fill="#EEECF7" stroke="#4C3F91" stroke-width="1.5"/>
+        <text x="480" y="105" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">30</text>
+        <rect x="420" y="48" width="120" height="34" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/>
+        <text x="480" y="71" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">40 ← top</text>
+      </g>
+    </svg>
+    <div class="cap">Fig 2. LIFO behaviour — <code>push</code> always adds above the current top; <code>pop</code> always removes the current top. Nothing beneath the top can be touched directly.</div>
+  </div>
+
+  <h2>Algorithms &amp; C Implementation</h2>
+
+  <h3>Push (insert)</h3>
+  <ol>
+    <li>If <code>top == SIZE - 1</code>, report overflow.</li>
+    <li>Else, increment <code>top</code> and store the new element at <code>stack[top]</code>.</li>
+  </ol>
+  <div class="formula-block"><span class="c1">void</span> push(<span class="c1">int</span> s[], <span class="c1">int</span> *top) {
+  <span class="c1">if</span> (*top == SIZE-1) { <span class="cm">// overflow</span>
+    printf(<span class="c2">"Stack Overflow"</span>); <span class="c1">return</span>;
+  }
+  scanf(<span class="c2">"%d"</span>, &amp;s[++(*top)]);
+}</div>
+
+  <h3>Pop (delete)</h3>
+  <ol>
+    <li>If <code>top == -1</code>, report underflow.</li>
+    <li>Else, read <code>stack[top]</code> and decrement <code>top</code>.</li>
+  </ol>
+  <div class="formula-block"><span class="c1">int</span> pop(<span class="c1">int</span> *top) {
+  <span class="c1">if</span> (*top == -1) <span class="cm">// underflow</span>
+    <span class="c1">return</span> -1;
+  <span class="c1">return</span> s[(*top)--];
+}</div>
+
+  <h3>Peek / Top</h3>
+  <p>Returns the element at <code>stack[top]</code> without modifying <code>top</code> — errors if the stack is empty.</p>
+
+  <h3>isEmpty &amp; isFull</h3>
+  <table>
+    <tr><th>Check</th><th>Condition</th></tr>
+    <tr><td>isEmpty</td><td><code>top == -1</code></td></tr>
+    <tr><td>isFull</td><td><code>top == SIZE - 1</code></td></tr>
+  </table>
+
+  <h3>Display</h3>
+  <p>Print elements from <code>stack[top]</code> down to <code>stack[0]</code> so the top of the stack is shown first.</p>
+  <div class="formula-block"><span class="c1">void</span> display(<span class="c1">int</span> s[], <span class="c1">int</span> *top) {
+  <span class="c1">if</span> (*top == -1) { printf(<span class="c2">"Stack is empty"</span>); <span class="c1">return</span>; }
+  <span class="c1">for</span> (<span class="c1">int</span> i = *top; i &gt;= 0; i--)
+    printf(<span class="c2">"%d "</span>, s[i]);
+}</div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q1</span><span class="marks">10 marks</span></div>
+    <div class="qtext">Implement functions to demonstrate the following operations on stack — Push, Pop and Display.</div>
+    <div class="ans-label">Answer</div>
+    <p>Use the array representation from §1.1 (<code>int stack[SIZE], top = -1</code>) together with the three functions above (<code>push</code>, <code>pop</code>, <code>display</code>), driven from a menu loop in <code>main()</code> that reads a choice and calls the corresponding function. Always check overflow inside <code>push</code> and underflow inside <code>pop</code> before touching the array.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q7</span><span class="marks">1 mark</span></div>
+    <div class="qtext">Consider the following operations performed on a stack of size 5: Push(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5); After completion of all operations, the number of elements present in the stack is?</div>
+    <div class="ans-label">Answer — traced step by step</div>
+    <table>
+      <tr><th>Operation</th><th>Stack after operation</th></tr>
+      <tr><td>Push(1)</td><td>[1]</td></tr>
+      <tr><td>Pop()</td><td>[]</td></tr>
+      <tr><td>Push(2)</td><td>[2]</td></tr>
+      <tr><td>Push(3)</td><td>[2, 3]</td></tr>
+      <tr><td>Pop()</td><td>[2]</td></tr>
+      <tr><td>Push(4)</td><td>[2, 4]</td></tr>
+      <tr><td>Pop()</td><td>[2]</td></tr>
+      <tr><td>Pop()</td><td>[]</td></tr>
+      <tr><td>Push(5)</td><td>[5]</td></tr>
+    </table>
+    <p><strong>Answer: 1 element</strong> remains in the stack (verified by simulation).</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q1</span><span class="marks">1 mark</span></div>
+    <div class="qtext">Pushing an element into a stack with five elements, when its size limit is 5, will make the stack ____.</div>
+    <div class="ans-label">Answer</div>
+    <p><strong>Overflow.</strong> The stack is already full (<code>top == SIZE-1 == 4</code>), so any further push must be rejected — this is exactly the check performed at the top of the <code>push</code> function above.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q9</span><span class="marks">1 mark</span></div>
+    <div class="qtext">Consider the following algorithm — declare a stack of characters; while there are more characters to read: read a character, push it on the stack; while the stack is not empty: pop a character off the stack, write it to the screen. What is the output for input "Bengaluru"?</div>
+    <div class="ans-label">Answer</div>
+    <p>Every character is pushed in order, then popped — and pop always returns the most-recently-pushed character first (LIFO), so the whole string comes back out <strong>reversed</strong>:</p>
+    <p class="mono" style="font-size:15px">"Bengaluru" → <strong>"urulagneB"</strong></p>
+    <p>This is a standard use of a stack: <strong>reversing a sequence</strong>, since LIFO order is the exact opposite of the input order.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="stack-linked" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.3</span><h1>Stack using a Linked List</h1></div>
+  <p class="section-sub">Dynamic implementation · push = insert at front · pop = delete from front · array vs linked comparison</p>
+
+  <p>In the linked implementation, each stack element is a node <code>{data, link}</code> and <code>top</code> points to the first node. <strong>PUSH inserts a node at the beginning; POP removes the first node</strong>, so both are O(1) with no traversal. The stack grows until memory runs out, so there is no fixed capacity and no "stack full" check (only a failed <code>malloc</code>).</p>
+  <pre class="formula-block">struct node { int data; struct node *link; } *top = NULL;
+
+void push(int x) {
+    struct node *p = (struct node*)malloc(sizeof(struct node));
+    if (p == NULL) { printf("Overflow\n"); return; }
+    p-&gt;data = x;
+    p-&gt;link = top;       <span class="cm">/* new node -&gt; old top */</span>
+    top = p;             <span class="cm">/* new node is the top */</span>
+}
+int pop(void) {
+    if (top == NULL) { printf("Underflow\n"); return -1; }
+    struct node *t = top;
+    int x = t-&gt;data;
+    top = top-&gt;link;
+    free(t);
+    return x;
+}</pre>
+  <table>
+    <tr><th>Array stack</th><th>Linked stack</th></tr>
+    <tr><td>Fixed size, set at creation</td><td>Dynamic size</td></tr>
+    <tr><td>Contiguous memory, no pointer overhead</td><td>Node + pointer per element</td></tr>
+    <tr><td>Overflow when <code>top == MAX-1</code></td><td>Overflow only if <code>malloc</code> fails</td></tr>
+    <tr><td>Push/pop O(1)</td><td>Push/pop O(1)</td></tr>
+  </table>
+  <p>The same idea, with the queue as well, is developed in §3.8 of the Unit I notes (Stack &amp; Queue via SLL).</p>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-2-3" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.4</span><h1>Applications of Stack &amp; Infix→Postfix Conversion</h1></div>
+  <p class="section-sub">Applications of stack data structures · infix to postfix</p>
+
+  <h2>Applications of Stacks</h2>
+  <ul>
+    <li><strong>Recursion</strong> — the system uses an internal stack to track function calls (§2.3).</li>
+    <li><strong>Expression conversion</strong> — infix to postfix / infix to prefix.</li>
+    <li><strong>Expression evaluation</strong> — evaluating postfix/prefix expressions.</li>
+    <li><strong>Undo/Redo</strong> operations in editors.</li>
+    <li><strong>Depth-First Search (DFS)</strong> in graphs.</li>
+    <li><strong>Browser history</strong> (back button).</li>
+    <li><strong>Function call management</strong> (call stack, §2.3).</li>
+    <li>Checking <strong>balanced parentheses</strong> and reversing sequences (§1.2, §1.9).</li>
+  </ul>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q3</span><span class="marks">1 mark</span></div>
+    <div class="qtext">The minimum number of stacks needed to implement a queue is: ____</div>
+    <div class="ans-label">Answer</div>
+    <p><strong>2.</strong> One stack is used to accept incoming (enqueue) elements; when a dequeue is requested and the second (output) stack is empty, every element is popped from the input stack and pushed onto the output stack, reversing their order so the oldest element ends up on top — restoring FIFO behaviour from two LIFO stacks.</p>
+  </div>
+
+  <h2>Infix, Postfix and Prefix Notation</h2>
+  <table>
+    <tr><th>Notation</th><th>Form</th><th>Example</th></tr>
+    <tr><td>Infix</td><td><code>&lt;operand&gt; &lt;operator&gt; &lt;operand&gt;</code></td><td><code>A + B</code></td></tr>
+    <tr><td>Postfix</td><td><code>&lt;operand&gt; &lt;operand&gt; &lt;operator&gt;</code></td><td><code>A B +</code></td></tr>
+    <tr><td>Prefix</td><td><code>&lt;operator&gt; &lt;operand&gt; &lt;operand&gt;</code></td><td><code>+ A B</code></td></tr>
+  </table>
+  <p>Infix is natural for humans but ambiguous for a computer without extra rules for operator precedence, associativity, and parentheses. Postfix and prefix remove that ambiguity entirely: the position of each operator already fixes the order of evaluation, so no precedence table or parentheses are needed at evaluation time.</p>
+
+  <h2>Algorithm: Infix → Postfix (using a stack)</h2>
+  <ol>
+    <li>Scan the infix expression left to right.</li>
+    <li>If the scanned character is an operand, append it to the output.</li>
+    <li>If it is an operator:
+      <ul>
+        <li>If the stack is empty, or contains a <code>'('</code>, or the scanned operator has <strong>higher</strong> precedence than the stack's top operator — push it.</li>
+        <li>Otherwise, pop and output all operators from the stack with precedence ≥ the scanned operator, then push the scanned operator.</li>
+      </ul>
+    </li>
+    <li>If the scanned character is <code>'('</code>, push it.</li>
+    <li>If it is <code>')'</code>, pop and output until a <code>'('</code> is popped (discard both parentheses).</li>
+    <li>Repeat steps 2–5 until input is exhausted.</li>
+    <li>Pop and output any remaining operators from the stack.</li>
+  </ol>
+
+  <div class="callout key">
+    <span class="label">Precedence used throughout this unit</span>
+    <code>^</code> (highest, right-associative) &gt; <code>*</code>, <code>/</code> (left-associative) &gt; <code>+</code>, <code>-</code> (lowest, left-associative). For equal precedence between two left-associative operators, the one already on the stack is popped first (left-to-right evaluation order).
+  </div>
+
+  <h3>Worked Trace: A + B * C − D</h3>
+  <table>
+    <tr><th>Char</th><th>Stack</th><th>Output</th></tr>
+    <tr><td>A</td><td>—</td><td>A</td></tr>
+    <tr><td>+</td><td>+</td><td>A</td></tr>
+    <tr><td>B</td><td>+</td><td>AB</td></tr>
+    <tr><td>*</td><td>+ *</td><td>AB</td></tr>
+    <tr><td>C</td><td>+ *</td><td>ABC</td></tr>
+    <tr><td>−</td><td>−</td><td>ABC*+ <span style="color:var(--ink-faint)">(pop * , +)</span></td></tr>
+    <tr><td>D</td><td>−</td><td>ABC*+D</td></tr>
+    <tr><td>end</td><td>—</td><td><strong>ABC*+D−</strong></td></tr>
+  </table>
+  <p class="section-sub" style="margin-top:-8px">Result verified by code simulation: <code>A+B*C-D</code> → <code>ABC*+D-</code>.</p>
+
+  <h3>Worked Trace: (A + B) * C / D − E</h3>
+  <table>
+    <tr><th>Sr</th><th>Char</th><th>Stack</th><th>Output</th></tr>
+    <tr><td>1</td><td>(</td><td>(</td><td>—</td></tr>
+    <tr><td>2</td><td>A</td><td>(</td><td>A</td></tr>
+    <tr><td>3</td><td>+</td><td>( +</td><td>A</td></tr>
+    <tr><td>4</td><td>B</td><td>( +</td><td>AB</td></tr>
+    <tr><td>5</td><td>)</td><td>—</td><td>AB+</td></tr>
+    <tr><td>6</td><td>*</td><td>*</td><td>AB+</td></tr>
+    <tr><td>7</td><td>C</td><td>*</td><td>AB+C</td></tr>
+    <tr><td>8</td><td>/</td><td>/</td><td>AB+C*</td></tr>
+    <tr><td>9</td><td>D</td><td>/</td><td>AB+C*D</td></tr>
+    <tr><td>10</td><td>−</td><td>−</td><td>AB+C*D/</td></tr>
+    <tr><td>11</td><td>E</td><td>−</td><td>AB+C*D/E</td></tr>
+    <tr><td>end</td><td>—</td><td>—</td><td><strong>AB+C*D/E−</strong></td></tr>
+  </table>
+  <p class="section-sub" style="margin-top:-8px">Verified: <code>(A+B)*C/D-E</code> → <code>AB+C*D/E-</code>.</p>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE 21-22 Test-I · Q2</span><span class="marks">10 marks</span></div>
+    <div class="qtext">Design an algorithm using stack to convert a given infix expression (without parenthesis) into a postfix expression. Using the same, convert the following infix to postfix, showing each step: <code>A+B/C*D-A^F^H</code></div>
+    <div class="ans-label">Answer — algorithm as above; trace below (verified by code simulation)</div>
+    <table>
+      <tr><th>Char</th><th>Stack</th><th>Output</th></tr>
+      <tr><td>A</td><td>—</td><td>A</td></tr>
+      <tr><td>+</td><td>+</td><td>A</td></tr>
+      <tr><td>B</td><td>+</td><td>AB</td></tr>
+      <tr><td>/</td><td>+ /</td><td>AB</td></tr>
+      <tr><td>C</td><td>+ /</td><td>ABC</td></tr>
+      <tr><td>*</td><td>+ *</td><td>ABC/ <span style="color:var(--ink-faint)">(/ pops — equal precedence to *)</span></td></tr>
+      <tr><td>D</td><td>+ *</td><td>ABC/D</td></tr>
+      <tr><td>−</td><td>−</td><td>ABC/D*+ <span style="color:var(--ink-faint)">(pop *, +)</span></td></tr>
+      <tr><td>A</td><td>−</td><td>ABC/D*+A</td></tr>
+      <tr><td>^</td><td>− ^</td><td>ABC/D*+A</td></tr>
+      <tr><td>F</td><td>− ^</td><td>ABC/D*+AF</td></tr>
+      <tr><td>^</td><td>− ^ ^</td><td>ABC/D*+AF <span style="color:var(--ink-faint)">(^ is right-assoc — does <em>not</em> pop the ^ already on stack)</span></td></tr>
+      <tr><td>H</td><td>− ^ ^</td><td>ABC/D*+AFH</td></tr>
+      <tr><td>end</td><td>—</td><td><strong>ABC/D*+AFH^^−</strong></td></tr>
+    </table>
+    <p><strong>Result: <code>ABC/D*+AFH^^-</code></strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q1.5</span><span class="marks">2 marks</span></div>
+    <div class="qtext">Write the postfix and prefix forms of the given expression: <code>A + B * (C − D) / (P − R)</code></div>
+    <div class="ans-label">Answer (verified: both forms evaluate identically to the infix, at A=2,B=3,C=7,D=4,P=9,R=6 → 5.0)</div>
+    <p><strong>Postfix:</strong> <code>ABCD-*PR-/+</code> &nbsp;&nbsp; <strong>Prefix:</strong> <code>+A/*B-CD-PR</code> (prefix method in §1.5)</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-2-4" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.5</span><h1>Infix→Prefix Conversion</h1></div>
+  <p class="section-sub">Applications of stack data structures · infix to prefix</p>
+
+  <h2>Algorithm: Infix → Prefix (using a stack)</h2>
+  <p>Prefix conversion reuses the postfix machinery with three extra steps:</p>
+  <ol>
+    <li><strong>Reverse</strong> the infix expression.</li>
+    <li><strong>Swap</strong> every <code>'('</code> with <code>')'</code> and vice versa.</li>
+    <li>Convert this reversed-and-swapped expression to <strong>postfix</strong> — but when comparing precedence for two operators of <em>equal</em> precedence, do <strong>not</strong> pop (only pop when the stack's top operator has <strong>strictly higher</strong> precedence). This preserves correct left-to-right evaluation order once the result is reversed back.</li>
+    <li><strong>Reverse</strong> the resulting postfix string — this is the prefix expression.</li>
+  </ol>
+
+  <div class="callout key">
+    <span class="label">Why step 3's rule changes</span>
+    Reversing the scan direction effectively turns left-associative operators into right-associative ones for the purposes of the stack comparison. Popping on equal precedence (as in infix→postfix) would silently reorder same-precedence operators; skipping the pop preserves the original left-to-right grouping once everything is reversed back.
+  </div>
+
+  <h3>Worked Trace: A + B * C − D  (sanity check against the deck)</h3>
+  <table>
+    <tr><th>Sr</th><th>Char</th><th>Stack</th><th>Prefix-so-far</th></tr>
+    <tr><td>0</td><td>A</td><td>—</td><td>A</td></tr>
+    <tr><td>1</td><td>+</td><td>+</td><td>A</td></tr>
+    <tr><td>2</td><td>B</td><td>+</td><td>A B</td></tr>
+    <tr><td>3</td><td>*</td><td>+ *</td><td>A B</td></tr>
+    <tr><td>4</td><td>C</td><td>+ *</td><td>A B C</td></tr>
+    <tr><td>5</td><td>−</td><td>−</td><td>+A*BC <span style="color:var(--ink-faint)">(pop *, then +)</span></td></tr>
+    <tr><td>6</td><td>D</td><td>−</td><td>+A*BC D</td></tr>
+    <tr><td>7</td><td>end</td><td>—</td><td><strong>−+A*BCD</strong></td></tr>
+  </table>
+  <p class="section-sub" style="margin-top:-8px">Matches the source deck's own worked example exactly, and independently verified by code: <code>A+B*C-D</code> → prefix <code>-+A*BCD</code>.</p>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q3</span><span class="marks">5+5 marks</span></div>
+    <div class="qtext">Write a function to perform infix to prefix conversion. Convert the given infix expression to prefix and show the contents of the stack at each step: <code>K+L-M*N+(O^P)*W/U/V*T+Q</code></div>
+    <div class="ans-label">Answer — reverse-and-swap, then convert to postfix</div>
+    <p>Step 1–2: reverse and swap parentheses gives: <code class="mono">Q+T*V/U/W*(P^O)+N*M-L+K</code></p>
+    <table>
+      <tr><th>Char</th><th>Stack</th><th>Output-so-far</th></tr>
+      <tr><td>Q</td><td>—</td><td>Q</td></tr>
+      <tr><td>+</td><td>+</td><td>Q</td></tr>
+      <tr><td>T</td><td>+</td><td>QT</td></tr>
+      <tr><td>*</td><td>+ *</td><td>QT</td></tr>
+      <tr><td>V</td><td>+ *</td><td>QTV</td></tr>
+      <tr><td>/</td><td>+ * /</td><td>QTV <span style="color:var(--ink-faint)">(equal prec. as * → no pop)</span></td></tr>
+      <tr><td>U</td><td>+ * /</td><td>QTVU</td></tr>
+      <tr><td>/</td><td>+ * / /</td><td>QTVU</td></tr>
+      <tr><td>W</td><td>+ * / /</td><td>QTVUW</td></tr>
+      <tr><td>*</td><td>+ * / / *</td><td>QTVUW</td></tr>
+      <tr><td>(</td><td>+ * / / * (</td><td>QTVUW</td></tr>
+      <tr><td>P</td><td>+ * / / * (</td><td>QTVUWP</td></tr>
+      <tr><td>^</td><td>+ * / / * ( ^</td><td>QTVUWP</td></tr>
+      <tr><td>O</td><td>+ * / / * ( ^</td><td>QTVUWPO</td></tr>
+      <tr><td>)</td><td>+ * / / *</td><td>QTVUWPO^</td></tr>
+      <tr><td>+</td><td>+ +</td><td>QTVUWPO^*//* <span style="color:var(--ink-faint)">(pop *,/,/,* — all &gt; prec of +)</span></td></tr>
+      <tr><td>N</td><td>+ +</td><td>QTVUWPO^*//*N</td></tr>
+      <tr><td>*</td><td>+ + *</td><td>QTVUWPO^*//*N</td></tr>
+      <tr><td>M</td><td>+ + *</td><td>QTVUWPO^*//*NM</td></tr>
+      <tr><td>−</td><td>+ + −</td><td>QTVUWPO^*//*NM* <span style="color:var(--ink-faint)">(pop *; + has equal prec to − → no further pop)</span></td></tr>
+      <tr><td>L</td><td>+ + −</td><td>QTVUWPO^*//*NM*L</td></tr>
+      <tr><td>+</td><td>+ + − +</td><td>QTVUWPO^*//*NM*L</td></tr>
+      <tr><td>K</td><td>+ + − +</td><td>QTVUWPO^*//*NM*LK</td></tr>
+      <tr><td>end</td><td>—</td><td>QTVUWPO^*//*NM*LK+−++</td></tr>
+    </table>
+    <p>Reversing this postfix-of-the-reversed-expression gives the prefix result:</p>
+    <p><strong>Prefix: <code>++-+KL*MN*//*^OPWUVTQ</code></strong></p>
+    <div class="callout key">
+      <span class="label">Cross-check</span>
+      Substituting K=2, L=3, M=4, N=5, O=2, P=1, W=3, U=2, V=5, T=4, Q=6 into both the original infix and the derived prefix expression gives the same value, <strong>−6.6</strong>, in both — confirming the conversion is correct.
+    </div>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-2-5" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.6</span><h1>Postfix Expression Evaluation</h1></div>
+  <p class="section-sub">Postfix expression evaluation and parsing</p>
+
+  <h2>Algorithm</h2>
+  <ol>
+    <li>Scan the postfix expression left to right.</li>
+    <li>If the scanned token is an operand, push it onto the stack.</li>
+    <li>If the scanned token is an operator, pop the top two elements (<code>op2</code> then <code>op1</code> — <code>op2</code> comes off first since it was pushed last), apply the operator as <code>op1 &lt;operator&gt; op2</code>, and push the result back.</li>
+    <li>After the scan, the single value left on the stack is the result.</li>
+  </ol>
+
+  <div class="callout key">
+    <span class="label">Order matters for − and /</span>
+    Because the stack is LIFO, the element popped <em>first</em> is the <strong>right-hand</strong> operand. For <code>3 4 -</code>: pop 4 (op2), pop 3 (op1), compute <code>3 − 4 = −1</code> — not <code>4 − 3</code>.
+  </div>
+
+  <div class="formula-block"><span class="c1">float</span> eval(<span class="c1">char</span> postfix[]) {
+  <span class="c1">float</span> stack[20]; <span class="c1">int</span> top = -1;
+  <span class="c1">for</span> (<span class="c1">int</span> i = 0; postfix[i] != <span class="c2">'\0'</span>; i++) {
+    <span class="c1">if</span> (isdigit(postfix[i]))
+      stack[++top] = postfix[i] - <span class="c2">'0'</span>;
+    <span class="c1">else</span> {
+      <span class="c1">float</span> op2 = stack[top--];
+      <span class="c1">float</span> op1 = stack[top--];
+      <span class="c1">switch</span> (postfix[i]) {
+        <span class="c1">case</span> <span class="c2">'+'</span>: stack[++top] = op1 + op2; <span class="c1">break</span>;
+        <span class="c1">case</span> <span class="c2">'-'</span>: stack[++top] = op1 - op2; <span class="c1">break</span>;
+        <span class="c1">case</span> <span class="c2">'*'</span>: stack[++top] = op1 * op2; <span class="c1">break</span>;
+        <span class="c1">case</span> <span class="c2">'/'</span>: stack[++top] = op1 / op2; <span class="c1">break</span>;
+      }
+    }
+  }
+  <span class="c1">return</span> stack[top];
+}</div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q5a</span><span class="marks">5 marks</span></div>
+    <div class="qtext">Write an algorithm to evaluate given postfix expression. Evaluate the given postfix expression showing the contents of the stack: <code>3, 4, *, 2, 5, *, +</code></div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <table>
+      <tr><th>Token</th><th>Action</th><th>Stack</th></tr>
+      <tr><td>3</td><td>push</td><td>[3]</td></tr>
+      <tr><td>4</td><td>push</td><td>[3, 4]</td></tr>
+      <tr><td>*</td><td>pop 4, pop 3 → 3*4=12, push</td><td>[12]</td></tr>
+      <tr><td>2</td><td>push</td><td>[12, 2]</td></tr>
+      <tr><td>5</td><td>push</td><td>[12, 2, 5]</td></tr>
+      <tr><td>*</td><td>pop 5, pop 2 → 2*5=10, push</td><td>[12, 10]</td></tr>
+      <tr><td>+</td><td>pop 10, pop 12 → 12+10=22, push</td><td>[22]</td></tr>
+    </table>
+    <p><strong>Result: 22</strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q6</span><span class="marks">1 mark</span></div>
+    <div class="qtext">The result of evaluating the postfix expression <code>5, 4, 6, +, *, 4, 9, 3, /, +, *</code> is?</div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <table>
+      <tr><th>Token</th><th>Action</th><th>Stack</th></tr>
+      <tr><td>5</td><td>push</td><td>[5]</td></tr>
+      <tr><td>4</td><td>push</td><td>[5, 4]</td></tr>
+      <tr><td>6</td><td>push</td><td>[5, 4, 6]</td></tr>
+      <tr><td>+</td><td>4+6=10, push</td><td>[5, 10]</td></tr>
+      <tr><td>*</td><td>5*10=50, push</td><td>[50]</td></tr>
+      <tr><td>4</td><td>push</td><td>[50, 4]</td></tr>
+      <tr><td>9</td><td>push</td><td>[50, 4, 9]</td></tr>
+      <tr><td>3</td><td>push</td><td>[50, 4, 9, 3]</td></tr>
+      <tr><td>/</td><td>9/3=3, push</td><td>[50, 4, 3]</td></tr>
+      <tr><td>+</td><td>4+3=7, push</td><td>[50, 7]</td></tr>
+      <tr><td>*</td><td>50*7=350, push</td><td>[350]</td></tr>
+    </table>
+    <p><strong>Result: 350</strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q1.2</span><span class="marks">2 marks</span></div>
+    <div class="qtext">Naveen got the postfix expression <code>5 3 + 6 2 / * 3 5 * +</code> to evaluate. Help him with the answer.</div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <table>
+      <tr><th>Token</th><th>Action</th><th>Stack</th></tr>
+      <tr><td>5</td><td>push</td><td>[5]</td></tr>
+      <tr><td>3</td><td>push</td><td>[5, 3]</td></tr>
+      <tr><td>+</td><td>5+3=8, push</td><td>[8]</td></tr>
+      <tr><td>6</td><td>push</td><td>[8, 6]</td></tr>
+      <tr><td>2</td><td>push</td><td>[8, 6, 2]</td></tr>
+      <tr><td>/</td><td>6/2=3, push</td><td>[8, 3]</td></tr>
+      <tr><td>*</td><td>8*3=24, push</td><td>[24]</td></tr>
+      <tr><td>3</td><td>push</td><td>[24, 3]</td></tr>
+      <tr><td>5</td><td>push</td><td>[24, 3, 5]</td></tr>
+      <tr><td>*</td><td>3*5=15, push</td><td>[24, 15]</td></tr>
+      <tr><td>+</td><td>24+15=39, push</td><td>[39]</td></tr>
+    </table>
+    <p><strong>Result: 39</strong></p>
+  </div>
+
+  <div class="callout clarify">
+    <span class="label">Related but different — QP1 Q5b</span>
+    "Write an algorithm using stack to evaluate a given valid <strong>prefix</strong> expression" (CIE 21-22, 5 marks) asks for the same idea in reverse: scan the prefix expression <strong>right to left</strong>; push operands; on an operator, pop <code>op1</code> then <code>op2</code> (in that order, since the scan is reversed) and push <code>op1 &lt;operator&gt; op2</code>. The single remaining value is the result — the roles of "which operand comes off first" flip relative to postfix evaluation because the scan direction is reversed. The full algorithm, C code and a traced example are in <a href="#stack-prefix-eval">§1.7</a>.
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="stack-prefix-eval" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.7</span><h1>Prefix Expression Evaluation</h1></div>
+  <p class="section-sub">Lab · application of stack · evaluate a prefix (Polish) expression by scanning right to left</p>
+
+  <h2>Idea</h2>
+  <p>In a prefix expression the operator comes <em>before</em> its two operands (<code>+ A B</code>). Scanning from the left, an operator is met before the operands it needs, so a stack cannot evaluate it immediately. Scanning <strong>from the right</strong> reverses this: both operands of an operator have already been seen and are sitting on the stack when the operator arrives. So prefix evaluation is the postfix algorithm run backwards, with one change in operand order.</p>
+
+  <h2>Algorithm</h2>
+  <ol class="steps">
+    <li>Scan the prefix expression from <strong>right to left</strong>.</li>
+    <li>If the token is an operand, push it.</li>
+    <li>If the token is an operator, pop <code>op1</code> (first pop — this is the <strong>left</strong> operand), then pop <code>op2</code> (the right operand), compute <code>op1 &lt;operator&gt; op2</code> and push the result.</li>
+    <li>When the scan ends, the single value on the stack is the answer. Time O(n), stack depth at most the number of operands.</li>
+  </ol>
+  <div class="callout key">
+    <span class="label">Postfix vs prefix — the one difference</span>
+    Postfix is scanned left to right and the <em>first</em> pop is the <strong>right</strong> operand (<code>op2</code>). Prefix is scanned right to left and the <em>first</em> pop is the <strong>left</strong> operand (<code>op1</code>). Getting this wrong flips <code>−</code> and <code>/</code>: for <code>- 9 3</code> the 3 is pushed first, then 9, so the first pop gives 9 and the result is 9 − 3 = 6.
+  </div>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C</span><span class="marks">6 marks</span></div>
+    <div class="qtext">Write a C program to evaluate a prefix expression using a stack, and trace it for <code>- + 7 * 4 5 + 2 0</code>.</div>
+    <div class="ans-label">Answer — full program (single-digit operands; the trace is printed after every token)</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char pre[] = "-+7*45+20";        /* (7 + 4*5) - (2 + 0) */
+    int stack[20], top = -1;
+    for (int i = strlen(pre) - 1; i &gt;= 0; i--) {      /* scan RIGHT to LEFT */
+        char ch = pre[i];
+        if (isdigit((unsigned char)ch)) stack[++top] = ch - '0';
+        else {
+            int op1 = stack[top--];                    /* first pop = LEFT operand */
+            int op2 = stack[top--];
+            int r = 0;
+            switch (ch) {
+                case '+': r = op1 + op2; break;
+                case '-': r = op1 - op2; break;
+                case '*': r = op1 * op2; break;
+                case '/': r = op1 / op2; break;
+            }
+            stack[++top] = r;
+        }
+        printf("%c  [", ch);
+        for (int j = 0; j &lt;= top; j++) printf("%s%d", j ? ", " : "", stack[j]);
+        printf("]\n");
+    }
+    printf("Result = %d\n", stack[top]);
+    return 0;
+}</pre>
+    <div class="ans-label">Output (compiled with gcc and run)</div>
+    <pre class="formula-block">0  [0]
+2  [0, 2]
++  [2]
+5  [2, 5]
+4  [2, 5, 4]
+*  [2, 20]
+7  [2, 20, 7]
++  [2, 27]
+-  [25]
+Result = 25</pre>
+    <div class="ans-label">Trace (scan right to left)</div>
+    <table>
+      <tr><th>Token</th><th>Action</th><th>Stack (bottom → top)</th></tr>
+      <tr><td>0</td><td>push</td><td>[0]</td></tr>
+      <tr><td>2</td><td>push</td><td>[0, 2]</td></tr>
+      <tr><td>+</td><td>pop 2, pop 0 → 2+0=2, push</td><td>[2]</td></tr>
+      <tr><td>5</td><td>push</td><td>[2, 5]</td></tr>
+      <tr><td>4</td><td>push</td><td>[2, 5, 4]</td></tr>
+      <tr><td>*</td><td>pop 4, pop 5 → 4*5=20, push</td><td>[2, 20]</td></tr>
+      <tr><td>7</td><td>push</td><td>[2, 20, 7]</td></tr>
+      <tr><td>+</td><td>pop 7, pop 20 → 7+20=27, push</td><td>[2, 27]</td></tr>
+      <tr><td>−</td><td>pop 27, pop 2 → 27−2=25, push</td><td>[25]</td></tr>
+    </table>
+    <p><strong>Result: 25.</strong> Cross-check: the infix form is <code>(7 + 4*5) − (2 + 0)</code> = 27 − 2 = 25, and its postfix form <code>7 4 5 * + 2 0 + −</code> evaluated with the §1.6 algorithm also gives 25 (all three checked in code).</p>
+  </div>
+  <div class="callout">
+    <span class="label">Multi-digit operands</span>
+    The program reads one character per operand. For numbers such as 12 or 45 the expression is written with spaces and split into tokens (for example with <code>strtok</code> and <code>atoi</code>); the stack logic is unchanged.
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Your materials only mention prefix evaluation in passing (CIE 21-22 Q5b). The full algorithm, C code and traced example are added here and were compiled and run.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="stack-paren" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.8</span><h1>Parenthesis Balancing</h1></div>
+  <p class="section-sub">Matching (, [, { using a stack · O(n) · syllabus application</p>
+
+  <p>An expression is <strong>balanced</strong> if every opening bracket has a matching closing bracket of the same type, and brackets close in the correct (nested) order. A stack fits because the <em>most recent</em> unmatched opening bracket must be the first to close.</p>
+  <ol class="steps">
+    <li>Scan left to right. <strong>Push</strong> every opening bracket <code>( [ {</code>.</li>
+    <li>On a closing bracket: if the stack is empty, it is unbalanced (extra closer). Otherwise <strong>pop</strong> and check that the popped bracket matches; if not, unbalanced.</li>
+    <li>Ignore all other characters.</li>
+    <li>After the scan, the expression is balanced <strong>only if the stack is empty</strong> (otherwise there are unmatched openers).</li>
+  </ol>
+  <pre class="formula-block">int balanced(char *e) {
+    char st[100]; int top = -1;
+    for (int i = 0; e[i]; i++) {
+        char c = e[i];
+        if (c=='(' || c=='[' || c=='{') st[++top] = c;
+        else if (c==')' || c==']' || c=='}') {
+            if (top == -1) return 0;                    <span class="cm">/* extra closer */</span>
+            char o = st[top--];
+            if ((c==')' &amp;&amp; o!='(') || (c==']' &amp;&amp; o!='[') || (c=='}' &amp;&amp; o!='{'))
+                return 0;                               <span class="cm">/* wrong type   */</span>
+        }
+    }
+    return top == -1;                                   <span class="cm">/* none left over */</span>
+}</pre>
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">Your Unit II deck · verified</span><span class="marks">3 marks</span></div>
+    <div class="qtext">Classify each expression.</div>
+    <table>
+      <tr><th>Expression</th><th>Result</th><th>Reason</th></tr>
+      <tr><td><code>{ [ ( A + B ) ] }</code></td><td>Balanced</td><td>Closes in reverse order of opening; stack ends empty</td></tr>
+      <tr><td><code>(A + B) * [C − D]</code></td><td>Balanced</td><td>Two separate matched groups</td></tr>
+      <tr><td><code>{ [ ( A + B ] ) }</code></td><td>Not balanced</td><td><code>]</code> arrives while top is <code>(</code> — mismatch</td></tr>
+      <tr><td><code>(A + B</code></td><td>Not balanced</td><td>Stack not empty at the end</td></tr>
+      <tr><td><code>A + B)</code></td><td>Not balanced</td><td><code>)</code> arrives on an empty stack</td></tr>
+    </table>
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-2-6" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.9</span><h1>Solved Numericals — Stacks</h1></div>
+  <p class="section-sub">Full exam-style stack questions worked end to end</p>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">CIE 21-22 Test-I · Q1a</span><span class="marks">10 marks</span></div>
+    <div class="qtext">Considering only the characters '(' and ')', a sequence of parentheses is called <strong>regular</strong> if: an empty sequence is regular; if S is regular, then (S) is regular; if A and B are regular, their concatenation AB is regular. Write a C function/algorithm using stack to find if the sequence is regular or not. Trace your algorithm for the input sequences <code>((()))()</code> and <code>(())))()</code>.</div>
+
+    <div class="ans-label">Algorithm (using a stack)</div>
+    <ol class="steps">
+      <li>Initialise an empty stack.</li>
+      <li>Scan the sequence left to right. On <code>'('</code>, push it.</li>
+      <li>On <code>')'</code>: if the stack is empty, the sequence is immediately <strong>not regular</strong> (a close with nothing to match) — stop. Otherwise pop one <code>'('</code>.</li>
+      <li>After the full scan: if the stack is empty, the sequence is <strong>regular</strong>; if it still holds unmatched <code>'('</code>s, it is <strong>not regular</strong>.</li>
+    </ol>
+
+    <div class="formula-block"><span class="c1">int</span> isRegular(<span class="c1">char</span> seq[]) {
+  <span class="c1">int</span> stack[50], top = -1;
+  <span class="c1">for</span> (<span class="c1">int</span> i = 0; seq[i] != <span class="c2">'\0'</span>; i++) {
+    <span class="c1">if</span> (seq[i] == <span class="c2">'('</span>)
+      stack[++top] = 1;
+    <span class="c1">else</span> { <span class="cm">// seq[i] == ')'</span>
+      <span class="c1">if</span> (top == -1) <span class="c1">return</span> 0;  <span class="cm">// unmatched ')'</span>
+      top--;
+    }
+  }
+  <span class="c1">return</span> (top == -1);  <span class="cm">// regular iff stack empties exactly</span>
+}</div>
+
+    <div class="ans-label">Trace 1: <code>((()))()</code></div>
+    <table>
+      <tr><th>Char</th><th>Action</th><th>Stack (top → right)</th></tr>
+      <tr><td>(</td><td>push</td><td>(</td></tr>
+      <tr><td>(</td><td>push</td><td>( (</td></tr>
+      <tr><td>(</td><td>push</td><td>( ( (</td></tr>
+      <tr><td>)</td><td>pop</td><td>( (</td></tr>
+      <tr><td>)</td><td>pop</td><td>(</td></tr>
+      <tr><td>)</td><td>pop</td><td>empty</td></tr>
+      <tr><td>(</td><td>push</td><td>(</td></tr>
+      <tr><td>)</td><td>pop</td><td>empty</td></tr>
+    </table>
+    <p>Stack empties exactly at the end → <strong>"((()))()" is REGULAR.</strong></p>
+
+    <div class="ans-label">Trace 2: <code>(())))()</code></div>
+    <table>
+      <tr><th>Char</th><th>Action</th><th>Stack (top → right)</th></tr>
+      <tr><td>(</td><td>push</td><td>(</td></tr>
+      <tr><td>(</td><td>push</td><td>( (</td></tr>
+      <tr><td>)</td><td>pop</td><td>(</td></tr>
+      <tr><td>)</td><td>pop</td><td>empty</td></tr>
+      <tr><td>)</td><td>stack empty — unmatched ')'</td><td>—</td></tr>
+    </table>
+    <p>The algorithm halts on the 5th character with an unmatched <code>')'</code> → <strong>"(())))()" is NOT REGULAR.</strong> (Both traces verified by stack simulation in code.)</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-1" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.1</span><h1>Introduction to Recursion</h1></div>
+  <p class="section-sub">Introduction to recursion</p>
+
+  <h2>What is Recursion?</h2>
+  <p><strong>Recursion</strong> is a technique where a function solves a problem by calling itself on one or more smaller instances of the same problem. It is a natural approach for problems that can be broken down into smaller sub-problems that look identical in structure to the original.</p>
+
+  <h2>Key Components of a Recursive Algorithm</h2>
+  <ol>
+    <li><strong>Decomposition</strong> — what is the smaller identical sub-problem? (e.g. for factorial(n), it's factorial(n−1)).</li>
+    <li><strong>Composition</strong> — how are the answers to the smaller sub-problem(s) combined to form the answer to the larger problem? (e.g. multiply the sub-result by <code>n</code>).</li>
+    <li><strong>Base case (stopping case)</strong> — the smallest problem that can be solved directly, without further decomposition. Every recursive method must have at least one.</li>
+  </ol>
+
+  <div class="callout key">
+    <span class="label">Two rules a recursive function must always follow</span>
+    (1) It must call itself, on a strictly "smaller" version of the problem. (2) It must have a base case that does <em>not</em> make a further recursive call, and that is actually reachable from every valid input — otherwise the recursion never terminates (§2.3).
+  </div>
+
+  <h2>Recursion vs. Iteration</h2>
+  <table>
+    <tr><th>Aspect</th><th>Recursion</th><th>Iteration</th></tr>
+    <tr><td>Mechanism</td><td>Function calls itself with a smaller argument</td><td>Loop (for/while) repeats a block of code</td></tr>
+    <tr><td>Termination</td><td>Base case</td><td>Loop condition becomes false</td></tr>
+    <tr><td>Memory overhead</td><td>Higher — each call adds a stack frame (§2.3)</td><td>Lower — no extra call frames</td></tr>
+    <tr><td>Speed</td><td>Generally slower due to call/return overhead</td><td>Generally faster</td></tr>
+    <tr><td>Code clarity</td><td>Often shorter, more natural for recursively-structured problems (trees, divide-and-conquer)</td><td>Can be longer/less intuitive for the same problems</td></tr>
+    <tr><td>Equivalence</td><td colspan="2">Every recursive algorithm can be rewritten iteratively (using an explicit stack for state), and vice versa.</td></tr>
+  </table>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q4b</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Define Recursion. How does recursion differ from iteration?</div>
+    <div class="ans-label">Answer</div>
+    <p>Recursion is a technique in which a function solves a problem by calling itself on smaller instances of the same problem until a base case is reached. See the comparison table above for the key differences — mechanism, termination, memory overhead, and speed are the four points worth naming explicitly.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q2</span><span class="marks">1 mark</span></div>
+    <div class="qtext">What is the output of the following recursion when n = 2?<br><code>int fun(int n) { if (n == 4) return n; else return 2*fun(n+1); }</code></div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <table>
+      <tr><th>Call</th><th>Condition</th><th>Result</th></tr>
+      <tr><td>fun(2)</td><td>2 ≠ 4</td><td>2 * fun(3)</td></tr>
+      <tr><td>fun(3)</td><td>3 ≠ 4</td><td>2 * fun(4)</td></tr>
+      <tr><td>fun(4)</td><td>4 == 4 (base case)</td><td>returns 4</td></tr>
+    </table>
+    <p>Composing back up: fun(3) = 2×4 = 8, fun(2) = 2×8 = <strong>16</strong>.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-2" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.2</span><h1>Factorial Function &amp; Execution Trace</h1></div>
+  <p class="section-sub">Factorial function</p>
+
+  <h2>Recursive Design</h2>
+  <p>Factorial is the canonical first example of recursion, because its own mathematical definition is already recursive:</p>
+  <div class="formula-block">N! = (N-1)! * N   <span class="cm">for N &gt; 1</span>
+1! = 1             <span class="cm">base case</span></div>
+  <ul>
+    <li><strong>Decomposition:</strong> <code>(N−1)!</code></li>
+    <li><strong>Composition:</strong> multiply the sub-result by <code>N</code></li>
+    <li><strong>Base case:</strong> <code>1! = 1</code> (equivalently <code>0! = 1</code>)</li>
+  </ul>
+
+  <div class="formula-block"><span class="c1">int</span> factorial(<span class="c1">int</span> n) {
+  <span class="c1">int</span> fact;
+  <span class="c1">if</span> (n &gt; 1)               <span class="cm">// recursive case (decomposition)</span>
+    fact = factorial(n - 1) * n;  <span class="cm">// composition</span>
+  <span class="c1">else</span>                      <span class="cm">// base case</span>
+    fact = 1;
+  <span class="c1">return</span> fact;
+}</div>
+
+  <h2>Execution Trace: factorial(4)</h2>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+        <marker id="arrow4b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#93316B"/></marker>
+      </defs>
+      <text x="130" y="20" text-anchor="middle" font-family="Inter" font-size="12.5" font-weight="600" fill="#12796F">Decomposition (calls go down)</text>
+      <text x="500" y="20" text-anchor="middle" font-family="Inter" font-size="12.5" font-weight="600" fill="#93316B">Composition (returns go up)</text>
+
+      <rect x="40" y="34" width="180" height="34" rx="6" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/>
+      <text x="130" y="56" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">factorial(4)</text>
+
+      <rect x="70" y="80" width="180" height="34" rx="6" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/>
+      <text x="160" y="102" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">factorial(3)</text>
+
+      <rect x="100" y="126" width="180" height="34" rx="6" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/>
+      <text x="190" y="148" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13">factorial(2)</text>
+
+      <rect x="90" y="172" width="290" height="34" rx="6" fill="#F7EEDD" stroke="#A66A0D" stroke-width="1.5"/>
+      <text x="235" y="194" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12.5">factorial(1) → base case, returns 1</text>
+
+      <path d="M60,68 Q40,90 65,84" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrow4)"/>
+      <path d="M90,114 Q70,136 95,130" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrow4)"/>
+      <path d="M120,160 Q100,182 125,176" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrow4)"/>
+
+      <text x="440" y="230" font-family="JetBrains Mono, monospace" font-size="13" fill="#2A2C2F">factorial(1) returns  <tspan fill="#93316B" font-weight="700">1</tspan></text>
+      <text x="440" y="258" font-family="JetBrains Mono, monospace" font-size="13" fill="#2A2C2F">factorial(2) = 1 * 2 = <tspan fill="#93316B" font-weight="700">2</tspan></text>
+      <text x="440" y="286" font-family="JetBrains Mono, monospace" font-size="13" fill="#2A2C2F">factorial(3) = 2 * 3 = <tspan fill="#93316B" font-weight="700">6</tspan></text>
+      <text x="440" y="314" font-family="JetBrains Mono, monospace" font-size="13" fill="#2A2C2F">factorial(4) = 6 * 4 = <tspan fill="#93316B" font-weight="700">24</tspan></text>
+
+      <path d="M370,220 Q410,225 430,225" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrow4b)"/>
+    </svg>
+    <div class="cap">Fig 3. Recursive call stack for factorial(4). Decomposition builds up stack frames from factorial(4) down to the base case factorial(1); composition then unwinds them, multiplying as each frame returns: 1 → 2 → 6 → 24.</div>
+  </div>
+
+  <table>
+    <tr><th>Phase</th><th>Call</th><th>Value</th></tr>
+    <tr><td rowspan="4">Decomposition</td><td>factorial(4)</td><td>waits on factorial(3)</td></tr>
+    <tr><td>factorial(3)</td><td>waits on factorial(2)</td></tr>
+    <tr><td>factorial(2)</td><td>waits on factorial(1)</td></tr>
+    <tr><td>factorial(1)</td><td><strong>base case → returns 1</strong></td></tr>
+    <tr><td rowspan="3">Composition</td><td>factorial(2) = 1 × 2</td><td>2</td></tr>
+    <tr><td>factorial(3) = 2 × 3</td><td>6</td></tr>
+    <tr><td>factorial(4) = 6 × 4</td><td><strong>24</strong></td></tr>
+  </table>
+  <p class="section-sub" style="margin-top:-8px">Verified by direct computation: factorial(4) = 4×3×2×1 = <strong>24</strong>; and more generally factorial(5) = 5×4×3×2×1 = <strong>120</strong>.</p>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-3" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.3</span><h1>Role of the Stack During Recursion Execution</h1></div>
+  <p class="section-sub">Role of the stack during execution</p>
+
+  <h2>The System Call Stack</h2>
+  <p>Every recursive call is managed behind the scenes by an internal <strong>call stack</strong> maintained by the runtime system — not the array-based stack from Part 2, but the exact same LIFO principle:</p>
+  <ul>
+    <li>When a method (recursive or not) begins execution, a new <strong>stack frame</strong> is pushed, holding that call's local variables, parameters, and the return address.</li>
+    <li>When a method ends (hits a <code>return</code>), its frame is popped, and control resumes in the caller's frame exactly where it left off.</li>
+  </ul>
+  <p>This is precisely why the factorial(4) trace in Fig 3 grows downward (frames pushed: 4, 3, 2, 1) and then unwinds upward (frames popped in reverse: 1, 2, 3, 4) — the call stack enforces that the <em>last</em> call made (factorial(1)) is the <em>first</em> to return, which is exactly what makes composition happen in the correct order.</p>
+
+  <h2>Stack Overflow from Infinite Recursion</h2>
+  <p>Because each pending call keeps its frame on the stack until it returns, a recursive function that never reaches its base case keeps pushing frames indefinitely. Since the call stack has finite memory, this eventually exhausts it — a <strong>stack overflow error</strong>. This can happen because of:</p>
+  <ul>
+    <li><strong>No base case</strong> at all.</li>
+    <li>A base case that exists but is <strong>unreachable</strong> — e.g. bad decomposition that never actually shrinks the argument toward it.</li>
+    <li>The problem genuinely not getting smaller with each call.</li>
+  </ul>
+
+  <div class="callout key">
+    <span class="label">Exam framing</span>
+    "Explain the role of the stack during execution" (of recursion, or of a specific recursive algorithm like binary search or Tower of Hanoi) is asking for exactly this: each recursive call pushes a new frame holding that call's parameters and local state; the base case is the only frame that returns without triggering a further push; frames then pop and their results combine (composition) in strict last-in-first-out order as the recursion unwinds.
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q2 (role-of-stack part)</span><span class="marks">3 of 10 marks</span></div>
+    <div class="qtext">Design a Recursive function to implement Binary Search. Explain the role of stack during its execution.</div>
+    <div class="ans-label">Answer (binary search implementation in §2.4)</div>
+    <p>Each recursive call to <code>binarySearch(arr, left, right, x)</code> pushes a new stack frame holding that call's own <code>left</code>, <code>right</code>, and computed <code>mid</code>. The recursion halves the search range on every call (decomposition), so the maximum stack depth is only <strong>⌈log₂ n⌉ + 1</strong> frames for an array of size n — far shallower than, say, factorial's n frames. The base case (<code>right &lt; left</code>, i.e. element not found, or <code>arr[mid] == x</code>, i.e. found) returns a value with no further call, and that value propagates back up through each waiting frame as the stack unwinds, becoming the final return value of the outermost call.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-4" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.4</span><h1>Recursive Binary Search</h1></div>
+  <p class="section-sub">Binary search</p>
+
+  <h2>Idea</h2>
+  <p>Binary search finds the position of a target value in a <strong>sorted</strong> array by repeatedly comparing the target against the <strong>middle</strong> element and discarding the half of the array that cannot contain it. Each recursive call operates on a range half the size of the previous one — a textbook divide-and-conquer recursion.</p>
+  <ul>
+    <li><strong>Decomposition:</strong> search the left half or the right half of the current range.</li>
+    <li><strong>Composition:</strong> none needed — the answer from the sub-call <em>is</em> the answer (this is a case of "tail recursion").</li>
+    <li><strong>Base case:</strong> <code>arr[mid] == x</code> (found), or the range is empty, i.e. <code>right &lt; left</code> (not found).</li>
+  </ul>
+
+  <div class="formula-block"><span class="c1">int</span> binarySearch(<span class="c1">int</span> arr[], <span class="c1">int</span> left, <span class="c1">int</span> right, <span class="c1">int</span> x) {
+  <span class="c1">if</span> (right &gt;= left) {
+    <span class="c1">int</span> mid = left + (right - left) / 2;
+    <span class="c1">if</span> (arr[mid] == x)
+      <span class="c1">return</span> mid;
+    <span class="c1">if</span> (arr[mid] &gt; x)
+      <span class="c1">return</span> binarySearch(arr, left, mid - 1, x);
+    <span class="c1">return</span> binarySearch(arr, mid + 1, right, x);
+  }
+  <span class="c1">return</span> -1;  <span class="cm">// not found</span>
+}</div>
+
+  <div class="callout key">
+    <span class="label">Why <code>left + (right-left)/2</code> instead of <code>(left+right)/2</code></span>
+    Both give the same mathematical result, but <code>(left+right)</code> can overflow a fixed-width integer for very large indices; <code>left + (right-left)/2</code> avoids that. Either form is acceptable in an exam answer — mention the safer form if asked to "improve" the code.
+  </div>
+
+  <h2>Worked Trace: search for 26 in {1, 4, 7, 9, 26, 55, 87, 90}</h2>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="20" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="55" y="42" text-anchor="middle">1</text>
+        <rect x="90" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="125" y="42" text-anchor="middle">4</text>
+        <rect x="160" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="195" y="42" text-anchor="middle">7</text>
+        <rect x="230" y="20" width="70" height="34" fill="#F7EEDD" stroke="#A66A0D"/><text x="265" y="42" text-anchor="middle">9</text>
+        <rect x="300" y="20" width="70" height="34" fill="#E4F3F0" stroke="#12796F" stroke-width="2"/><text x="335" y="42" text-anchor="middle" font-weight="700">26</text>
+        <rect x="370" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="405" y="42" text-anchor="middle">55</text>
+        <rect x="440" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="475" y="42" text-anchor="middle">87</text>
+        <rect x="510" y="20" width="70" height="34" fill="#FFFFFF" stroke="#E4E0D3"/><text x="545" y="42" text-anchor="middle">90</text>
+      </g>
+      <g font-family="Inter" font-size="11" fill="#5B6169">
+        <text x="55" y="68" text-anchor="middle">idx 0</text><text x="125" y="68" text-anchor="middle">idx 1</text>
+        <text x="195" y="68" text-anchor="middle">idx 2</text><text x="265" y="68" text-anchor="middle">idx 3</text>
+        <text x="335" y="68" text-anchor="middle">idx 4</text><text x="405" y="68" text-anchor="middle">idx 5</text>
+        <text x="475" y="68" text-anchor="middle">idx 6</text><text x="545" y="68" text-anchor="middle">idx 7</text>
+      </g>
+      <g font-family="JetBrains Mono, monospace" font-size="12.5" fill="#2A2C2F">
+        <text x="20" y="105">Call 1:  left=0, right=7 → mid=3 → arr[3]=9  &lt; 26  → search right half</text>
+        <text x="20" y="135">Call 2:  left=4, right=7 → mid=5 → arr[5]=55 &gt; 26  → search left half</text>
+        <text x="20" y="165">Call 3:  left=4, right=4 → mid=4 → arr[4]=26 == 26 → <tspan fill="#12796F" font-weight="700">found at index 4</tspan></text>
+      </g>
+      <rect x="230" y="90" width="360" height="90" fill="none" stroke="#E4E0D3" stroke-dasharray="3 3" rx="6"/>
+    </svg>
+    <div class="cap">Fig 4. Recursive binary search for 26 — each call halves the active range; found in 3 comparisons instead of scanning all 8 elements linearly.</div>
+  </div>
+  <p>Verified by running the algorithm: <code>binarySearch({1,4,7,9,26,55,87,90}, 0, 7, 26)</code> returns index <strong>4</strong> after exactly 3 recursive calls.</p>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">Deck's own example (unit 1 stacks.pdf, verified)</span><span class="marks">reference</span></div>
+    <div class="qtext">Search for 70 in <code>{1, 4, 7, 9, 26, 55, 87, 90}</code>.</div>
+    <div class="ans-label">Answer</div>
+    <p>Trace: mid=3 → arr[3]=9 &lt; 70 → right half; mid=5 → arr[5]=55 &lt; 70 → right half (left=6,right=7); mid=6 → arr[6]=87 &gt; 70 → left half (left=6,right=5, i.e. <code>right &lt; left</code>) → base case triggers → <strong>returns −1 (not found)</strong>, since 70 is not actually present in the array. Verified by running the function.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-5" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.5</span><h1>Towers of Hanoi Problem</h1></div>
+  <p class="section-sub">Towers of Hanoi problem</p>
+
+  <h2>The Puzzle</h2>
+  <p>Three pegs — <strong>Source (S)</strong>, <strong>Temporary/spare (T)</strong>, <strong>Destination (D)</strong> — hold <code>n</code> disks of decreasing diameter, all initially stacked on the source peg. The goal is to move the entire stack to the destination peg, moving one disk at a time, and never placing a larger disk on top of a smaller one.</p>
+
+  <h2>Recursive Design</h2>
+  <p>A tower of <code>n</code> disks can be moved from source to destination using the spare peg by:</p>
+  <ol>
+    <li><strong>Decomposition:</strong> move the top <code>n−1</code> disks from source to spare (using destination as the temporary peg for this sub-move).</li>
+    <li><strong>Composition:</strong> move the single remaining (largest) disk from source directly to destination.</li>
+    <li>Move the <code>n−1</code> disks from spare to destination (using source as the temporary peg).</li>
+    <li><strong>Base case:</strong> <code>n == 0</code> — nothing to move.</li>
+  </ol>
+
+  <div class="formula-block"><span class="c1">void</span> ToH(<span class="c1">int</span> n, <span class="c1">char</span> src, <span class="c1">char</span> dest, <span class="c1">char</span> temp) {
+  <span class="c1">if</span> (n &gt; 0) {
+    ToH(n - 1, src, temp, dest);              <span class="cm">// decomposition</span>
+    printf(<span class="c2">"Move disk %d from %c to %c"</span>, n, src, dest); <span class="cm">// composition</span>
+    ToH(n - 1, temp, dest, src);              <span class="cm">// decomposition</span>
+  }
+}
+<span class="cm">// called as: ToH(n, 'A', 'C', 'B');</span></div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 290" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker>
+      </defs>
+      <g font-family="Inter" font-size="13" font-weight="600" fill="#2A2C2F">
+        <text x="90" y="24" text-anchor="middle">A (Source)</text>
+        <text x="320" y="24" text-anchor="middle">B (Spare)</text>
+        <text x="550" y="24" text-anchor="middle">C (Destination)</text>
+      </g>
+      <line x1="90" y1="34" x2="90" y2="120" stroke="#8A9096" stroke-width="4"/>
+      <line x1="320" y1="34" x2="320" y2="120" stroke="#8A9096" stroke-width="4"/>
+      <line x1="550" y1="34" x2="550" y2="120" stroke="#8A9096" stroke-width="4"/>
+      <rect x="30" y="34" width="120" height="90" fill="none" stroke="#E4E0D3" rx="4"/>
+      <rect x="260" y="34" width="120" height="90" fill="none" stroke="#E4E0D3" rx="4"/>
+      <rect x="490" y="34" width="120" height="90" fill="none" stroke="#E4E0D3" rx="4"/>
+      <rect x="55" y="96" width="70" height="20" rx="4" fill="#E4F3F0" stroke="#12796F"/>
+      <rect x="63" y="76" width="54" height="20" rx="4" fill="#EEECF7" stroke="#4C3F91"/>
+      <rect x="71" y="56" width="38" height="20" rx="4" fill="#F6E9F0" stroke="#93316B"/>
+      <text x="90" y="140" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">initial: n disks on A</text>
+
+      <path d="M170,150 Q260,190 300,150" fill="none" stroke="#12796F" stroke-width="2" marker-end="url(#arrow5)"/>
+      <text x="235" y="205" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#12796F">1. move n−1 disks: A → B (using C as spare)</text>
+
+      <path d="M400,150 Q470,190 520,150" fill="none" stroke="#A66A0D" stroke-width="2" marker-end="url(#arrow5)"/>
+      <text x="460" y="205" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#A66A0D">2. move disk n: A → C</text>
+      <text x="460" y="225" text-anchor="middle" font-family="Inter" font-size="12" font-weight="600" fill="#A66A0D">3. move n−1 disks: B → C (using A as spare)</text>
+
+      <rect x="285" y="96" width="70" height="20" rx="4" fill="#E4F3F0" stroke="#12796F" opacity="0.4"/>
+      <rect x="515" y="116" width="70" height="20" rx="4" fill="#F7EEDD" stroke="#A66A0D"/>
+    </svg>
+    <div class="cap">Fig 5. Towers of Hanoi — recursive decomposition. Moving n disks A→C reduces to: move n−1 disks A→B, move the largest disk A→C, move n−1 disks B→C.</div>
+  </div>
+
+  <h2>Recurrence Relation &amp; Minimum Moves</h2>
+  <p>Let <code>T(n)</code> be the minimum number of moves to transfer <code>n</code> disks. Each call to move <code>n</code> disks makes two recursive calls to move <code>n−1</code> disks, plus one direct move:</p>
+  <div class="formula-block">T(n) = 2·T(n-1) + 1,   T(0) = 0
+Solving: T(n) = 2<sup>n</sup> - 1</div>
+  <p>For <code>n=3</code>: T(3) = 2³−1 = <strong>7</strong> moves. For <code>n=4</code>: T(4) = 2⁴−1 = <strong>15</strong> moves. (Both confirmed by running the recursive algorithm and counting the printed moves.)</p>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q2a (Part B)</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write the recursive call tree to explain the recursion to solve Tower of Hanoi problem (number of disks = 3).</div>
+    <div class="ans-label">Answer — call tree for ToH(3, A, C, B)</div>
+    <div class="formula-block">ToH(3,A,C,B)
+├─ ToH(2,A,B,C)
+│   ├─ ToH(1,A,C,B)
+│   │   ├─ ToH(0,A,B,C)        <span class="cm">base case, returns</span>
+│   │   ├─ <span class="c2">Move disk 1: A→C</span>
+│   │   └─ ToH(0,B,C,A)        <span class="cm">base case, returns</span>
+│   ├─ <span class="c2">Move disk 2: A→B</span>
+│   └─ ToH(1,C,B,A)
+│       ├─ ToH(0,C,A,B)        <span class="cm">base case, returns</span>
+│       ├─ <span class="c2">Move disk 1: C→B</span>
+│       └─ ToH(0,A,B,C)        <span class="cm">base case, returns</span>
+├─ <span class="c2">Move disk 3: A→C</span>
+└─ ToH(2,B,C,A)
+    ├─ ToH(1,B,A,C)
+    │   ├─ ToH(0,B,C,A)
+    │   ├─ <span class="c2">Move disk 1: B→A</span>
+    │   └─ ToH(0,C,A,B)
+    ├─ <span class="c2">Move disk 2: B→C</span>
+    └─ ToH(1,A,C,B)
+        ├─ ToH(0,A,B,C)
+        ├─ <span class="c2">Move disk 1: A→C</span>
+        └─ ToH(0,B,C,A)</div>
+    <p>Reading the highlighted moves top to bottom gives the move sequence (matches the deck's own worked trace and the run below): disk1 A→C, disk2 A→B, disk1 C→B, disk3 A→C, disk1 B→A, disk2 B→C, disk1 A→C — <strong>7 moves</strong> total.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Quiz Q8</span><span class="marks">2 marks</span></div>
+    <div class="qtext">Minimum number of moves required to solve a tower of Hanoi problem with 3 disks is ____. Also provide the moves from Tower 'A' (source) to Tower 'C' (destination) making use of Tower 'B' (temporary).</div>
+    <div class="ans-label">Answer — verified by running ToH(3,'A','C','B')</div>
+    <p><strong>Minimum moves = 2³ − 1 = 7</strong></p>
+    <table>
+      <tr><th>#</th><th>Move</th></tr>
+      <tr><td>1</td><td>Move disk 1 from A to C</td></tr>
+      <tr><td>2</td><td>Move disk 2 from A to B</td></tr>
+      <tr><td>3</td><td>Move disk 1 from C to B</td></tr>
+      <tr><td>4</td><td>Move disk 3 from A to C</td></tr>
+      <tr><td>5</td><td>Move disk 1 from B to A</td></tr>
+      <tr><td>6</td><td>Move disk 2 from B to C</td></tr>
+      <tr><td>7</td><td>Move disk 1 from A to C</td></tr>
+    </table>
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE 21-22 Test-I · Q3 &amp; CIE-1 2024-25 · Q4a</span><span class="marks">10 marks / 6 marks</span></div>
+    <div class="qtext">Implement a C program to solve the Tower of Hanoi puzzle recursively. The program should print all the moves and the total number of moves taken. Trace your strategy for n = 4 disks.</div>
+    <div class="ans-label">Answer — C code as in the box above; trace for n=4, verified by running ToH(4,'A','C','B')</div>
+    <table>
+      <tr><th>#</th><th>Move</th></tr>
+      <tr><td>1</td><td>Move disk 1 from A to B</td></tr>
+      <tr><td>2</td><td>Move disk 2 from A to C</td></tr>
+      <tr><td>3</td><td>Move disk 1 from B to C</td></tr>
+      <tr><td>4</td><td>Move disk 3 from A to B</td></tr>
+      <tr><td>5</td><td>Move disk 1 from C to A</td></tr>
+      <tr><td>6</td><td>Move disk 2 from C to B</td></tr>
+      <tr><td>7</td><td>Move disk 1 from A to B</td></tr>
+      <tr><td>8</td><td>Move disk 4 from A to C</td></tr>
+      <tr><td>9</td><td>Move disk 1 from B to C</td></tr>
+      <tr><td>10</td><td>Move disk 2 from B to A</td></tr>
+      <tr><td>11</td><td>Move disk 1 from C to A</td></tr>
+      <tr><td>12</td><td>Move disk 3 from B to C</td></tr>
+      <tr><td>13</td><td>Move disk 1 from A to B</td></tr>
+      <tr><td>14</td><td>Move disk 2 from A to C</td></tr>
+      <tr><td>15</td><td>Move disk 1 from B to C</td></tr>
+    </table>
+    <p><strong>Total moves = 2⁴ − 1 = 15</strong></p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-6" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.6</span><h1>More Recursion Examples</h1></div>
+  <p class="section-sub">Additional practice with the same decomposition → composition → base-case pattern</p>
+
+  <div class="callout clarify">
+    <span class="label">Not explicitly named in the syllabus wording — kept as reinforcement</span>
+    The syllabus names only factorial, binary search, and Towers of Hanoi under "Recursion." The examples below come from the source deck (<code>unit 1 recursion.pdf</code>) and are kept because they reinforce the same decomposition/composition/base-case pattern with very short, exam-friendly functions.
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Fibonacci Numbers</h3>
+      <p>fibonacci(n) = fibonacci(n−1) + fibonacci(n−2), with base cases fibonacci(1)=0, fibonacci(2)=1 (this deck's indexing starts the sequence 0, 1, 1, 2, 3, 5, 8, 13, …).</p>
+      <div class="formula-block"><span class="c1">int</span> fibonacci(<span class="c1">int</span> n) {
+  <span class="c1">if</span> (n == 1) <span class="c1">return</span> 0;
+  <span class="c1">if</span> (n == 2) <span class="c1">return</span> 1;
+  <span class="c1">return</span> fibonacci(n-1) + fibonacci(n-2);
+}</div>
+      <p><strong>fibonacci(4) = 2</strong> — verified: fib(3)=fib(2)+fib(1)=1+0=1, fib(4)=fib(3)+fib(2)=1+1=2.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">GCD (Euclidean Algorithm)</h3>
+      <p>GCD(m,n) = GCD(n, m mod n); base case GCD(m,0) = m.</p>
+      <div class="formula-block"><span class="c1">int</span> GCD(<span class="c1">int</span> m, <span class="c1">int</span> n) {
+  <span class="c1">if</span> (n == 0) <span class="c1">return</span> m;
+  <span class="c1">return</span> GCD(n, m % n);
+}</div>
+      <p><strong>GCD(48, 18) = 6</strong> — verified: GCD(48,18)→GCD(18,12)→GCD(12,6)→GCD(6,0)=6.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Sum of First N Natural Numbers</h3>
+      <p>Sum(n) = Sum(n−1) + n; base case Sum(1) = 1.</p>
+      <div class="formula-block"><span class="c1">int</span> Sum(<span class="c1">int</span> n) {
+  <span class="c1">if</span> (n == 1) <span class="c1">return</span> 1;
+  <span class="c1">return</span> Sum(n - 1) + n;
+}</div>
+      <p><strong>Sum(5) = 15</strong> — verified: 1+2+3+4+5 = 15.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Number of Zeros in a Number</h3>
+      <p>Decomposition: strip the last digit; if it's 0, add 1. Base case: a single-digit number.</p>
+      <div class="formula-block"><span class="c1">int</span> numberOfZeros(<span class="c1">int</span> n) {
+  <span class="c1">if</span> (n == 0) <span class="c1">return</span> 1;
+  <span class="c1">if</span> (n &lt; 10) <span class="c1">return</span> 0;
+  <span class="c1">if</span> (n % 10 == 0)
+    <span class="c1">return</span> numberOfZeros(n / 10) + 1;
+  <span class="c1">return</span> numberOfZeros(n / 10);
+}</div>
+      <p><strong>numberOfZeros(2030) = 2</strong> — verified: strips to 203 (last digit 3, no add) → 20 (last digit 0, +1) → 2 (single digit, 0). Total = 0+1+0 = 2.</p>
+    </div>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-7" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.7</span><h1>Solved Numericals — Recursion</h1></div>
+  <p class="section-sub">The full multi-part recursion question from CIE-1, answered end to end</p>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-1 2024-25 · Q2 (full)</span><span class="marks">7+3 = 10 marks</span></div>
+    <div class="qtext">Design a Recursive function to implement Binary Search. Explain the role of stack during its execution.</div>
+    <div class="ans-label">Part 1 — recursive design (7 marks)</div>
+    <p>See §2.4 for the full derivation: decomposition halves the search range by comparing the target against <code>arr[mid]</code>; the base case triggers either on a match (<code>arr[mid]==x</code>) or an empty range (<code>right &lt; left</code>). The C function is:</p>
+    <div class="formula-block"><span class="c1">int</span> binarySearch(<span class="c1">int</span> arr[], <span class="c1">int</span> left, <span class="c1">int</span> right, <span class="c1">int</span> x) {
+  <span class="c1">if</span> (right &gt;= left) {
+    <span class="c1">int</span> mid = left + (right - left) / 2;
+    <span class="c1">if</span> (arr[mid] == x) <span class="c1">return</span> mid;
+    <span class="c1">if</span> (arr[mid] &gt; x) <span class="c1">return</span> binarySearch(arr, left, mid - 1, x);
+    <span class="c1">return</span> binarySearch(arr, mid + 1, right, x);
+  }
+  <span class="c1">return</span> -1;
+}</div>
+    <p>Worked on {1,4,7,9,26,55,87,90}, searching for 26: found at index 4 in 3 calls (full trace and Fig 4 in §2.4, verified by running the function).</p>
+    <div class="ans-label">Part 2 — role of stack (3 marks)</div>
+    <p>Each recursive call pushes a new frame (holding that call's own <code>left</code>, <code>right</code>, <code>mid</code>) onto the system's call stack. Because the range halves every call, the maximum stack depth is only <strong>⌈log₂ n⌉ + 1</strong>. The base-case frame returns first; its return value then propagates back up through each waiting frame in turn as the stack unwinds, becoming the final result. (Full explanation in §2.3.)</p>
+  </div>
+
+  <h2>Recursion Techniques at a Glance</h2>
+  <table>
+    <tr><th>Problem</th><th>Recursive calls per step</th><th>Max stack depth for input size n</th><th>Verified result</th></tr>
+    <tr><td>Factorial(n)</td><td>1</td><td>n</td><td>factorial(4)=24, factorial(5)=120</td></tr>
+    <tr><td>Recursive Binary Search</td><td>1 (of 2 branches)</td><td>⌈log₂ n⌉ + 1</td><td>found 26 at index 4 in 3 calls (n=8)</td></tr>
+    <tr><td>Towers of Hanoi(n)</td><td>2</td><td>n</td><td>T(3)=7 moves, T(4)=15 moves</td></tr>
+    <tr><td>Fibonacci(n) (naive)</td><td>2</td><td>n</td><td>fibonacci(4)=2</td></tr>
+  </table>
+  <p class="section-sub" style="margin-top:-8px">Binary search's depth grows logarithmically because each call discards half the remaining input; factorial and Towers of Hanoi both branch/step linearly with n, but ToH still does exponentially more total <em>work</em> (2ⁿ−1 moves) because it makes two recursive calls per level instead of one.</p>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-stack-recursion" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">3.1</span><h1>Recursion, Backtracking &amp; Undo/Redo with Stacks</h1></div>
+  <p class="section-sub">Self-learning · removing recursion · backtracking (maze, N-Queens) · undo/redo · browser history</p>
+
+  <h2>Using a stack to eliminate recursion</h2>
+  <p>A recursive call is a <strong>frame pushed on the system call stack</strong> (parameters, locals, return address). To remove recursion, make the stack explicit: push the pending work onto your own stack and loop until the stack is empty. This avoids call-stack overflow on deep inputs. Typical pattern: replace <code>f(n-1)</code> by pushing the argument, popping it in a loop, and pushing new sub-problems.</p>
+  <p>Example — printing a list in reverse without recursion: push every element while traversing, then pop and print.</p>
+
+  <h2>Backtracking</h2>
+  <p><strong>Backtracking</strong> builds a solution step by step and, when a step leads to a dead end, <strong>undoes</strong> it and tries the next choice. The stack holds the path of choices made so far; "backtrack" = pop.</p>
+  <ul>
+    <li><strong>Maze solving</strong> — push each cell as you move; at a dead end pop to the previous cell and try another direction; the stack contents at the exit are the path.</li>
+    <li><strong>N-Queens</strong> — place one queen per row, pushing the column; if no safe column exists in a row, pop the previous row's queen and move it. For N = 4 there are exactly <strong>2 solutions</strong>: queen columns (1,3,0,2) and (2,0,3,1), counted from 0 (verified).</li>
+  </ul>
+
+  <h2>Undo / Redo in a text editor</h2>
+  <p>Use <strong>two stacks</strong>. Each edit is pushed on the <em>undo</em> stack. <strong>Undo</strong> pops the undo stack, reverses the edit and pushes it on the <em>redo</em> stack. <strong>Redo</strong> pops the redo stack, reapplies it and pushes it back on undo. Making a new edit <strong>clears the redo stack</strong>.</p>
+
+  <h2>Browser history navigation</h2>
+  <p>Two stacks again: <em>back</em> and <em>forward</em>. Visiting a page pushes the current page on <em>back</em> and clears <em>forward</em>. Back pops <em>back</em> and pushes the current page on <em>forward</em>; Forward does the reverse.</p>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-stack-variants" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">3.2</span><h1>Custom Stack Variations</h1></div>
+  <p class="section-sub">Self-learning · multiple stacks in one array · Min/Max stack · stack of plates</p>
+
+  <h2>Multiple stacks in a single array</h2>
+  <p>Two stacks can share one array of size N: stack A grows from index 0 upward (<code>topA</code> starts at −1) and stack B grows from index N−1 downward (<code>topB</code> starts at N). The array is full only when <code>topA + 1 == topB</code>, so neither stack overflows while there is free space overall. For more than two stacks, split the array into equal segments, or use the <em>shifting</em> method that moves neighbouring stacks when one overflows.</p>
+
+  <h2>Min Stack (get minimum in O(1))</h2>
+  <p>Keep an auxiliary stack that stores the <strong>minimum so far</strong> at each depth. On push, also push <code>min(x, current min)</code>; on pop, pop both. Then <code>getMin()</code> is simply the top of the auxiliary stack. A Max stack is the same with <code>max</code>.</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Worked trace · verified</span><span class="marks">3 marks</span></div>
+    <div class="qtext">Push 5, 3, 7, 2, 8 on a Min Stack, then pop twice.</div>
+    <table>
+      <tr><th>Operation</th><th>Main stack (bottom→top)</th><th>getMin()</th></tr>
+      <tr><td>push 5</td><td>5</td><td>5</td></tr><tr><td>push 3</td><td>5 3</td><td>3</td></tr>
+      <tr><td>push 7</td><td>5 3 7</td><td>3</td></tr><tr><td>push 2</td><td>5 3 7 2</td><td>2</td></tr>
+      <tr><td>push 8</td><td>5 3 7 2 8</td><td>2</td></tr><tr><td>pop</td><td>5 3 7 2</td><td>2</td></tr>
+      <tr><td>pop</td><td>5 3 7</td><td>3</td></tr>
+    </table>
+  </div>
+
+  <h2>Stack of Plates</h2>
+  <p>A real stack has a capacity, so a pile of plates is modelled as a <strong>list of stacks</strong>: when the current stack reaches its capacity, start a new one. Push goes to the last stack, pop takes from the last stack and discards it when empty (<em>SetOfStacks</em> idea).</p>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-stack-problems" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">3.3</span><h1>Classic Stack Problems</h1></div>
+  <p class="section-sub">Self-learning · reverse a stack without extra space · Stock Span · Largest Rectangle in Histogram</p>
+
+  <h2>Reverse a stack without extra space (using recursion)</h2>
+  <p>No second stack or array is used; the recursion's own call stack holds the elements. <code>reverse()</code> pops the top, reverses the rest, then calls <code>insertAtBottom()</code> to place the popped element at the bottom. <code>insertAtBottom(x)</code> pops everything, pushes <code>x</code>, then pushes the elements back. Time O(n²), extra space only the call stack.</p>
+  <pre class="formula-block">void insertAtBottom(int x) {
+    if (isEmpty()) { push(x); return; }
+    int t = pop();
+    insertAtBottom(x);
+    push(t);
+}
+void reverse(void) {
+    if (isEmpty()) return;
+    int t = pop();
+    reverse();
+    insertAtBottom(t);
+}</pre>
+  <p>Stack 1,2,3,4 (4 on top) becomes 4,3,2,1 (1 on top) — verified.</p>
+
+  <h2>Stock Span problem</h2>
+  <p>The <strong>span</strong> of a day's price is the number of consecutive previous days (including today) with price ≤ today's. Keep a stack of <em>indices</em> of days with decreasing prices: pop while the price at the top ≤ today's; span = today's index − index now on top (or index + 1 if empty); then push today. Each index is pushed and popped once, so O(n).</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Worked example · verified</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Prices: 100, 80, 60, 70, 60, 75, 85. Find the spans.</div>
+    <table>
+      <tr><th>Day</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+      <tr><td>Price</td><td>100</td><td>80</td><td>60</td><td>70</td><td>60</td><td>75</td><td>85</td></tr>
+      <tr><td>Span</td><td>1</td><td>1</td><td>1</td><td>2</td><td>1</td><td>4</td><td>6</td></tr>
+    </table>
+  </div>
+
+  <h2>Largest Rectangle in Histogram</h2>
+  <p>Given bar heights, find the largest rectangle that fits. Keep a stack of indices of bars with <em>increasing</em> heights. When a shorter bar arrives, pop: the popped bar's height is the rectangle's height and its width extends from the new stack top + 1 to the current index − 1. Push a sentinel height 0 at the end to flush the stack. O(n).</p>
+  <p><strong>Example:</strong> heights 2, 1, 5, 6, 2, 3 → largest area <strong>10</strong> (the bars of height 5 and 6 give 5 × 2 = 10) — verified.</p>
+  <div class="callout key">
+    <span class="label">Exam tip</span>
+    These three are usually asked as "explain the approach / trace this input" rather than full code. State the stack contents (indices) at each step and the final answer.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-hanoi-stack" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">3.4</span><h1>Iterative Tower of Hanoi using a Stack</h1></div>
+  <p class="section-sub">Lab · application of stack · simulating the recursion with an explicit stack, and the classic parity method</p>
+
+  <h2>Why make it iterative?</h2>
+  <p>The recursive solution of §2.5 relies on the system call stack. Because every recursive call is just a frame on a stack (§2.3, §3.1), the same program can be written with a loop and a stack that <em>we</em> manage. This shows exactly what the machine does during recursion, and avoids stack overflow for deep recursion. Two iterative forms are standard.</p>
+
+  <h2>Method 1: explicit stack of frames</h2>
+  <p>Each frame holds <code>(n, from, to, aux)</code> and a flag saying whether it is a <strong>SOLVE</strong> request (move n disks) or a single <strong>MOVE</strong> of disk n. The recursive body <code>solve(n−1, from, aux, to); move n; solve(n−1, aux, to, from)</code> becomes: pop a frame; if it is a MOVE (or n = 1) print the move; otherwise push three frames <strong>in reverse order</strong> — the last step first — so that LIFO order replays them as first step, move, last step.</p>
+  <ol class="steps">
+    <li>Push <code>SOLVE(n, A, C, B)</code>.</li>
+    <li>While the stack is not empty, pop a frame <code>f</code>.</li>
+    <li>If <code>f</code> is a MOVE or <code>f.n == 1</code>, print "Move disk f.n from f.from to f.to".</li>
+    <li>Else push <code>SOLVE(n−1, aux, to, from)</code>, then <code>MOVE(n, from, to)</code>, then <code>SOLVE(n−1, from, aux, to)</code>.</li>
+  </ol>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrH" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <text x="150" y="24" text-anchor="middle" font-family="Inter" font-size="13" fill="#1C1E21">Explicit stack after popping the first frame</text>
+      <rect x="60" y="150" width="180" height="40" rx="5" fill="#E8EFF8" stroke="#1D4E89" stroke-width="1.6"/>
+      <text x="150" y="175" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1C1E21">SOLVE(2, B to C, via A)</text>
+      <rect x="60" y="106" width="180" height="40" rx="5" fill="#F7EEDD" stroke="#A66A0D" stroke-width="1.6"/>
+      <text x="150" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1C1E21">MOVE disk 3: A to C</text>
+      <rect x="60" y="62" width="180" height="40" rx="5" fill="#E8EFF8" stroke="#1D4E89" stroke-width="1.6"/>
+      <text x="150" y="87" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#1C1E21">SOLVE(2, A to B, via C)</text>
+      <line x1="270" y1="82" x2="244" y2="82" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrH)"/>
+      <text x="280" y="86" font-family="Inter" font-size="12" fill="#5B6169">top: popped and run first</text>
+      <text x="280" y="170" font-family="Inter" font-size="12" fill="#5B6169">bottom: runs last</text>
+      <text x="280" y="196" font-family="Inter" font-size="12" fill="#5B6169">Pushed in reverse order, so LIFO</text>
+      <text x="280" y="214" font-family="Inter" font-size="12" fill="#5B6169">runs them in the right order.</text>
+    </svg>
+    <div class="cap">Fig 6. Explicit-stack Tower of Hanoi for n = 3 (A to C via B): the frame SOLVE(3) is replaced by three frames, pushed last-step-first.</div>
+  </div>
+  <p>Frame trace for n = 2 (A to C via B): pop <code>SOLVE(2)</code> → push <code>SOLVE(1, B→C)</code>, <code>MOVE(2, A→C)</code>, <code>SOLVE(1, A→B)</code>. Pops then print: disk 1 A→B, disk 2 A→C, disk 1 B→C (3 moves, checked in C).</p>
+
+  <h2>Method 2: the parity (odd/even) rule</h2>
+  <p>With pegs A, B, C and n disks (A the source, C the target), repeat for <code>2ⁿ − 1</code> moves:</p>
+  <ul>
+    <li><strong>Odd-numbered moves</strong> (1st, 3rd, …) move the <strong>smallest disk</strong> one peg along a fixed cycle: if n is odd, A → C → B → A …; if n is even, A → B → C → A ….</li>
+    <li><strong>Even-numbered moves</strong> make the only legal move between the <strong>other two</strong> pegs (the smaller top disk moves onto the larger; if one peg is empty, a disk moves onto it).</li>
+  </ul>
+  <p>The program below keeps each peg as an array stack (§1.1) so "legal move" is just comparing two tops.</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C</span><span class="marks">10 marks</span></div>
+    <div class="qtext">Write a C program for the Tower of Hanoi without recursion, using an explicit stack, and show the moves for n = 3.</div>
+    <div class="ans-label">Answer — full program (recursive reference, Method 1 and Method 2; <code>./a.out n method</code>, method 0 = recursive, 1 = explicit stack, 2 = parity)</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+/* ---------- recursive reference ---------- */
+void rec(int n, char a, char b, char c) {   /* move n disks a -&gt; c using b */
+    if (n == 0) return;
+    rec(n-1, a, c, b);
+    printf("Move disk %d from %c to %c\n", n, a, c);
+    rec(n-1, b, a, c);
+}
+
+/* ---------- method 1: explicit stack of frames ---------- */
+typedef struct { int n; char from, to, aux; int moveOnly; } FRAME;
+
+void hanoi_stack(int n) {
+    FRAME st[100]; int top = -1;
+    st[++top] = (FRAME){n, 'A', 'C', 'B', 0};
+    while (top &gt;= 0) {
+        FRAME f = st[top--];
+        if (f.moveOnly || f.n == 1) {
+            printf("Move disk %d from %c to %c\n", f.n, f.from, f.to);
+            continue;
+        }
+        /* push in REVERSE order of execution (LIFO) */
+        st[++top] = (FRAME){f.n-1, f.aux,  f.to,  f.from, 0};   /* 3rd: n-1 aux -&gt; to   */
+        st[++top] = (FRAME){f.n,   f.from, f.to,  f.aux,  1};   /* 2nd: move disk n     */
+        st[++top] = (FRAME){f.n-1, f.from, f.aux, f.to,   0};   /* 1st: n-1 from -&gt; aux */
+    }
+}
+
+/* ---------- method 2: parity rule with three array stacks ---------- */
+int peg[3][20], tp[3];
+const char name[3] = {'A','B','C'};
+void mv(int s, int d) {
+    int disk = peg[s][--tp[s]];
+    peg[d][tp[d]++] = disk;
+    printf("Move disk %d from %c to %c\n", disk, name[s], name[d]);
+}
+void legal(int x, int y) {                   /* the only legal move between pegs x and y */
+    if (tp[x] == 0) mv(y, x);
+    else if (tp[y] == 0) mv(x, y);
+    else if (peg[x][tp[x]-1] &lt; peg[y][tp[y]-1]) mv(x, y);
+    else mv(y, x);
+}
+void hanoi_parity(int n) {
+    for (int i = n; i &gt;= 1; i--) peg[0][tp[0]++] = i;
+    int small = 0;                            /* peg holding disk 1 */
+    int dir = (n % 2) ? 2 : 1;                /* odd: A-&gt;C-&gt;B-&gt;A ; even: A-&gt;B-&gt;C-&gt;A */
+    long total = (1L &lt;&lt; n) - 1;
+    for (long m = 1; m &lt;= total; m++) {
+        if (m % 2 == 1) { int nx = (small + dir) % 3; mv(small, nx); small = nx; }
+        else { int x = (small + 1) % 3, y = (small + 2) % 3; legal(x, y); }
+    }
+}
+
+int main(int argc, char **argv) {
+    int n = argc &gt; 1 ? atoi(argv[1]) : 3;
+    int which = argc &gt; 2 ? atoi(argv[2]) : 0;
+    if (which == 0) rec(n, 'A', 'B', 'C');
+    else if (which == 1) hanoi_stack(n);
+    else hanoi_parity(n);
+    return 0;
+}</pre>
+    <div class="ans-label">Moves for n = 3 (identical from all three methods)</div>
+    <table>
+      <tr><th>Move</th><th>Disk</th><th>From</th><th>To</th></tr>
+      <tr><td>1</td><td>Disk 1</td><td>A</td><td>C</td></tr>
+      <tr><td>2</td><td>Disk 2</td><td>A</td><td>B</td></tr>
+      <tr><td>3</td><td>Disk 1</td><td>C</td><td>B</td></tr>
+      <tr><td>4</td><td>Disk 3</td><td>A</td><td>C</td></tr>
+      <tr><td>5</td><td>Disk 1</td><td>B</td><td>A</td></tr>
+      <tr><td>6</td><td>Disk 2</td><td>B</td><td>C</td></tr>
+      <tr><td>7</td><td>Disk 1</td><td>A</td><td>C</td></tr>
+    </table>
+    <p>7 moves = 2³ − 1. The output of Method 1 and Method 2 was compared with the recursive version using <code>cmp</code> for n = 3, 4, 5 and 6 (7, 15, 31 and 63 moves) and was byte-for-byte identical every time. Notice that disk 1 moves on every odd move, A→C, C→B, B→A, A→C, matching the odd-n cycle.</p>
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Iterative Tower of Hanoi is on the lab list but not in the Unit II deck. It is written here from standard material, and the C program was compiled and run.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="quick-revision" style="--accent:var(--ink);--accent-soft:var(--amber-soft);">
+  <div class="section-head"><span class="tag">QR</span><h1>Quick Revision</h1></div>
+  <p class="section-sub">One-page cheat sheet — Unit II: stacks and applications</p>
+
+  <h2>Stack</h2>
+  <ul>
+    <li>LIFO. <code>top = -1</code> empty; <code>top == MAX-1</code> full. Push: check overflow → <code>stack[++top] = x</code>. Pop: check underflow → <code>stack[top--]</code>. Peek: read <code>stack[top]</code>. All O(1).</li>
+    <li>Linked stack: push = insert at front, pop = delete from front; no fixed capacity.</li>
+    <li>Precedence: <code>^</code> &gt; <code>* /</code> &gt; <code>+ -</code>; <code>^</code> is right-associative.</li>
+  </ul>
+
+  <h2>Expressions</h2>
+  <div class="formula-block">Infix → Postfix:  operand→output; ( → push; ) → pop till (; operator → pop ≥ precedence, then push
+Infix → Prefix:   reverse, swap ( ), convert with "pop only if STRICTLY greater", reverse result
+Postfix eval:     operand→push; operator→ pop op2, pop op1, push (op1 <span class="c1">OP</span> op2)
+Prefix eval:      scan RIGHT→LEFT; operand→push; operator→ pop op1 (left), pop op2, push (op1 <span class="c1">OP</span> op2)</div>
+
+  <h2>Parentheses</h2>
+  <p>Push openers; on a closer pop and match; at the end the stack must be empty. O(n).</p>
+
+  <h2>Recursion &amp; Tower of Hanoi</h2>
+  <ul>
+    <li>Base case + recursive case; each call pushes a frame on the call stack.</li>
+    <li>Hanoi: <code>T(n) = 2T(n-1) + 1 = 2ⁿ − 1</code> (n=3 → 7, n=4 → 15).</li>
+    <li>Iterative Hanoi: explicit stack — push <code>SOLVE(n−1, aux→to)</code>, <code>MOVE n</code>, <code>SOLVE(n−1, from→aux)</code> (reverse order). Parity method: odd moves shift disk 1 (n odd: A→C→B; n even: A→B→C), even moves = the only legal move among the other two pegs. n=3: 1:A→C, 2:A→B, 1:C→B, 3:A→C, 1:B→A, 2:B→C, 1:A→C.</li>
+  </ul>
+
+  <h2>Self-learning one-liners</h2>
+  <ul>
+    <li><strong>Reverse a stack</strong>: pop top, reverse rest, insert at bottom. <strong>Min stack</strong>: parallel stack of minimums.</li>
+    <li><strong>Two stacks in one array</strong>: A from the left, B from the right; full when <code>topA + 1 == topB</code>.</li>
+    <li><strong>Undo/redo</strong>: two stacks; new edit clears redo. <strong>Backtracking</strong>: pop = undo the last choice.</li>
+    <li><strong>Stock span</strong>: stack of indices, pop while price ≤ today. <strong>Histogram</strong>: stack of increasing heights, area on pop.</li>
+  </ul>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="question-bank" style="--accent:var(--ink);--accent-soft:var(--amber-soft);">
+  <div class="section-head"><span class="tag">QB</span><h1>Question Bank</h1></div>
+  <p class="section-sub">Past-paper questions for the new Unit II, plus predicted self-learning questions</p>
+
+  <div class="callout clarify">
+    <span class="label">Scope note</span>
+    Only Unit II questions (stacks, expression conversion and evaluation, Tower of Hanoi / recursion) are indexed. The "likely questions" table is a prediction from the syllabus self-learning list and past-paper style — it is not taken from a real paper.
+  </div>
+
+  <h2>Stacks</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q1 · 10M</td><td>Implement functions to demonstrate Push, Pop and Display on a stack.</td><td>→ <a href="#sec-2-2">§1.2 Operations on a Stack</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q1 · 1M</td><td>Pushing into a full stack of size 5 will make the stack ____.</td><td>→ <a href="#sec-2-2">§1.2</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q7 · 1M</td><td>Trace a sequence of push/pop operations on a stack of size 5 — final element count?</td><td>→ <a href="#sec-2-2">§1.2</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q9 · 1M</td><td>Output of a stack-based character-reversal algorithm for input "Bengaluru"?</td><td>→ <a href="#sec-2-2">§1.2</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q3 · 1M</td><td>Minimum number of stacks needed to implement a queue.</td><td>→ <a href="#sec-2-3">§1.4 Applications of Stack</a></td></tr>
+    <tr><td class="mono">CIE 21-22 Test-I · Q1a · 10M</td><td>Write a C function/algorithm using a stack to check if a parenthesis sequence is "regular"; trace for two given sequences.</td><td>→ <a href="#sec-2-6">§1.9 Solved Numericals — Stacks</a> <span class="pill">solved example added</span></td></tr>
+      <tr><td class="mono">Unit II deck · practice</td><td>Classify the five bracket expressions (balanced / not balanced).</td><td>→ <a href="#stack-paren">§1.8 Parenthesis Balancing</a></td></tr>
+  </table>
+  <h2>Infix ↔ Postfix ↔ Prefix &amp; Evaluation</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">CIE 21-22 Test-I · Q2 · 10M</td><td>Design the infix→postfix algorithm; convert <code>A+B/C*D-A^F^H</code> showing each step.</td><td>→ <a href="#sec-2-3">§1.4 Applications &amp; Infix→Postfix</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q3 · 5+5M</td><td>Write the infix→prefix function; convert <code>K+L-M*N+(O^P)*W/U/V*T+Q</code> showing stack contents at each step.</td><td>→ <a href="#sec-2-4">§1.5 Infix→Prefix Conversion</a></td></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q1.5 · 2M</td><td>Write the postfix and prefix forms of <code>A+B*(C-D)/(P-R)</code>.</td><td>→ <a href="#sec-2-3">§1.4</a> / <a href="#sec-2-4">§1.5</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q5a · 5M</td><td>Write the postfix-evaluation algorithm; evaluate <code>3,4,*,2,5,*,+</code> showing stack contents.</td><td>→ <a href="#sec-2-5">§1.6 Postfix Expression Evaluation</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q6 · 1M</td><td>Evaluate the postfix expression <code>5,4,6,+,*,4,9,3,/,+,*</code>.</td><td>→ <a href="#sec-2-5">§1.6</a></td></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q1.2 · 2M</td><td>Evaluate the postfix expression <code>5 3 + 6 2 / * 3 5 * +</code>.</td><td>→ <a href="#sec-2-5">§1.6</a></td></tr>
+    <tr><td class="mono">CIE 21-22 Test-I · Q5b · 5M</td><td>Write an algorithm using a stack to evaluate a valid prefix expression.</td><td>→ <a href="#stack-prefix-eval">§1.7 Prefix Expression Evaluation</a> <span class="pill">full section added</span></td></tr>
+  </table>
+  <h2>Recursion &amp; Tower of Hanoi</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q4b · 4M</td><td>Define Recursion. How does recursion differ from iteration?</td><td>→ <a href="#sec-3-1">§2.1 Introduction to Recursion</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q2 · 1M</td><td>Trace <code>fun(n)</code> for n=2, base case n==4, else <code>2*fun(n+1)</code>.</td><td>→ <a href="#sec-3-1">§2.1</a></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q2 · 7+3M</td><td>Design a recursive Binary Search function; explain the role of stack during its execution.</td><td>→ <a href="#sec-3-7">§2.7 Solved Numericals — Recursion</a> (full answer, links §3.3 + §3.4)</td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Q4a · 6M</td><td>Write a recursive program to solve the Tower of Hanoi problem.</td><td>→ <a href="#sec-3-5">§2.5 Towers of Hanoi Problem</a></td></tr>
+    <tr><td class="mono">CIE 21-22 Test-I · Q3 · 10M</td><td>C program to solve Tower of Hanoi recursively, printing all moves and the total count; trace for n=4.</td><td>→ <a href="#sec-3-5">§2.5</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td class="mono">CIE-1 2024-25 · Quiz Q8 · 2M</td><td>Minimum moves for Tower of Hanoi with 3 disks; list the moves A→C via B.</td><td>→ <a href="#sec-3-5">§2.5</a></td></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q2a (Part B) · 8M</td><td>Write the recursive call tree explaining recursion for Tower of Hanoi (3 disks).</td><td>→ <a href="#sec-3-5">§2.5</a> <span class="pill">solved example added</span></td></tr>
+  </table>
+  <h2>Likely questions — self-learning topics</h2>
+  <table>
+    <tr><th>Likelihood</th><th>Likely question</th><th>Answered at</th></tr>
+    <tr><td>Very likely</td><td>Balanced parentheses check using a stack (algorithm + trace).</td><td>→ <a href="#stack-paren">§1.8</a></td></tr>
+    <tr><td>Very likely</td><td>Reverse a stack without extra space (recursion).</td><td>→ <a href="#sl-stack-problems">§3.3</a></td></tr>
+    <tr><td>Likely</td><td>Min Stack / Max Stack: get the minimum in O(1).</td><td>→ <a href="#sl-stack-variants">§3.2</a></td></tr>
+    <tr><td>Likely</td><td>Undo/redo or browser history with two stacks.</td><td>→ <a href="#sl-stack-recursion">§3.1</a></td></tr>
+    <tr><td>Likely</td><td>Implement two stacks in a single array; overflow condition.</td><td>→ <a href="#sl-stack-variants">§3.2</a></td></tr>
+    <tr><td>Possible</td><td>N-Queens / maze solving: role of the stack in backtracking.</td><td>→ <a href="#sl-stack-recursion">§3.1</a></td></tr>
+    <tr><td>Possible</td><td>Stock Span; Largest Rectangle in Histogram (trace for a given input).</td><td>→ <a href="#sl-stack-problems">§3.3</a></td></tr>
+    <tr><td>Likely</td><td>Stack using a linked list: push and pop.</td><td>→ <a href="#stack-linked">§1.3</a></td></tr>
+    <tr><td>Likely</td><td>Evaluate a prefix expression using a stack (e.g. <code>- + 7 * 4 5 + 2 0</code>).</td><td>→ <a href="#stack-prefix-eval">§1.7</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td>Likely</td><td>Tower of Hanoi without recursion (explicit stack / parity rule); list the 7 moves for n = 3.</td><td>→ <a href="#sl-hanoi-stack">§3.4</a> <span class="pill">solved example added</span></td></tr>
+  </table>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+</div>
+</div>
+
+<script>
+const sections=document.querySelectorAll('.section[id]'),navLinks=document.querySelectorAll('.navlink');
+const setActive=()=>{let cur='';const y=window.scrollY+140;
+ sections.forEach(s=>{if(s.offsetTop<=y)cur=s.id});
+ navLinks.forEach(l=>{l.style.color='';l.style.fontWeight='';
+  if(l.getAttribute('href')==='#'+cur){l.style.color='var(--blue)';l.style.fontWeight='600'}})};
+window.addEventListener('scroll',setActive);setActive();
+(function(){var root=document.documentElement,b=document.getElementById('themeToggle'),ico=document.getElementById('themeIco'),lbl=document.getElementById('themeLbl');
+ function paint(){var d=root.getAttribute('data-theme')==='dark';ico.textContent=d?'☀️':'🌙';lbl.textContent=d?'Light':'Dark';b.setAttribute('aria-pressed',d?'true':'false')}
+ b.addEventListener('click',function(){root.setAttribute('data-theme',root.getAttribute('data-theme')==='dark'?'light':'dark');paint()});
+ paint();})();
+</script>
+</body>
+</html>

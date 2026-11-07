@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Unit 1 — Introduction &amp; Linked Lists — Exam Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --body:#2A2C2F; --paper:#F6F4EE; --surface:#FFFFFF; --ink:#1C1E21; --ink-soft:#5B6169; --ink-faint:#8A8F96;
+  --line:#E4E0D3; --line-soft:#EDEAE0;
+  --blue:#1D4E89; --blue-soft:#E8EFF8; --indigo:#4C3F91; --indigo-soft:#EEECF7;
+  --teal:#12796F; --teal-soft:#E4F3F0; --plum:#93316B; --plum-soft:#F6E9F0;
+  --amber:#A66A0D; --amber-soft:#F7EEDD;
+  --radius:10px; --shadow:0 1px 2px rgba(28,30,33,.04),0 6px 20px rgba(28,30,33,.05);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Newsreader',Georgia,serif;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+code,.mono,.formula{font-family:'JetBrains Mono',monospace}
+.shell{display:flex;min-height:100vh}
+.sidebar{width:290px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 18px 40px 22px}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.brand{display:flex;flex-direction:column;gap:2px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--line-soft)}
+.brand .eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.brand .title{font-family:'Newsreader',serif;font-size:20px;font-weight:600;line-height:1.25;margin-top:2px}
+.brand .sub{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+.navgroup{margin-bottom:14px}
+.navgroup .part-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:700;margin:16px 0 6px 4px}
+.navgroup a.navlink,.navlink{display:flex;align-items:center;gap:8px;font-size:13.6px;color:var(--ink-soft);padding:6px 8px;border-radius:7px;text-decoration:none}
+.navlink:hover{background:var(--paper);color:var(--ink)} .navlink .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--ink-faint)}
+.navlink.top-of-part{font-weight:600;color:var(--ink)}
+.main{flex:1;min-width:0} .page{max-width:900px;margin:0 auto;padding:56px 44px 90px}
+@media(max-width:760px){.sidebar{display:none}.page{padding:34px 20px 70px}}
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:70px 44px;max-width:1000px;margin:0 auto}
+.cover .kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:14px}
+.cover h1{font-size:44px;line-height:1.12;max-width:760px;margin:0 0 16px}
+.cover .desc{font-size:16.5px;color:var(--ink-soft);max-width:620px;margin-bottom:8px}
+.cover .meta{display:flex;gap:22px;flex-wrap:wrap;margin:26px 0 44px;font-size:13px;color:var(--ink-soft)}
+.cover .meta span{display:flex;align-items:center;gap:7px} .cover .meta b{color:var(--ink);font-weight:600}
+.index-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:640px){.index-grid{grid-template-columns:1fr}}
+.index-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:block;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;border-left:4px solid var(--card-color,var(--blue))}
+.index-card:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(28,30,33,.09);text-decoration:none}
+.index-card .num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);font-weight:600}
+.index-card h3{font-size:17px;margin:5px 0;color:var(--ink);font-weight:600} .index-card p{font-size:13px;color:var(--ink-soft);margin:0;line-height:1.5}
+.part-divider{margin:34px 0 12px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.section{scroll-margin-top:24px}
+.section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;padding-bottom:14px;border-bottom:2px solid var(--accent,var(--blue))}
+.section-head .tag{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--accent,var(--blue));background:var(--accent-soft,var(--blue-soft));padding:3px 9px;border-radius:6px}
+.section-head h1{font-size:30px;margin:0}
+.section-sub{color:var(--ink-soft);font-size:14.5px;margin:10px 0 28px}
+.section p{margin:0 0 14px;color:var(--body)} .section ul,.section ol{margin:0 0 16px;padding-left:22px;color:var(--body)} .section li{margin-bottom:6px}
+.section h2{font-size:22px;margin:34px 0 12px;padding-top:4px} .section h3{font-size:17.5px;margin:24px 0 10px;color:var(--accent,var(--blue))}
+.section strong{color:var(--ink);font-weight:600}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.3px}
+.callout .label{font-weight:700;color:var(--amber);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:block}
+.callout.clarify{border-left-color:var(--plum)}.callout.clarify .label{color:var(--plum)}
+.callout.key{border-left-color:var(--blue)}.callout.key .label{color:var(--blue)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:18px 0;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.8px;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+th{background:var(--paper);text-align:left;padding:10px 13px;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+td{padding:10px 13px;border-bottom:1px solid var(--line-soft);color:var(--body);vertical-align:top} tr:last-child td{border-bottom:none}
+.formula-block{background:#20232A;color:#E8EAED;border-radius:8px;padding:16px 20px;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:14px;overflow-x:auto;line-height:1.8;white-space:pre-wrap}
+.formula-block .c1{color:#7FB8E8}.formula-block .c2{color:#F2C88F}.formula-block .cm{color:#8A9099}
+.svg-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:20px 0;text-align:center;box-shadow:var(--shadow)}
+.svg-wrap .cap{font-size:12.5px;color:var(--ink-soft);margin-top:8px;font-style:italic} .svg-wrap svg{max-width:100%;height:auto}
+.qbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:22px 0 26px;box-shadow:var(--shadow);border-top:3px solid var(--accent,var(--blue))}
+.qbox .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.qbox .qsrc{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint)}
+.qbox .marks{font-size:11.5px;font-weight:700;color:var(--accent,var(--blue));background:var(--accent-soft,var(--blue-soft));padding:2px 9px;border-radius:5px}
+.qbox .qtext{font-weight:600;font-size:15.5px;margin-bottom:14px;color:var(--ink)}
+.qbox .ans-label{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--ink-faint);margin:14px 0 6px}
+.steps{counter-reset:step}.steps li{list-style:none;position:relative;padding-left:34px;margin-bottom:12px}
+.steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--accent-soft,var(--blue-soft));color:var(--accent,var(--blue));font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.backtotop{display:inline-block;margin-top:44px;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--paper);color:var(--ink-soft);border:1px solid var(--line);margin:2px 4px 2px 0}
+
+/* ---- dark theme ---- */
+:root[data-theme="dark"]{
+  --body:#D6D4CE; --paper:#14161A; --surface:#1D2025; --ink:#ECEAE4; --ink-soft:#A8ADB5; --ink-faint:#7C828B;
+  --line:#33373E; --line-soft:#2A2D33;
+  --blue:#7FB0E8; --blue-soft:#1C2B3F; --indigo:#A99CEB; --indigo-soft:#2A2642; --teal:#4FC1B3; --teal-soft:#15302D;
+  --plum:#E58BBD; --plum-soft:#3A2230; --amber:#E0A94C; --amber-soft:#3A2F18;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 20px rgba(0,0,0,.30);
+}
+/* diagrams: re-map the inline SVG palette for dark mode */
+:root[data-theme="dark"] svg [fill="#12796F" i]{fill:#4FC1B3}
+:root[data-theme="dark"] svg [fill="#1C1E21" i]{fill:#ECEAE4}
+:root[data-theme="dark"] svg [fill="#1D4E89" i]{fill:#7FB0E8}
+:root[data-theme="dark"] svg [fill="#2A2C2F" i]{fill:#D6D4CE}
+:root[data-theme="dark"] svg [fill="#4C3F91" i]{fill:#A99CEB}
+:root[data-theme="dark"] svg [fill="#5B6169" i]{fill:#A8ADB5}
+:root[data-theme="dark"] svg [fill="#8A9096" i]{fill:#8A9096}
+:root[data-theme="dark"] svg [fill="#93316B" i]{fill:#E58BBD}
+:root[data-theme="dark"] svg [fill="#A66A0D" i]{fill:#E0A94C}
+:root[data-theme="dark"] svg [fill="#E4F3F0" i]{fill:#15302D}
+:root[data-theme="dark"] svg [fill="#E8EFF8" i]{fill:#1C2B3F}
+:root[data-theme="dark"] svg [fill="#EEECF7" i]{fill:#2A2642}
+:root[data-theme="dark"] svg [fill="#F6E9F0" i]{fill:#3A2230}
+:root[data-theme="dark"] svg [fill="#F7EEDD" i]{fill:#3A2F18}
+:root[data-theme="dark"] svg [fill="#FFFFFF" i]{fill:#1D2025}
+:root[data-theme="dark"] svg [stroke="#12796F" i]{stroke:#4FC1B3}
+:root[data-theme="dark"] svg [stroke="#1D4E89" i]{stroke:#7FB0E8}
+:root[data-theme="dark"] svg [stroke="#4C3F91" i]{stroke:#A99CEB}
+:root[data-theme="dark"] svg [stroke="#5B6169" i]{stroke:#A8ADB5}
+:root[data-theme="dark"] svg [stroke="#8A9096" i]{stroke:#8A9096}
+:root[data-theme="dark"] svg [stroke="#93316B" i]{stroke:#E58BBD}
+:root[data-theme="dark"] svg [stroke="#A66A0D" i]{stroke:#E0A94C}
+:root[data-theme="dark"] svg [stroke="#E4E0D3" i]{stroke:#3C4047}
+:root[data-theme="dark"] .formula-block{background:#101216;border:1px solid var(--line)}
+:root[data-theme="dark"] .index-card:hover{box-shadow:0 8px 26px rgba(0,0,0,.5)}
+code,pre,.mono,.formula-block{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0}
+body,.sidebar,.card,table,.qbox,.callout,.index-card,.svg-wrap{transition:background-color .2s,color .2s,border-color .2s}
+.theme-toggle{position:fixed;top:14px;right:16px;z-index:50;display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 12.5px 'Inter',system-ui,sans-serif;cursor:pointer;box-shadow:var(--shadow)}
+.theme-toggle:hover{border-color:var(--blue)}
+.theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.theme-toggle .ico{font-size:15px;line-height:1}
+</style>
+<script>
+(function(){var m=false;try{m=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+document.documentElement.setAttribute('data-theme',m?'dark':'light');})();
+</script>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode"><span class="ico" id="themeIco">🌙</span><span id="themeLbl">Dark</span></button>
+<div class="shell">
+<nav class="sidebar">
+  <div class="brand">
+    <span class="eyebrow">IS233AI · Data Structures &amp; Applications</span>
+    <span class="title">Unit 1 — Exam Notes</span>
+    <span class="sub">Introduction · Memory Allocation · Linked Lists</span>
+  </div>
+  <a class="navlink top-of-part" href="#index"><span class="dot"></span>Index</a>
+  <a class="navlink" href="#syllabus-map"><span class="dot"></span>Syllabus Map</a>
+  <div class="navgroup">
+    <div class="part-label">Part 1 — Introduction</div>
+    <a class="navlink" href="#sec-1-1"><span class="dot"></span>1.1 Data Structures: Concepts &amp; Types</a>
+    <a class="navlink" href="#sec-ds-types"><span class="dot"></span>1.2 Data, Data Types, ADT &amp; Operations</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Part 2 — Memory Allocation</div>
+    <a class="navlink" href="#sec-static-dynamic"><span class="dot"></span>2.1 Static vs Dynamic Memory Allocation</a>
+    <a class="navlink" href="#sec-2-1"><span class="dot"></span>2.2 malloc, calloc, free, realloc</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Part 3 — Linked Lists</div>
+    <a class="navlink" href="#sec-3-1"><span class="dot"></span>3.1 Definition, Terminology &amp; Types of Linked Lists</a>
+    <a class="navlink" href="#sec-3-2"><span class="dot"></span>3.2 SLL: Insertion (Front &amp; Rear)</a>
+    <a class="navlink" href="#sec-3-3"><span class="dot"></span>3.3 SLL: Deletion &amp; Ordered Insert</a>
+    <a class="navlink" href="#sec-3-4"><span class="dot"></span>3.4 getnode, freenode &amp; Header Node</a>
+    <a class="navlink" href="#sec-cll"><span class="dot"></span>3.5 Circular Linked Lists</a>
+    <a class="navlink" href="#sec-dll"><span class="dot"></span>3.6 Doubly Linked Lists</a>
+    <a class="navlink" href="#sec-cdll"><span class="dot"></span>3.7 Circular Doubly Linked Lists</a>
+    <a class="navlink" href="#sec-3-5"><span class="dot"></span>3.8 Stack &amp; Queue via SLL</a>
+    <a class="navlink" href="#sec-3-6"><span class="dot"></span>3.9 Solved Numericals — Linked Lists</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Part 4 — Self-learning / Extended Topics</div>
+    <a class="navlink" href="#sl-reverse"><span class="dot"></span>4.1 Reversing a Linked List</a>
+    <a class="navlink" href="#sl-merge"><span class="dot"></span>4.2 Merging and Splitting Linked Lists</a>
+    <a class="navlink" href="#sl-poly"><span class="dot"></span>4.3 Polynomials &amp; Sparse Matrices</a>
+    <a class="navlink" href="#sl-apps"><span class="dot"></span>4.4 Applications of Linked Lists</a>
+    <a class="navlink" href="#sl-josephus"><span class="dot"></span>4.5 Josephus Problem (Circular List)</a>
+    <a class="navlink" href="#sl-loop"><span class="dot"></span>4.6 Detect &amp; Remove a Loop</a>
+  </div>
+  <div class="navgroup">
+    <div class="part-label">Reference</div>
+    <a class="navlink" href="#quick-revision"><span class="dot"></span>Quick Revision</a>
+    <a class="navlink" href="#question-bank"><span class="dot"></span>Question Bank</a>
+  </div>
+</nav>
+
+<div class="main">
+
+<header class="cover" id="index">
+  <div class="kicker">IS233AI · Data Structures and Applications · Unit 1</div>
+  <h1>Introduction &amp; Linked Lists — Complete Exam Notes</h1>
+  <p class="desc">Every Unit I syllabus topic in one place: data structure basics and ADT, static vs dynamic memory allocation, singly, circular, doubly and circular doubly linked lists, and the self-learning and lab topics — reversal, merge/split, polynomials, sparse matrices, round-robin scheduling, the Josephus problem and loop detection.</p>
+  <div class="meta">
+    <span>📖 <b>19</b> topics</span>
+    <span>🧮 <b>23</b> worked examples</span>
+    <span>🖼️ <b>12</b> hand-built diagrams</span>
+    <span>⏱️ <b>09</b> syllabus hours</span>
+  </div>
+
+  <div class="part-divider">Part 1 — Introduction</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sec-1-1" style="--card-color:var(--blue)">
+      <span class="num">1.1</span>
+      <h3>Data Structures: Concepts &amp; Types</h3>
+      <p>Linear vs non-linear structures and how to classify them.</p>
+    </a>
+    <a class="index-card" href="#sec-ds-types" style="--card-color:var(--blue)">
+      <span class="num">1.2</span>
+      <h3>Data, Data Types, ADT &amp; Operations</h3>
+      <p>Data vs information, primitive/non-primitive, static/dynamic, ADT, operations.</p>
+    </a>
+  </div>
+  <div class="part-divider">Part 2 — Memory Allocation</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sec-static-dynamic" style="--card-color:var(--indigo)">
+      <span class="num">2.1</span>
+      <h3>Static vs Dynamic Memory Allocation</h3>
+      <p>Compile-time vs run-time allocation, stack/data area vs heap.</p>
+    </a>
+    <a class="index-card" href="#sec-2-1" style="--card-color:var(--indigo)">
+      <span class="num">2.2</span>
+      <h3>malloc, calloc, free, realloc</h3>
+      <p>Syntax, return values and the pointer-rebind trap.</p>
+    </a>
+  </div>
+  <div class="part-divider">Part 3 — Linked Lists</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sec-3-1" style="--card-color:var(--teal)">
+      <span class="num">3.1</span>
+      <h3>Definition, Terminology &amp; Types of Linked Lists</h3>
+      <p>Node structure and the four kinds of linked lists.</p>
+    </a>
+    <a class="index-card" href="#sec-3-2" style="--card-color:var(--teal)">
+      <span class="num">3.2</span>
+      <h3>SLL: Insertion (Front &amp; Rear)</h3>
+      <p>Insert at front and rear, with pointer-rewiring diagrams.</p>
+    </a>
+    <a class="index-card" href="#sec-3-3" style="--card-color:var(--teal)">
+      <span class="num">3.3</span>
+      <h3>SLL: Deletion &amp; Ordered Insert</h3>
+      <p>Delete from front/rear, by key, by position, ordered insert.</p>
+    </a>
+    <a class="index-card" href="#sec-3-4" style="--card-color:var(--teal)">
+      <span class="num">3.4</span>
+      <h3>getnode, freenode &amp; Header Node</h3>
+      <p>Allocation wrappers and the special metadata node.</p>
+    </a>
+    <a class="index-card" href="#sec-cll" style="--card-color:var(--teal)">
+      <span class="num">3.5</span>
+      <h3>Circular Linked Lists</h3>
+      <p>Last node links to first; insertion, deletion, traversal.</p>
+    </a>
+    <a class="index-card" href="#sec-dll" style="--card-color:var(--teal)">
+      <span class="num">3.6</span>
+      <h3>Doubly Linked Lists</h3>
+      <p>llink/rlink nodes, insertion, deletion, SLL vs DLL.</p>
+    </a>
+    <a class="index-card" href="#sec-cdll" style="--card-color:var(--teal)">
+      <span class="num">3.7</span>
+      <h3>Circular Doubly Linked Lists</h3>
+      <p>Delete from beginning, end and a given position.</p>
+    </a>
+    <a class="index-card" href="#sec-3-5" style="--card-color:var(--teal)">
+      <span class="num">3.8</span>
+      <h3>Stack &amp; Queue via SLL</h3>
+      <p>Implementing both structures directly on a singly list.</p>
+    </a>
+    <a class="index-card" href="#sec-3-6" style="--card-color:var(--teal)">
+      <span class="num">3.9</span>
+      <h3>Solved Numericals — Linked Lists</h3>
+      <p>Exam-style list questions from both papers, worked end to end.</p>
+    </a>
+  </div>
+  <div class="part-divider">Part 4 — Self-learning / Extended Topics</div>
+  <div class="index-grid">
+    <a class="index-card" href="#sl-reverse" style="--card-color:var(--plum)">
+      <span class="num">4.1</span>
+      <h3>Reversing a Linked List</h3>
+      <p>Three-pointer iterative and recursive reversal, with a trace.</p>
+    </a>
+    <a class="index-card" href="#sl-merge" style="--card-color:var(--plum)">
+      <span class="num">4.2</span>
+      <h3>Merging and Splitting Linked Lists</h3>
+      <p>Joining, merging sorted lists, splitting into halves or alternates.</p>
+    </a>
+    <a class="index-card" href="#sl-poly" style="--card-color:var(--plum)">
+      <span class="num">4.3</span>
+      <h3>Polynomials &amp; Sparse Matrices</h3>
+      <p>Polynomial addition and subtraction; sparse matrix storage and multiplication.</p>
+    </a>
+    <a class="index-card" href="#sl-apps" style="--card-color:var(--plum)">
+      <span class="num">4.4</span>
+      <h3>Applications of Linked Lists</h3>
+      <p>Round-robin on a circular list, multilevel lists, dynamic collections.</p>
+    </a>
+    <a class="index-card" href="#sl-josephus" style="--card-color:var(--plum)">
+      <span class="num">4.5</span>
+      <h3>Josephus Problem (Circular List)</h3>
+      <p>Eliminate every k-th node of a circle; n=7, k=3 leaves node 4.</p>
+    </a>
+    <a class="index-card" href="#sl-loop" style="--card-color:var(--plum)">
+      <span class="num">4.6</span>
+      <h3>Detect &amp; Remove a Loop</h3>
+      <p>Floyd's tortoise-and-hare, loop start, and breaking the cycle.</p>
+    </a>
+  </div>
+  <div class="part-divider">Reference</div>
+  <div class="index-grid">
+    <a class="index-card" href="#quick-revision" style="--card-color:var(--ink)"><span class="num">QR</span><h3>Quick Revision</h3><p>One-page cheat sheet of every algorithm skeleton and key fact in this unit.</p></a>
+    <a class="index-card" href="#question-bank" style="--card-color:var(--ink)"><span class="num">QB</span><h3>Question Bank</h3><p>Past-paper questions indexed to where they are answered, plus likely self-learning questions.</p></a>
+  </div>
+</header>
+
+<section class="page section" id="syllabus-map" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">MAP</span><h1>Syllabus Map</h1></div>
+  <p class="section-sub">How the new Unit I syllabus headings map onto this guide's sections.</p>
+
+  <table>
+    <tr><th>Syllabus heading</th><th>Sub-topics named</th><th>Covered in</th></tr>
+    <tr><td rowspan="3"><strong>Introduction</strong></td><td>Abstract Data Types (ADT)</td><td>§1.2</td></tr>
+    <tr><td>Primitive and non-primitive data types; linear and non-linear data structures</td><td>§1.1, §1.2</td></tr>
+    <tr><td>Static and dynamic memory allocation</td><td>§2.1, §2.2</td></tr>
+    <tr><td rowspan="3"><strong>Linked Lists</strong></td><td>Singly, doubly, circular</td><td>§3.1 – §3.7</td></tr>
+    <tr><td>Operations: creation, insertion, deletion, traversal, searching</td><td>§3.2 – §3.7</td></tr>
+    <tr><td>Applications of linked lists</td><td>§3.8, §4.4</td></tr>
+    <tr><td rowspan="4"><strong>Self-learning / Extended topics</strong></td><td>Multilevel lists, polynomial representation and arithmetic, sparse matrix</td><td>§4.3, §4.4</td></tr>
+    <tr><td>Circular lists for round-robin; managing dynamic collections (train, student records, inventory)</td><td>§4.4</td></tr>
+    <tr><td>Merging and splitting linked lists</td><td>§4.2</td></tr>
+    <tr><td>Reverse a linked list (iterative and recursive)</td><td>§4.1</td></tr>
+  </table>
+
+  <h2>Lab programs (Application of List)</h2>
+  <table>
+    <tr><th>Lab item</th><th>Covered in</th></tr>
+    <tr><td>Sparse matrix multiplication</td><td><a href="#sl-poly">§4.3 — Sparse matrix multiplication</a></td></tr>
+    <tr><td>Polynomial addition and subtraction using linked lists</td><td><a href="#sl-poly">§4.3 — Polynomial subtraction</a></td></tr>
+    <tr><td>Merge two sorted linked lists</td><td><a href="#sl-merge">§4.2</a></td></tr>
+    <tr><td>Josephus problem using a circular linked list</td><td><a href="#sl-josephus">§4.5</a></td></tr>
+    <tr><td>Detect and remove loops in a linked list</td><td><a href="#sl-loop">§4.6</a></td></tr>
+    <tr><td>Part A: search for an element in a linked list</td><td><a href="#sec-3-3">§3.3 — Searching</a></td></tr>
+    <tr><td>Part A: reverse a linked list</td><td><a href="#sl-reverse">§4.1</a></td></tr>
+    <tr><td>Part A: detect the cycle in a linked list</td><td><a href="#sl-loop">§4.6</a></td></tr>
+  </table>
+
+  <div class="callout clarify">
+    <span class="label">How this version differs from the earlier Unit 1 / Unit 2 notes</span>
+    The syllabus was re-cut: Unit I is now introduction plus linked lists, Unit II is stacks (with Tower of Hanoi), and queues move to Unit III. This guide reuses the earlier introduction, memory-allocation and singly-linked-list sections, adds the new deck's static-vs-dynamic comparison, and writes the circular, doubly and circular-doubly list sections (the earlier notes deferred them). Queue sections were moved out; copies of the old notes are in <code>old-syllabus/</code>.
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    The new deck's algorithm slides for circular and doubly lists are images, so those algorithms are written here from standard material, and each was run in C. The self-learning topics (Part 4) are kept brief and exam-oriented.
+  </div>
+</section>
+
+
+<section class="page section" id="sec-1-1" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.1</span><h1>Data Structures: Concepts &amp; Types</h1></div>
+  <p class="section-sub">Introduction to data structures · types of data structures · linear &amp; non-linear data structures</p>
+
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Neither source deck opens with this topic — both jump straight into stacks. This section is written from standard curriculum material so the guide is self-sufficient, and it directly answers SEE Q1.3 ("List the differences between Linear and Non-Linear data structures").
+  </div>
+
+  <h2>What is a Data Structure?</h2>
+  <p>A <strong>data structure</strong> is a specific way of organising, storing, and managing data in memory so that it can be accessed and modified efficiently. The choice of data structure determines how efficiently operations such as insertion, deletion, searching, and traversal can be performed on the data. The same collection of values can be organised as an array, a linked list, a tree, or a graph — each choice trades off memory usage, access speed, and the cost of insertion/deletion differently.</p>
+
+  <h2>Types of Data Structures</h2>
+  <p>Data structures are broadly classified into two categories based on how their elements are arranged relative to one another: <strong>linear</strong> and <strong>non-linear</strong>.</p>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker>
+      </defs>
+      <rect x="260" y="14" width="160" height="42" rx="8" fill="#E8EFF8" stroke="#1D4E89" stroke-width="1.5"/>
+      <text x="340" y="40" text-anchor="middle" font-family="Newsreader,serif" font-size="16" font-weight="600" fill="#1C1E21">Data Structures</text>
+
+      <path d="M300,56 Q220,90 170,110" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrow1)"/>
+      <path d="M380,56 Q460,90 510,110" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+      <rect x="70" y="112" width="200" height="38" rx="8" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/>
+      <text x="170" y="136" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#12796F">Linear</text>
+
+      <rect x="410" y="112" width="200" height="38" rx="8" fill="#F6E9F0" stroke="#93316B" stroke-width="1.5"/>
+      <text x="510" y="136" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="#93316B">Non-Linear</text>
+
+      <text x="170" y="170" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">elements form a sequence</text>
+      <text x="510" y="170" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">elements branch / interconnect</text>
+
+      <g font-family="JetBrains Mono, monospace" font-size="12.5" fill="#2A2C2F">
+        <rect x="80" y="188" width="180" height="26" rx="6" fill="#FFFFFF" stroke="#E4E0D3"/>
+        <text x="170" y="205" text-anchor="middle">Array</text>
+        <rect x="80" y="222" width="180" height="26" rx="6" fill="#FFFFFF" stroke="#E4E0D3"/>
+        <text x="170" y="239" text-anchor="middle">Stack  ·  Queue</text>
+        <rect x="80" y="256" width="180" height="26" rx="6" fill="#FFFFFF" stroke="#E4E0D3"/>
+        <text x="170" y="273" text-anchor="middle">Linked List</text>
+
+        <rect x="420" y="188" width="180" height="26" rx="6" fill="#FFFFFF" stroke="#E4E0D3"/>
+        <text x="510" y="205" text-anchor="middle">Tree</text>
+        <rect x="420" y="222" width="180" height="26" rx="6" fill="#FFFFFF" stroke="#E4E0D3"/>
+        <text x="510" y="239" text-anchor="middle">Graph</text>
+      </g>
+    </svg>
+    <div class="cap">Fig 1. Classification of data structures — linear structures arrange elements in a single sequence; non-linear structures let elements connect in branching or interconnected ways.</div>
+  </div>
+
+  <h3>Linear Data Structures</h3>
+  <p>In a linear data structure, elements are arranged in a sequential order, one after another, so that each element (except the first and last) has exactly one predecessor and one successor. Traversal happens in a single run — front to back. Examples: <strong>Array</strong>, <strong>Stack</strong>, <strong>Queue</strong>, <strong>Linked List</strong>.</p>
+
+  <h3>Non-Linear Data Structures</h3>
+  <p>In a non-linear data structure, elements are not arranged sequentially — an element may connect to multiple other elements, so traversal can branch. This models hierarchical or networked relationships that a straight sequence cannot capture. Examples: <strong>Tree</strong> (hierarchical, parent-child relationships), <strong>Graph</strong> (arbitrary interconnections between nodes).</p>
+
+  <h3>Linear vs. Non-Linear — Comparison</h3>
+  <table>
+    <tr><th>Aspect</th><th>Linear Data Structure</th><th>Non-Linear Data Structure</th></tr>
+    <tr><td>Arrangement</td><td>Elements in a single sequential level</td><td>Elements across multiple, hierarchical or interconnected levels</td></tr>
+    <tr><td>Traversal</td><td>Single pass (one traversal visits every element)</td><td>May need multiple passes / strategies (e.g. preorder, BFS, DFS)</td></tr>
+    <tr><td>Memory utilisation</td><td>Often less efficient for sparse/hierarchical relationships</td><td>Generally more memory-efficient for such relationships</td></tr>
+    <tr><td>Implementation complexity</td><td>Simple to implement</td><td>Comparatively complex to implement</td></tr>
+    <tr><td>Examples</td><td>Array, Stack, Queue, Linked List</td><td>Tree, Graph</td></tr>
+  </table>
+
+  <div class="qbox" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q1.3</span><span class="marks">2 marks</span></div>
+    <div class="qtext">List the differences between Linear and Non-Linear data structures.</div>
+    <div class="ans-label">Answer</div>
+    <p>See the comparison table above — cite at least: arrangement (sequential vs. hierarchical/interconnected), traversal (single pass vs. multiple strategies), and one example each (Array/Stack/Queue vs. Tree/Graph).</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-ds-types" style="--accent:var(--blue);--accent-soft:var(--blue-soft);">
+  <div class="section-head"><span class="tag">1.2</span><h1>Data, Data Types, ADT &amp; Operations</h1></div>
+  <p class="section-sub">Data vs information · primitive vs non-primitive · static vs dynamic · abstract data type · operations on data structures · applications</p>
+
+  <h2>Data and Information</h2>
+  <p><strong>Data</strong> is the basic entity or fact used in a calculation or manipulation — raw values without context (numerical or alphanumerical). <strong>Information</strong> is data given context and meaning. The number <code>35</code> is data; "the temperature today is 35 °C" is information. A data structure organises data so it can be turned into information efficiently.</p>
+
+  <h2>Data Type vs Data Structure</h2>
+  <p>A <strong>data type</strong> says what kind of values a variable can hold (<code>int</code>, <code>float</code>, <code>char</code>) and which operations are legal on them. A <strong>data structure</strong> is the logical relationship between individual data elements together with the operations to organise, access and process them in memory.</p>
+
+  <h2>Primitive vs Non-Primitive Data Structures</h2>
+  <table>
+    <tr><th>Aspect</th><th>Primitive</th><th>Non-primitive</th></tr>
+    <tr><td>Definition</td><td>Basic types that machine instructions operate on directly</td><td>Derived from primitives; cannot be handled directly by machine instructions</td></tr>
+    <tr><td>Holds</td><td>A single value</td><td>A group of homogeneous or heterogeneous items</td></tr>
+    <tr><td>Examples</td><td>int, float, char, pointer, boolean</td><td>Array, structure, stack, queue, linked list, tree, graph</td></tr>
+  </table>
+  <p>Non-primitive structures split into <strong>linear</strong> and <strong>non-linear</strong> (see §1.1). Linear structures are either <em>sequential</em> (array-based: array, stack, queue — consecutive memory) or <em>linked</em> (nodes joined by pointers: linked list, linked stack, linked queue).</p>
+
+  <h2>Static vs Dynamic Data Structures</h2>
+  <table>
+    <tr><th>Static</th><th>Dynamic</th></tr>
+    <tr><td>Size fixed at compile time; cannot grow or shrink</td><td>Grows and shrinks at run time</td></tr>
+    <tr><td>Example: array</td><td>Example: linked list, linked stack/queue, tree</td></tr>
+    <tr><td>Risk: wasted space or overflow</td><td>Memory used as needed; needs pointer management</td></tr>
+  </table>
+
+  <h2>Abstract Data Type (ADT)</h2>
+  <p>An <strong>Abstract Data Type</strong> is a conceptual model of a data structure: it specifies the data objects, the relationships among them and the operations allowed, but says <em>what</em> each operation does, not <em>how</em> it is implemented. The user depends only on the operations, so the implementation can change (a stack ADT can be built on an array or on a linked list) without changing client code. This is data abstraction.</p>
+  <div class="formula-block"><span class="cm">// Stack ADT — specification only</span>
+<span class="c1">Data:</span>       an ordered collection with one open end (TOP)
+<span class="c1">Operations:</span> push(x), pop(), peek(), isEmpty(), isFull()
+<span class="c1">Rule:</span>       last element pushed is the first popped (LIFO)</div>
+
+  <h2>Operations on Non-Primitive Data Structures</h2>
+  <ul>
+    <li><strong>Creating</strong> — setting up the structure in memory.</li>
+    <li><strong>Inserting</strong> — adding an element at a position.</li>
+    <li><strong>Deleting</strong> — removing an element.</li>
+    <li><strong>Searching</strong> — finding the location of an element.</li>
+    <li><strong>Sorting</strong> — arranging elements in a specified order.</li>
+    <li><strong>Merging</strong> — combining two lists into one.</li>
+    <li><strong>Traversing</strong> — visiting every element once, e.g. to display or process it.</li>
+  </ul>
+
+  <h2>Applications of Data Structures</h2>
+  <p>Compiler design (symbol tables, parsing), operating systems (process queues, memory management), database management systems (indexes), numerical analysis, graphics, artificial intelligence, simulation, and statistical packages.</p>
+
+  <div class="callout key">
+    <span class="label">Exam tip</span>
+    "Primitive vs non-primitive" and "linear vs non-linear" are the standard 2-mark theory questions. Always give one example each and say whether the structure is static (array) or dynamic (linked list).
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-static-dynamic" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.1</span><h1>Static vs Dynamic Memory Allocation</h1></div>
+  <p class="section-sub">Memory allocation · compile-time vs run-time · stack/data area vs heap · why linked lists need dynamic allocation</p>
+
+  <p><strong>Memory allocation</strong> is the process of reserving a part of computer memory for a program's data. There are two kinds.</p>
+
+  <h2>Static Memory Allocation</h2>
+  <p>Memory is allocated at <strong>compile time</strong>. Once allocated, it can be neither extended nor reduced while the program runs. It lives in the stack or data area. It is fast and simple (the compiler frees it), but if too much is reserved it is wasted, and if too little is reserved the program overflows. Use it only when the data size is known in advance, e.g. <code>int a[100];</code>.</p>
+
+  <h2>Dynamic Memory Allocation</h2>
+  <p>Memory is allocated at <strong>run time</strong> from the <strong>heap</strong> using library functions, in exactly the amount needed. It can be released when no longer required, so utilisation is efficient and the size need not be known in advance. The costs: the programmer must manage pointers, allocation is slower, and memory that is not freed leaks.</p>
+
+  <table>
+    <tr><th>Static allocation</th><th>Dynamic allocation</th></tr>
+    <tr><td>Done at compile time</td><td>Done at run time</td></tr>
+    <tr><td>Size is fixed</td><td>Size varies with requirement</td></tr>
+    <tr><td>Cannot extend or reduce at run time</td><td>Can be extended (<code>realloc</code>) or released (<code>free</code>) at run time</td></tr>
+    <tr><td>Management is easy; compiler deallocates</td><td>Needs extra functions; programmer must deallocate</td></tr>
+    <tr><td>Execution is faster</td><td>Slower, as allocation happens while running</td></tr>
+    <tr><td>Stack or data area</td><td>Heap area</td></tr>
+    <tr><td>Example: arrays</td><td>Example: linked lists, trees</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">Link to linked lists</span>
+    A linked list allocates each node separately with <code>malloc</code> when needed, which is why it can grow and shrink at run time. The functions are covered next in §2.2.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-2-1" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+  <div class="section-head"><span class="tag">2.2</span><h1>malloc, calloc, free, realloc</h1></div>
+  <p class="section-sub">Dynamic Memory Allocation</p>
+
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Neither source deck explains these four functions — both only ever call <code>malloc</code>/<code>free</code> inline, without teaching syntax, return values, or failure modes. This section is written from standard C reference material so the guide is self-sufficient, and directly answers three exam questions below.
+  </div>
+
+  <h2>Why Dynamic Memory Allocation?</h2>
+  <p>An array's size is fixed at compile time — declaring <code>int arr[100]</code> commits to exactly 100 elements whether the program ends up needing 3 or 3000. <strong>Dynamic memory allocation</strong> requests memory from the heap at <em>run time</em>, in the exact amount needed, and is what makes data structures like linked lists, stacks, and queues able to grow node by node instead of being capped by a fixed array size (this is also the direct answer to "differentiate arrays and dynamic memory allocation" below).</p>
+
+  <h2>The Four Functions</h2>
+  <table>
+    <tr><th>Function</th><th>Syntax</th><th>Behaviour</th></tr>
+    <tr><td><code>malloc</code></td><td><code>void* malloc(size_t size)</code></td><td>Allocates <code>size</code> bytes of <strong>uninitialised</strong> memory; returns a pointer to it, or <code>NULL</code> on failure.</td></tr>
+    <tr><td><code>calloc</code></td><td><code>void* calloc(size_t n, size_t size)</code></td><td>Allocates memory for <code>n</code> elements of <code>size</code> bytes each, and <strong>zero-initialises</strong> the whole block; returns a pointer, or <code>NULL</code> on failure.</td></tr>
+    <tr><td><code>free</code></td><td><code>void free(void* ptr)</code></td><td>Releases a block previously returned by <code>malloc</code>/<code>calloc</code>/<code>realloc</code> back to the heap. Freeing an already-freed or non-heap pointer is undefined behaviour.</td></tr>
+    <tr><td><code>realloc</code></td><td><code>void* realloc(void* ptr, size_t newsize)</code></td><td>Resizes a previously allocated block to <code>newsize</code> bytes, preserving existing contents up to the smaller of the old/new sizes; may move the block, so the <strong>caller must use the returned pointer</strong>, not the original.</td></tr>
+  </table>
+
+  <div class="formula-block"><span class="cm">// malloc: uninitialised</span>
+<span class="c1">int</span> *p = (<span class="c1">int</span>*) malloc(5 * <span class="c1">sizeof</span>(<span class="c1">int</span>));   <span class="cm">// 5 ints, garbage values</span>
+
+<span class="cm">// calloc: zero-initialised</span>
+<span class="c1">int</span> *q = (<span class="c1">int</span>*) calloc(5, <span class="c1">sizeof</span>(<span class="c1">int</span>));       <span class="cm">// 5 ints, all set to 0</span>
+
+<span class="cm">// realloc: grow/shrink an existing block</span>
+q = (<span class="c1">int</span>*) realloc(q, 10 * <span class="c1">sizeof</span>(<span class="c1">int</span>));       <span class="cm">// now 10 ints; first 5 preserved</span>
+
+<span class="cm">// free: release it</span>
+free(p);
+free(q);</div>
+
+  <div class="callout key">
+    <span class="label">Common failure modes to name in an exam answer</span>
+    <strong>NULL return</strong> — always check before dereferencing; the heap can be exhausted. <strong>Memory leak</strong> — losing the only pointer to a block (e.g. reassigning the pointer variable) before calling <code>free</code> means that memory can never be reclaimed for the rest of the program's run. <strong>Dangling pointer</strong> — using a pointer after its block has been <code>free</code>d is undefined behaviour, since the memory may already have been reused for something else.
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">CIE 21-22 Test-I · Q2b &amp; CIE-II 2024-25 · Q1b</span><span class="marks">3 marks / 4 marks</span></div>
+    <div class="qtext">Explain with syntax any two dynamic memory allocation functions. / Differentiate between arrays and dynamic memory allocation.</div>
+    <div class="ans-label">Answer</div>
+    <p>Pick any two rows from the table above and state syntax + behaviour (e.g. <code>malloc</code> vs <code>calloc</code>, contrasting "uninitialised" vs "zero-initialised" — that contrast is usually the mark). For the arrays comparison: arrays are fixed-size, allocated at compile time (usually on the stack), with no manual release needed; dynamically allocated memory is variable-size, requested at run time from the heap, and must be explicitly released with <code>free</code> or it leaks for the remainder of the program.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--indigo);--accent-soft:var(--indigo-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q1.9</span><span class="marks">2 marks</span></div>
+    <div class="qtext">Predict the output of the following C code:<br><code>char *p = calloc(100,1); p = "welcome"; printf("%s\n", p);</code></div>
+    <div class="ans-label">Answer</div>
+    <p><strong>Output: <code>welcome</code></strong>. The teaching point is what <em>doesn't</em> happen: <code>p = "welcome"</code> does not copy the string into the 100-byte calloc'd block — it <strong>rebinds the pointer variable <code>p</code></strong> to point at the string literal <code>"welcome"</code> instead. The original 100-byte block is now unreachable (no pointer references it anymore) and can never be freed — a classic <strong>memory leak</strong> triggered by pointer reassignment instead of content copy (which would have needed <code>strcpy(p, "welcome")</code>).</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-1" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.1</span><h1>Definition, Terminology &amp; Types of Linked Lists</h1></div>
+  <p class="section-sub">Definition and terminology · Singly Linked List (SLL)</p>
+
+  <h2>Definition</h2>
+  <p>A <strong>linked list</strong> is a linear data structure in which elements (<strong>nodes</strong>) are not stored contiguously in memory. Instead, each node holds its data plus one or more <strong>pointers</strong> ("links") to other nodes, and the structure is traversed by following those links. This trades away the constant-time random access an array gives you, in exchange for cheap insertion/deletion anywhere in the list without shifting elements — and for growing one node at a time via dynamic memory allocation (§2.2) instead of needing a fixed size up front.</p>
+
+  <h2>Node Structure &amp; Terminology</h2>
+  <div class="formula-block"><span class="c1">struct</span> node {
+  <span class="c1">int</span> info;              <span class="cm">// the data field</span>
+  <span class="c1">struct</span> node *link;    <span class="cm">// pointer to the next node</span>
+};
+<span class="c1">typedef</span> <span class="c1">struct</span> node *NODE;</div>
+  <table>
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td>Node</td><td>One unit of the list: a data field (<code>info</code>) plus a link field (<code>link</code>)</td></tr>
+    <tr><td>first / head</td><td>External pointer to the first node of the list</td></tr>
+    <tr><td>NULL link</td><td>Marks the end of the list — the last node's <code>link</code> is <code>NULL</code></td></tr>
+    <tr><td>Traversal</td><td>Visiting every node by repeatedly following <code>link</code> from <code>first</code> until <code>NULL</code></td></tr>
+  </table>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowl1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+      </defs>
+      <text x="20" y="30" font-family="Inter" font-size="12.5" font-weight="600" fill="#12796F">first</text>
+      <path d="M20,40 L55,60" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl1)"/>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="60" y="55" width="60" height="34" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="80" y="77" text-anchor="middle">10</text>
+        <line x1="100" y1="55" x2="100" y2="89" stroke="#12796F"/>
+        <path d="M120,72 L165,72" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl1)"/>
+
+        <rect x="170" y="55" width="60" height="34" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="190" y="77" text-anchor="middle">20</text>
+        <line x1="210" y1="55" x2="210" y2="89" stroke="#12796F"/>
+        <path d="M230,72 L275,72" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl1)"/>
+
+        <rect x="280" y="55" width="60" height="34" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="300" y="77" text-anchor="middle">30</text>
+        <line x1="320" y1="55" x2="320" y2="89" stroke="#12796F"/>
+        <path d="M340,72 L385,72" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl1)"/>
+      </g>
+      <rect x="390" y="55" width="70" height="34" fill="#FFFFFF" stroke="#8A9096" stroke-width="1.5"/>
+      <text x="425" y="77" text-anchor="middle" font-family="Inter" font-size="12.5" fill="#5B6169">NULL</text>
+      <text x="80" y="118" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B6169">info | link</text>
+    </svg>
+    <div class="cap">Fig 2. A 3-node SLL holding 10→20→30. Each cell is one node: left half is <code>info</code>, right half is <code>link</code>; the last node's <code>link</code> is NULL.</div>
+  </div>
+
+  <h2>Types of Linked Lists</h2>
+  <p>Four variants exist, differing only in how the link field(s) are wired:</p>
+  <table>
+    <tr><th>Type</th><th>Structure</th></tr>
+    <tr><td><strong>Singly Linked List (SLL)</strong></td><td>One link per node, pointing forward only; last node's link is NULL. <em>The base case for every later operation.</em></td></tr>
+    <tr><td>Circular Singly Linked List (CSLL)</td><td>Same as SLL, but the last node's link points back to the first node instead of NULL — no NULL anywhere in a non-empty list.</td></tr>
+    <tr><td>Doubly Linked List (DLL)</td><td>Two links per node — one forward, one backward — enabling traversal in either direction.</td></tr>
+    <tr><td>Circular Doubly Linked List (CDLL)</td><td>DLL with the forward link of the last node pointing to the first, and the backward link of the first pointing to the last.</td></tr>
+  </table>
+  <div class="callout clarify">
+    <span class="label">Scope note</span>
+    SLL operations are covered in §3.2–§3.4 and worked in §3.9. The circular, doubly and circular doubly lists have their own sections (§3.8–§3.7); polynomial arithmetic and other applications are in Part 4.
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-II 2024-25 · Q1a</span><span class="marks">6 marks</span></div>
+    <div class="qtext">With an example, explain the difference between singly linked list, doubly linked list and circular linked list.</div>
+    <div class="ans-label">Answer</div>
+    <p>Use the table above: SLL has one forward-only link ending in NULL (Fig 2); DLL adds a backward link for two-way traversal; a circular list (singly or doubly) replaces the terminating NULL with a link back to the first node, so traversal can continue indefinitely without hitting an end. Draw the 3-node SLL from Fig 2 as the example, and contrast it with the same 3 nodes wired circularly (last node's link → first node instead of NULL).</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Q1.6</span><span class="marks">2 marks</span></div>
+    <div class="qtext">List any 4 differences between a Singly-linked list and a Doubly linked list.</div>
+    <div class="ans-label">Answer</div>
+    <table>
+      <tr><th>Aspect</th><th>SLL</th><th>DLL</th></tr>
+      <tr><td>Links per node</td><td>One (<code>link</code> / next)</td><td>Two (previous and next)</td></tr>
+      <tr><td>Traversal direction</td><td>Forward only</td><td>Both forward and backward</td></tr>
+      <tr><td>Memory per node</td><td>Lower (one pointer)</td><td>Higher (two pointers)</td></tr>
+      <tr><td>Deleting a given node</td><td>Needs a trailing <code>prev</code> pointer tracked during traversal</td><td>Direct — the node's own <code>prev</code> link gives the predecessor</td></tr>
+    </table>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-2" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.2</span><h1>SLL: Insertion (Front &amp; Rear)</h1></div>
+  <p class="section-sub">Operations on SLL: insertion</p>
+
+  <h2>Insert at Front</h2>
+  <p>The new node becomes the first node: point its <code>link</code> at the old <code>first</code>, then update <code>first</code> to the new node. This is an O(1) operation — no traversal needed.</p>
+  <div class="formula-block">NODE insertfront(NODE first, <span class="c1">int</span> item) {
+  NODE temp = (NODE) malloc(<span class="c1">sizeof</span>(<span class="c1">struct</span> node));
+  temp-&gt;info = item;
+  temp-&gt;link = first;
+  <span class="c1">return</span> temp;   <span class="cm">// temp is the new first</span>
+}</div>
+
+  <h2>Insert at Rear</h2>
+  <p>Traverse to the last node (the one whose <code>link</code> is NULL), then attach the new node there. This needs O(n) time since the whole list must be walked to find the end — unless a separate "last" pointer is maintained.</p>
+  <div class="formula-block">NODE insertrear(NODE first, <span class="c1">int</span> item) {
+  NODE temp = (NODE) malloc(<span class="c1">sizeof</span>(<span class="c1">struct</span> node));
+  temp-&gt;info = item;
+  temp-&gt;link = NULL;
+  <span class="c1">if</span> (first == NULL)
+    <span class="c1">return</span> temp;
+  NODE cur = first;
+  <span class="c1">while</span> (cur-&gt;link != NULL)
+    cur = cur-&gt;link;
+  cur-&gt;link = temp;
+  <span class="c1">return</span> first;
+}</div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowl2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+        <marker id="arrowl2b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#93316B"/></marker>
+      </defs>
+      <text x="20" y="24" font-family="Inter" font-size="12.5" font-weight="600" fill="#5B6169">insertfront(20): new node's link points at the old first</text>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="130" y="34" width="60" height="32" fill="#F6E9F0" stroke="#93316B" stroke-width="2"/><text x="150" y="55" text-anchor="middle">20</text>
+        <rect x="240" y="34" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="260" y="55" text-anchor="middle">10</text>
+      </g>
+      <path d="M190,58 Q215,80 245,60" fill="none" stroke="#93316B" stroke-width="2" marker-end="url(#arrowl2b)"/>
+      <text x="80" y="55" text-anchor="middle" font-family="Inter" font-size="11.5" font-weight="600" fill="#93316B">new first</text>
+
+      <text x="20" y="120" font-family="Inter" font-size="12.5" font-weight="600" fill="#5B6169">insertrear(30): traverse to the NULL link, attach there</text>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="130" y="130" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="150" y="151" text-anchor="middle">10</text>
+        <rect x="240" y="130" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="260" y="151" text-anchor="middle">20</text>
+        <rect x="350" y="130" width="60" height="32" fill="#F6E9F0" stroke="#93316B" stroke-width="2"/><text x="370" y="151" text-anchor="middle">30</text>
+      </g>
+      <path d="M190,146 L235,146" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl2)"/>
+      <path d="M300,146 Q325,168 355,148" fill="none" stroke="#93316B" stroke-width="2" marker-end="url(#arrowl2b)"/>
+      <text x="370" y="185" text-anchor="middle" font-family="Inter" font-size="11.5" font-weight="600" fill="#93316B">was NULL, now points to new node</text>
+    </svg>
+    <div class="cap">Fig 3. Insert-front rewires one link and moves <code>first</code>; insert-rear walks to the current last node before rewiring its (previously NULL) link.</div>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-3" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.3</span><h1>SLL: Deletion &amp; Ordered Insert</h1></div>
+  <p class="section-sub">Operations on SLL: deletion and display</p>
+
+  <h2>Delete by Key (Value)</h2>
+  <p>Two cases: the node to delete is the first node (update <code>first</code> directly), or it's somewhere further in — in which case a trailing pointer is needed, since an SLL node has no way to reach its predecessor.</p>
+  <div class="formula-block">NODE deleteinfo(NODE first, <span class="c1">int</span> key) {
+  NODE temp, cur, prev;
+  <span class="c1">if</span> (key == first-&gt;info) {
+    temp = first;
+    first = first-&gt;link;
+    printf(<span class="c2">"\nele del is %d"</span>, temp-&gt;info);
+    free(temp);
+    <span class="c1">return</span> first;
+  }
+  prev = NULL; cur = first;
+  <span class="c1">while</span> (cur != NULL &amp;&amp; key != cur-&gt;info) {
+    prev = cur;
+    cur = cur-&gt;link;
+  }
+  <span class="c1">if</span> (cur == NULL) {
+    printf(<span class="c2">"\n%d has not been there"</span>, key);
+    <span class="c1">return</span> first;
+  }
+  prev-&gt;link = cur-&gt;link;
+  printf(<span class="c2">"\n%d is deleted"</span>, cur-&gt;info);
+  free(cur);
+  <span class="c1">return</span> first;
+}</div>
+
+  <h2>Delete by Position</h2>
+  <p>Same pattern, but the loop counts positions instead of comparing values.</p>
+  <div class="formula-block">NODE deletepos(NODE first, <span class="c1">int</span> pos) {
+  NODE cur, prev; <span class="c1">int</span> ct = 1;
+  <span class="c1">if</span> (first == NULL) { printf(<span class="c2">"empty"</span>); <span class="c1">return</span> first; }
+  <span class="c1">if</span> (pos == 1) {
+    NODE temp = first;
+    first = first-&gt;link;
+    printf(<span class="c2">"\n%d is deleted"</span>, temp-&gt;info);
+    free(temp);
+    <span class="c1">return</span> first;
+  }
+  cur = first;
+  <span class="c1">while</span> (cur != NULL &amp;&amp; ct != pos) {
+    prev = cur; cur = cur-&gt;link; ct++;
+  }
+  <span class="c1">if</span> (ct != pos) { printf(<span class="c2">"invalid position"</span>); <span class="c1">return</span> first; }
+  prev-&gt;link = cur-&gt;link;
+  printf(<span class="c2">"\n%d is deleted"</span>, cur-&gt;info);
+  free(cur);
+  <span class="c1">return</span> first;
+}</div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowl3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+        <marker id="arrowl3b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#93316B"/></marker>
+      </defs>
+      <text x="20" y="22" font-family="Inter" font-size="12.5" font-weight="600" fill="#5B6169">deletepos(first, 2): unlink the 2nd node, then free it</text>
+      <text x="200" y="55" text-anchor="middle" font-family="Inter" font-size="11.5" font-weight="600" fill="#93316B">prev-&gt;link = cur-&gt;link</text>
+      <path d="M120,98 Q195,62 285,98" fill="none" stroke="#93316B" stroke-width="2" marker-end="url(#arrowl3b)"/>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="60" y="100" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="80" y="121" text-anchor="middle">10</text>
+        <rect x="170" y="100" width="60" height="32" fill="#F6E9F0" stroke="#93316B" stroke-width="2" stroke-dasharray="4 3"/><text x="190" y="121" text-anchor="middle">20</text>
+        <rect x="280" y="100" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="300" y="121" text-anchor="middle">30</text>
+      </g>
+      <text x="80" y="152" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B6169">prev</text>
+      <text x="190" y="152" text-anchor="middle" font-family="Inter" font-size="11" fill="#93316B">cur (freed)</text>
+    </svg>
+    <div class="cap">Fig 4. Deleting the 2nd node: <code>prev</code>'s link is redirected past <code>cur</code> to <code>cur</code>'s successor before <code>cur</code> is freed — the same rewiring pattern used by delete-by-key.</div>
+  </div>
+
+  <h2>Insert into an Ordered List</h2>
+  <p>If the list is kept sorted (<code>N<sub>i</sub> ≤ N<sub>i+1</sub></code> for all <code>i</code>), a new item is inserted just before the first node whose value exceeds it — keeping the list sorted without a separate sort pass.</p>
+  <div class="formula-block">NODE insertorder(NODE first, <span class="c1">int</span> item) {
+  NODE temp = (NODE) malloc(<span class="c1">sizeof</span>(<span class="c1">struct</span> node));
+  temp-&gt;info = item; temp-&gt;link = NULL;
+  <span class="c1">if</span> (first == NULL) <span class="c1">return</span> temp;
+  <span class="c1">if</span> (item &lt;= first-&gt;info) { temp-&gt;link = first; <span class="c1">return</span> temp; }
+  NODE cur = first, prev;
+  <span class="c1">while</span> (cur != NULL &amp;&amp; item &gt; cur-&gt;info) { prev = cur; cur = cur-&gt;link; }
+  prev-&gt;link = temp;
+  temp-&gt;link = cur;
+  <span class="c1">return</span> first;
+}</div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE 21-22 Test-I · Q2a</span><span class="marks">7 marks</span></div>
+    <div class="qtext">Develop C functions to perform the following operations on a singly linked list: (1) Replacing all nodes which have the data 'x' by 'y'. (2) Create an ordered list (a list of n nodes such that N<sub>i</sub> ≤ N<sub>i+1</sub> for all 1 ≤ i ≤ n-1).</div>
+    <div class="ans-label">Answer</div>
+    <p><strong>Part 2</strong> is exactly <code>insertorder</code> above, called once per input value. <strong>Part 1</strong> is a single traversal with no pointer rewiring at all — since only the <em>data</em> field changes, not the list's structure:</p>
+    <div class="formula-block"><span class="c1">void</span> replaceAll(NODE first, <span class="c1">int</span> x, <span class="c1">int</span> y) {
+  NODE cur = first;
+  <span class="c1">while</span> (cur != NULL) {
+    <span class="c1">if</span> (cur-&gt;info == x)
+      cur-&gt;info = y;
+    cur = cur-&gt;link;
+  }
+}</div>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-II 2024-25 · Q4a</span><span class="marks">6 marks</span></div>
+    <div class="qtext">Write a program to search a node with value 'K' in a single linked list; if it is not found, then insert the value as a last node.</div>
+    <div class="ans-label">Answer — a traversal (search) that falls through into insertrear (§3.2) on failure</div>
+    <div class="formula-block">NODE searchOrInsert(NODE first, <span class="c1">int</span> K) {
+  NODE cur = first;
+  <span class="c1">while</span> (cur != NULL) {
+    <span class="c1">if</span> (cur-&gt;info == K) {
+      printf(<span class="c2">"%d found"</span>, K);
+      <span class="c1">return</span> first;         <span class="cm">// found -&gt; list unchanged</span>
+    }
+    cur = cur-&gt;link;
+  }
+  printf(<span class="c2">"%d not found, inserting"</span>, K);
+  <span class="c1">return</span> insertrear(first, K);   <span class="cm">// not found -&gt; insert at rear (§3.2)</span>
+}</div>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program (Part A) · verified</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Write a function to search for an element in a singly linked list and report its position.</div>
+    <div class="ans-label">Answer — plain linear search (O(n))</div>
+    <pre class="formula-block">/* returns 1-based position of key, or 0 if absent */
+int search(struct node *head, int key) {
+    int pos = 1;
+    for (struct node *p = head; p != NULL; p = p-&gt;link, pos++)
+        if (p-&gt;data == key) return pos;
+    return 0;
+}</pre>
+    <p>On the list <code>10→20→30→40</code>, <code>search(head, 30)</code> returns 3 and <code>search(head, 99)</code> returns 0 (checked in C). A linked list offers no random access, so even a sorted list needs this node-by-node walk.</p>
+  </div>
+
+    <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-4" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.4</span><h1>getnode, freenode &amp; Header Node</h1></div>
+  <p class="section-sub">getnode, freenode, and header node</p>
+
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Neither source deck names <code>getnode</code>/<code>freenode</code> as separate functions — every insert/delete function in both decks calls <code>malloc</code>/<code>free</code> directly inline (see §3.2–§3.3). The two functions below are the standard wrappers the syllabus names; wherever the decks write <code>malloc(sizeof(struct node))</code> or <code>free(temp)</code> inline, substituting a call to <code>getnode()</code> / <code>freenode()</code> is functionally identical.
+  </div>
+
+  <h2>getnode &amp; freenode</h2>
+  <p>Wrapping allocation/deallocation in named functions keeps every insert operation from repeating the same <code>malloc</code> boilerplate, and gives one place to add error-checking (e.g. a NULL check) for the whole program.</p>
+  <div class="formula-block">NODE getnode() {
+  NODE temp = (NODE) malloc(<span class="c1">sizeof</span>(<span class="c1">struct</span> node));
+  <span class="c1">if</span> (temp == NULL) {
+    printf(<span class="c2">"Out of memory"</span>);
+    exit(0);
+  }
+  <span class="c1">return</span> temp;
+}
+
+<span class="c1">void</span> freenode(NODE p) {
+  free(p);
+}</div>
+  <p>With these, <code>insertfront</code> from §3.2 simplifies to:</p>
+  <div class="formula-block">NODE insertfront(NODE first, <span class="c1">int</span> item) {
+  NODE temp = getnode();
+  temp-&gt;info = item;
+  temp-&gt;link = first;
+  <span class="c1">return</span> temp;
+}</div>
+
+  <h2>Header Node</h2>
+  <p>A <strong>header node</strong> is a special extra node kept at the front of the list, holding metadata about the list itself — commonly a node count or a description of the list's purpose — rather than an actual data element. Its <code>link</code> field still points to the first <em>real</em> node.</p>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowl4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+      </defs>
+      <text x="20" y="24" font-family="Inter" font-size="12.5" font-weight="600" fill="#5B6169">header</text>
+      <g font-family="JetBrains Mono, monospace" font-size="12.5">
+        <rect x="20" y="36" width="70" height="34" fill="#F7EEDD" stroke="#A66A0D" stroke-width="1.5"/><text x="55" y="58" text-anchor="middle">n=3</text>
+        <path d="M90,53 L135,53" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl4)"/>
+        <rect x="140" y="36" width="70" height="34" fill="#E4F3F0" stroke="#12796F"/><text x="175" y="58" text-anchor="middle">10</text>
+        <path d="M210,53 L255,53" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl4)"/>
+        <rect x="260" y="36" width="70" height="34" fill="#E4F3F0" stroke="#12796F"/><text x="295" y="58" text-anchor="middle">20</text>
+        <path d="M330,53 L375,53" fill="none" stroke="#12796F" stroke-width="1.5" marker-end="url(#arrowl4)"/>
+        <rect x="380" y="36" width="70" height="34" fill="#E4F3F0" stroke="#12796F"/><text x="415" y="58" text-anchor="middle">30</text>
+      </g>
+      <rect x="460" y="36" width="70" height="34" fill="#FFFFFF" stroke="#8A9096" stroke-width="1.5"/>
+      <text x="495" y="58" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">NULL</text>
+      <text x="55" y="100" text-anchor="middle" font-family="Inter" font-size="11.5" fill="#5B6169">metadata, not data</text>
+    </svg>
+    <div class="cap">Fig 5. A headed SLL: the header node (here storing a node count) sits before the first real node; the external pointer <code>header</code> never changes even as the list grows or shrinks.</div>
+  </div>
+
+  <div class="callout key">
+    <span class="label">Why bother with a header node</span>
+    Without one, inserting or deleting the very first real node is a special case (it changes what the external <code>first</code> pointer refers to). With a header node, the external pointer always refers to the header, which never moves — every real insertion/deletion becomes a "modify some node's <code>link</code>" operation, with no special-casing for "am I at the front?" A header list is empty when <code>header-&gt;link == NULL</code>.
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-cll" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.5</span><h1>Circular Linked Lists</h1></div>
+  <p class="section-sub">Last node points back to the first · header node / last pointer · insertion, deletion, traversal</p>
+
+  <div class="callout clarify">
+    <span class="label">Not in your earlier materials — written from the new Unit I deck</span>
+    The deck's circular-list algorithm slides are images; the algorithms below are the standard ones, written out in full and tested in C.
+  </div>
+
+  <h2>Definition</h2>
+  <p>A <strong>circular linked list</strong> is a singly linked list in which the <code>link</code> of the last node points to the <strong>first node</strong> instead of NULL. It therefore has neither a beginning nor an end: starting from any node, you can reach every other node. Because there is no NULL to stop at, traversal ends when the pointer returns to the starting node.</p>
+
+  <p>Two ways are used to know where the list starts:</p>
+  <ul>
+    <li>an external pointer (<code>first</code>, or better <code>last</code>) to a node of the list; or</li>
+    <li>a <strong>header node</strong> as the first node, marked by a sentinel value or a flag. The last node points to the header.</li>
+  </ul>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <g font-family="JetBrains Mono, monospace" font-size="14" text-anchor="middle">
+        <rect x="70" y="50" width="80" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="115" y1="50" x2="115" y2="86" stroke="#12796F"/>
+        <text x="92" y="73" fill="#1C1E21">10</text><circle cx="133" cy="68" r="3" fill="#12796F"/>
+        <rect x="260" y="50" width="80" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="305" y1="50" x2="305" y2="86" stroke="#12796F"/>
+        <text x="282" y="73" fill="#1C1E21">20</text><circle cx="323" cy="68" r="3" fill="#12796F"/>
+        <rect x="450" y="50" width="80" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="495" y1="50" x2="495" y2="86" stroke="#12796F"/>
+        <text x="472" y="73" fill="#1C1E21">30</text><circle cx="513" cy="68" r="3" fill="#12796F"/>
+      </g>
+      <line x1="133" y1="68" x2="258" y2="68" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrC)"/>
+      <line x1="323" y1="68" x2="448" y2="68" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrC)"/>
+      <path d="M513,68 L513,130 L110,130 L110,88" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrC)"/>
+      <text x="310" y="150" text-anchor="middle" font-family="Inter" font-size="12" fill="#93316B">last node links back to the first</text>
+      <text x="115" y="30" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">first</text>
+      <line x1="115" y1="34" x2="115" y2="48" stroke="#5B6169" marker-end="url(#arrC)"/>
+    </svg>
+    <div class="cap">Fig 6. A circular singly linked list of three nodes — no NULL anywhere.</div>
+  </div>
+
+  <h2>Why use an external pointer to the <em>last</em> node?</h2>
+  <p>If <code>last</code> points to the last node, then <code>last-&gt;link</code> is the first node. So both ends are reachable in O(1): insertion at the front, insertion at the rear and deletion from the front all take constant time. With only a <code>first</code> pointer, inserting at the rear costs O(n) because you must walk around the whole list.</p>
+
+  <pre class="formula-block">typedef struct node { int data; struct node *link; } NODE;
+
+<span class="cm">/* insert at front — last is the external pointer */</span>
+NODE* insert_front(NODE *last, int x) {
+    NODE *p = (NODE*)malloc(sizeof(NODE));
+    p-&gt;data = x;
+    if (last == NULL) { p-&gt;link = p; return p; }   <span class="cm">/* first node points to itself */</span>
+    p-&gt;link = last-&gt;link;       <span class="cm">/* new node -&gt; old first */</span>
+    last-&gt;link = p;             <span class="cm">/* last -&gt; new first   */</span>
+    return last;
+}
+
+<span class="cm">/* insert at rear: same rewiring, then move last */</span>
+NODE* insert_rear(NODE *last, int x) {
+    last = insert_front(last, x);
+    return last-&gt;link;           <span class="cm">/* new node becomes last */</span>
+}
+
+<span class="cm">/* delete from front */</span>
+NODE* delete_front(NODE *last) {
+    if (last == NULL) { printf("List empty\n"); return NULL; }
+    NODE *first = last-&gt;link;
+    if (first == last) { free(first); return NULL; }  <span class="cm">/* only one node */</span>
+    last-&gt;link = first-&gt;link;
+    free(first);
+    return last;
+}
+
+<span class="cm">/* display */</span>
+void display(NODE *last) {
+    if (last == NULL) return;
+    NODE *t = last-&gt;link;
+    do { printf("%d ", t-&gt;data); t = t-&gt;link; } while (t != last-&gt;link);
+}</pre>
+
+  <div class="callout">
+    <span class="label">Common mistake</span>
+    Traversal must use <code>do … while</code> (or stop when you return to the start), never <code>while (p != NULL)</code> — that loops forever on a circular list. Handle the empty list and the single-node list as separate cases in every delete.
+  </div>
+
+  <h2>Deletion from the end</h2>
+  <p>With a single <code>last</code> pointer, deleting the last node needs the <em>previous</em> node, so you must walk from <code>last-&gt;link</code> until <code>p-&gt;link == last</code>: O(n). Set <code>p-&gt;link = last-&gt;link</code>, free <code>last</code>, and make <code>p</code> the new last.</p>
+
+  <h2>SLL vs Circular List</h2>
+  <table>
+    <tr><th>Singly linked list</th><th>Circular linked list</th></tr>
+    <tr><td>Last node's link is NULL</td><td>Last node's link is the first node</td></tr>
+    <tr><td>Reach later nodes only from earlier ones</td><td>Any node reaches every node</td></tr>
+    <tr><td>Stop at NULL</td><td>Stop on returning to the start</td></tr>
+    <tr><td>Rear insert O(n) with only <code>first</code></td><td>Rear insert O(1) with a <code>last</code> pointer</td></tr>
+    <tr><td>Suits one-pass processing</td><td>Suits repeated cycling: round-robin scheduling, buffers</td></tr>
+  </table>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-dll" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.6</span><h1>Doubly Linked Lists</h1></div>
+  <p class="section-sub">Node with llink, data, rlink · insertion and deletion · SLL vs DLL · browser-history scenario</p>
+
+  <h2>Definition and Node Structure</h2>
+  <p>A <strong>doubly linked list</strong> is a collection of nodes, each with three parts: <code>llink</code> (address of the previous node), <code>data</code>, and <code>rlink</code> (address of the next node). The first node's <code>llink</code> and the last node's <code>rlink</code> are NULL. Because every node knows both neighbours, the list can be traversed in either direction.</p>
+  <pre class="formula-block">struct node {
+    int data;
+    struct node *rlink;   <span class="cm">/* next     */</span>
+    struct node *llink;   <span class="cm">/* previous */</span>
+};</pre>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrD" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <g font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle" fill="#1C1E21">
+        <rect x="40" y="50" width="150" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="80" y1="50" x2="80" y2="86" stroke="#12796F"/><line x1="150" y1="50" x2="150" y2="86" stroke="#12796F"/>
+        <text x="60" y="73" font-size="11">NULL</text><text x="115" y="73">10</text><circle cx="170" cy="68" r="3" fill="#12796F"/>
+        <rect x="265" y="50" width="150" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="305" y1="50" x2="305" y2="86" stroke="#12796F"/><line x1="375" y1="50" x2="375" y2="86" stroke="#12796F"/>
+        <circle cx="285" cy="68" r="3" fill="#12796F"/><text x="340" y="73">20</text><circle cx="395" cy="68" r="3" fill="#12796F"/>
+        <rect x="490" y="50" width="150" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><line x1="530" y1="50" x2="530" y2="86" stroke="#12796F"/><line x1="600" y1="50" x2="600" y2="86" stroke="#12796F"/>
+        <circle cx="510" cy="68" r="3" fill="#12796F"/><text x="565" y="73">30</text><text x="620" y="73" font-size="11">NULL</text>
+      </g>
+      <path d="M170,60 L263,60" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrD)"/>
+      <path d="M285,76 Q228,100 192,76" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrD)"/>
+      <path d="M395,60 L488,60" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrD)"/>
+      <path d="M510,76 Q453,100 417,76" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrD)"/>
+      <text x="115" y="30" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">head</text>
+      <line x1="115" y1="34" x2="115" y2="48" stroke="#5B6169" marker-end="url(#arrD)"/>
+      <text x="340" y="132" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">grey arrows: rlink (forward) · purple arrows: llink (backward)</text>
+    </svg>
+    <div class="cap">Fig 7. A doubly linked list: each node has llink | data | rlink.</div>
+  </div>
+
+  <h2>Insertion at the Front</h2>
+  <pre class="formula-block">NODE* insert_front(NODE *head, int x) {
+    NODE *p = (NODE*)malloc(sizeof(NODE));
+    p-&gt;data = x;
+    p-&gt;llink = NULL;
+    p-&gt;rlink = head;
+    if (head != NULL) head-&gt;llink = p;
+    return p;                       <span class="cm">/* new head */</span>
+}</pre>
+
+  <h2>Insertion at the Rear</h2>
+  <pre class="formula-block">NODE* insert_rear(NODE *head, int x) {
+    NODE *p = (NODE*)malloc(sizeof(NODE));
+    p-&gt;data = x; p-&gt;rlink = NULL;
+    if (head == NULL) { p-&gt;llink = NULL; return p; }
+    NODE *t = head;
+    while (t-&gt;rlink != NULL) t = t-&gt;rlink;
+    t-&gt;rlink = p;                   <span class="cm">/* old last -&gt; new */</span>
+    p-&gt;llink = t;                   <span class="cm">/* new -&gt; old last */</span>
+    return head;
+}</pre>
+
+  <h2>Insertion after a Given Node</h2>
+  <p>To insert <code>p</code> after node <code>q</code>: four pointers change, and the order matters because you must not lose <code>q-&gt;rlink</code>.</p>
+  <pre class="formula-block">p-&gt;rlink = q-&gt;rlink;
+p-&gt;llink = q;
+if (q-&gt;rlink != NULL) q-&gt;rlink-&gt;llink = p;
+q-&gt;rlink = p;</pre>
+
+  <h2>Deletion</h2>
+  <p>Deleting a node needs only the pointer to the node itself, because it already holds its predecessor — no trailing pointer is required, unlike an SLL.</p>
+  <pre class="formula-block">NODE* delete_node(NODE *head, NODE *d) {      <span class="cm">/* d points to node to delete */</span>
+    if (head == NULL || d == NULL) return head;
+    if (d-&gt;llink != NULL) d-&gt;llink-&gt;rlink = d-&gt;rlink;
+    else                  head = d-&gt;rlink;    <span class="cm">/* deleting the first node */</span>
+    if (d-&gt;rlink != NULL) d-&gt;rlink-&gt;llink = d-&gt;llink;
+    free(d);
+    return head;
+}</pre>
+
+  <h2>Singly vs Doubly Linked List</h2>
+  <table>
+    <tr><th>Singly linked list</th><th>Doubly linked list</th></tr>
+    <tr><td>One link per node (<code>link</code>)</td><td>Two links per node (<code>llink</code>, <code>rlink</code>)</td></tr>
+    <tr><td>Forward traversal only</td><td>Forward and backward traversal</td></tr>
+    <tr><td>Delete needs a trailing <code>prev</code> pointer</td><td>Delete needs only the node itself</td></tr>
+    <tr><td>Less memory per node</td><td>Extra pointer per node, more rewiring per operation</td></tr>
+    <tr><td>Simple code</td><td>More pointer updates; more room for bugs</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">Scenario in your deck — browser history</span>
+    Each node stores a URL and a visit time. <strong>Add a URL</strong>: insert at the rear (or after the current page). <strong>Back/forward</strong>: move a <code>current</code> pointer along <code>llink</code>/<code>rlink</code> — this is exactly why a doubly list is used. <strong>Delete history older than a date</strong>: walk from the head while <code>time &lt; cutoff</code> and delete each front node.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-cdll" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.7</span><h1>Circular Doubly Linked Lists</h1></div>
+  <p class="section-sub">Doubly linked + circular · deletion from beginning, end and a given position</p>
+
+  <h2>Definition</h2>
+  <p>A <strong>circular doubly linked list</strong> (CDLL) combines the two ideas: every node has <code>prev</code> and <code>next</code> pointers, the last node's <code>next</code> points to the head, and the head's <code>prev</code> points to the last node. Nothing is NULL. The key benefit is that the <strong>last node is reachable in O(1) as <code>head-&gt;prev</code></strong>, so both end operations are constant time without an extra pointer.</p>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrE" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <g font-family="JetBrains Mono, monospace" font-size="14" text-anchor="middle" fill="#1C1E21">
+        <rect x="60" y="60" width="90" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="105" y="83">10</text>
+        <rect x="275" y="60" width="90" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="320" y="83">20</text>
+        <rect x="490" y="60" width="90" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.5"/><text x="535" y="83">30</text>
+      </g>
+      <path d="M150,68 L273,68" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <path d="M275,88 L152,88" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <path d="M365,68 L488,68" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <path d="M490,88 L367,88" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <path d="M535,60 L535,26 L105,26 L105,58" fill="none" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <path d="M105,96 L105,150 L535,150 L535,98" fill="none" stroke="#93316B" stroke-width="1.5" marker-end="url(#arrE)"/>
+      <text x="320" y="20" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">last.next = head</text>
+      <text x="320" y="170" text-anchor="middle" font-family="Inter" font-size="12" fill="#93316B">head.prev = last</text>
+    </svg>
+    <div class="cap">Fig 8. Circular doubly linked list: grey = next pointers, purple = prev pointers.</div>
+  </div>
+
+  <h2>Delete from the Beginning</h2>
+  <ol class="steps">
+    <li>If <code>head == NULL</code>: print "List empty, deletion not possible" and return.</li>
+    <li>If <code>head-&gt;next == head</code> (one node): free it, set <code>head = NULL</code>, return.</li>
+    <li>Otherwise: <code>temp = head; last = head-&gt;prev; head = head-&gt;next; head-&gt;prev = last; last-&gt;next = head; free(temp);</code> return head.</li>
+  </ol>
+
+  <h2>Delete from the End</h2>
+  <ol class="steps">
+    <li>Empty list: report and return.</li>
+    <li>One node (<code>head-&gt;next == head</code>): free it, set <code>head = NULL</code>.</li>
+    <li>Otherwise: <code>last = head-&gt;prev; second_last = last-&gt;prev; second_last-&gt;next = head; head-&gt;prev = second_last; free(last);</code> return head.</li>
+  </ol>
+
+  <h2>Delete at a Given Position</h2>
+  <pre class="formula-block">NODE* delete_pos(NODE *head, int pos) {
+    if (head == NULL) { printf("List empty\n"); return head; }
+    if (pos == 1)  return delete_begin(head);
+    NODE *t = head; int count = 1;
+    while (count &lt; pos) {
+        t = t-&gt;next; count++;
+        if (t == head) { printf("Invalid position\n"); return head; }
+    }
+    t-&gt;prev-&gt;next = t-&gt;next;
+    t-&gt;next-&gt;prev = t-&gt;prev;
+    free(t);
+    return head;
+}</pre>
+
+  <div class="callout">
+    <span class="label">Common mistake</span>
+    Forgetting the one-node case: there <code>head-&gt;next == head</code> and <code>head-&gt;prev == head</code>, so the general code would link the node to itself and then free it, leaving a dangling head.
+  </div>
+
+  <h2>Which list for which job</h2>
+  <table>
+    <tr><th>Type</th><th>Links</th><th>NULL at end?</th><th>Typical use</th></tr>
+    <tr><td>Singly (SLL)</td><td>1</td><td>Yes</td><td>Simple lists, stacks, queues</td></tr>
+    <tr><td>Circular singly (CLL)</td><td>1</td><td>No</td><td>Round-robin scheduling, cyclic buffers</td></tr>
+    <tr><td>Doubly (DLL)</td><td>2</td><td>Yes</td><td>Browser history, undo/redo, editors</td></tr>
+    <tr><td>Circular doubly (CDLL)</td><td>2</td><td>No</td><td>Playlists, O(1) access to both ends</td></tr>
+  </table>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="sec-3-5" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.8</span><h1>Stack &amp; Queue via SLL</h1></div>
+  <p class="section-sub">Applying SLL insertion/deletion to implement a stack and a queue without a fixed array size</p>
+
+  <p>An array-based stack or queue (see the Unit II notes for the array stack and Unit III for the array queue) is capped by a fixed size chosen up front. Building the same structure on top of an SLL removes that cap entirely — the structure grows and shrinks one node at a time via <code>getnode</code>/<code>freenode</code> (§3.4), and never reports a false overflow.</p>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowl5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#12796F"/></marker>
+      </defs>
+      <text x="20" y="24" font-family="Inter" font-size="12.5" font-weight="600" fill="#1D4E89">Queue via SLL: enqueue = insertrear, dequeue = deletefront</text>
+      <text x="20" y="118" font-family="Inter" font-size="12.5" font-weight="600" fill="#93316B">Stack via SLL: push = insertfront, pop = deletefront</text>
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="60" y="34" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="80" y="55" text-anchor="middle">10</text>
+        <rect x="170" y="34" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="190" y="55" text-anchor="middle">20</text>
+        <rect x="280" y="34" width="60" height="32" fill="#E4F3F0" stroke="#12796F"/><text x="300" y="55" text-anchor="middle">30</text>
+      </g>
+      <text x="80" y="84" text-anchor="middle" font-family="Inter" font-size="11.5" fill="#1D4E89">front (dequeue here)</text>
+      <text x="300" y="84" text-anchor="middle" font-family="Inter" font-size="11.5" fill="#1D4E89">rear (enqueue here)</text>
+
+      <g font-family="JetBrains Mono, monospace" font-size="13">
+        <rect x="60" y="128" width="60" height="32" fill="#F6E9F0" stroke="#93316B"/><text x="80" y="149" text-anchor="middle">10</text>
+        <rect x="170" y="128" width="60" height="32" fill="#F6E9F0" stroke="#93316B"/><text x="190" y="149" text-anchor="middle">20</text>
+        <rect x="280" y="128" width="60" height="32" fill="#F6E9F0" stroke="#93316B"/><text x="300" y="149" text-anchor="middle">30</text>
+      </g>
+      <text x="80" y="176" text-anchor="middle" font-family="Inter" font-size="11.5" fill="#93316B">top</text>
+      <text x="220" y="176" font-family="Inter" font-size="11.5" fill="#93316B">(push/pop always at this end)</text>
+    </svg>
+    <div class="cap">Fig 9. The only structural difference between an SLL-backed queue and an SLL-backed stack is <em>which end</em> insertion happens at — deletion is always from the front (an SLL only has cheap access to its front, per §3.2).</div>
+  </div>
+
+  <h2>Stack via SLL</h2>
+  <div class="formula-block">NODE push(NODE top, <span class="c1">int</span> item) { <span class="c1">return</span> insertfront(top, item); }
+NODE pop(NODE top, <span class="c1">int</span> *val) {
+  *val = top-&gt;info;
+  NODE temp = top;
+  top = top-&gt;link;
+  freenode(temp);
+  <span class="c1">return</span> top;
+}</div>
+
+  <h2>Queue via SLL</h2>
+  <p>Enqueue at the rear (§3.2's <code>insertrear</code>), dequeue from the front — this matches a queue's FIFO contract exactly, and never needs the circular-array trick (Unit III) since there's no fixed array to run out of.</p>
+  <div class="formula-block">NODE enqueue(NODE first, <span class="c1">int</span> item) { <span class="c1">return</span> insertrear(first, item); }
+NODE dequeue(NODE first, <span class="c1">int</span> *val) {
+  *val = first-&gt;info;
+  NODE temp = first;
+  first = first-&gt;link;
+  freenode(temp);
+  <span class="c1">return</span> first;
+}</div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">SEE Jan/Feb 2025 · Part B Q5a</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write a program to implement Queue data structure using linked list.</div>
+    <div class="ans-label">Answer</div>
+    <p>The <code>enqueue</code>/<code>dequeue</code> pair above, driven from a menu-loop <code>main()</code> the same way as the array-based version — the only change is that <code>first</code> (an SLL head pointer) replaces the array + <code>front</code>/<code>rear</code> indices, and every operation is O(1) at whichever end it targets, with no size limit and no false-overflow case of the linear queue.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sec-3-6" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+  <div class="section-head"><span class="tag">3.9</span><h1>Solved Numericals — Linked Lists</h1></div>
+  <p class="section-sub">Full exam-style SLL questions worked end to end</p>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-II 2021-22 · Q1.1</span><span class="marks">2 marks</span></div>
+    <div class="qtext">What does the function "fun" print for a given singly linked list with contents (1, 3, 5, 7, 9, 11, 13, 15, 17, 19), first node pointed to by "head"?<br><code>void fun(struct node *head){ if(head!=NULL){ struct node *q=head; while(q-&gt;next-&gt;next!=NULL) q=q-&gt;next; printf("%d",q-&gt;data); } }</code></div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <p>The loop advances <code>q</code> only while <code>q-&gt;next-&gt;next</code> is non-NULL — so it stops exactly when <code>q</code> is the <strong>second-to-last</strong> node (at that point, <code>q-&gt;next</code> is the last node and <code>q-&gt;next-&gt;next</code> is NULL). For the 10-node list, the second-to-last node holds <strong>17</strong>.</p>
+    <p><strong>Prints: 17</strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-II 2021-22 · Q1.2</span><span class="marks">2 marks</span></div>
+    <div class="qtext">Given <code>struct node { int *num; struct node *next; };</code>, what is the number of bytes allocated after executing:<br><code>p = (struct node *)malloc(sizeof(struct node *));</code></div>
+    <div class="ans-label">Answer — read the statement literally</div>
+    <div class="callout clarify">
+      <span class="label">Correcting the intended reading of this question</span>
+      The argument to <code>malloc</code> is <code>sizeof(struct node *)</code> — the size of one <strong>pointer to</strong> <code>struct node</code> — not <code>sizeof(struct node)</code>, the size of the struct itself. This is easy to misread as "allocate a node," but it doesn't: it allocates space for exactly one pointer.
+    </div>
+    <p>On the common 32-bit-pointer teaching convention used elsewhere in this course (where <code>int</code> is stated as 4 bytes), a pointer is also <strong>4 bytes</strong> — so <code>malloc</code> allocates <strong>4 bytes</strong> (8 bytes on a 64-bit pointer model). Contrast this with what a real node needs: <code>struct node</code> holds one <code>int*</code> and one <code>struct node*</code>, i.e. <strong>8 bytes</strong> (32-bit) or <strong>16 bytes</strong> (64-bit) — roughly double what was actually allocated. Writing to <code>p-&gt;num</code> or <code>p-&gt;next</code> after this call writes past the allocated block — undefined behaviour / heap corruption.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">Quiz-II 2024-25 · Q1.1</span><span class="marks">2 marks</span></div>
+    <div class="qtext">What is the output of the following code snippet for the list 1→2→3→4→5→6?<br><code>void FUN(struct node* start){ if(start==NULL) return; printf("%d ",start-&gt;data); if(start-&gt;next!=NULL) FUN(start-&gt;next-&gt;next); printf("%d ",start-&gt;data); }</code></div>
+    <div class="ans-label">Answer — traced (verified by code)</div>
+    <table>
+      <tr><th>Call</th><th>Prints before recursing</th><th>Recurses into</th></tr>
+      <tr><td>FUN(1)</td><td>1</td><td>FUN(3) <span style="color:var(--ink-faint)">(1-&gt;next-&gt;next)</span></td></tr>
+      <tr><td>FUN(3)</td><td>3</td><td>FUN(5)</td></tr>
+      <tr><td>FUN(5)</td><td>5</td><td>FUN(NULL) — base case, no print, returns immediately</td></tr>
+    </table>
+    <p>Then each frame prints its node's value again on the way back out, in reverse call order: 5, 3, 1.</p>
+    <p><strong>Output: <code>1 3 5 5 3 1</code></strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">Quiz-II 2024-25 · Q1.5</span><span class="marks">2 marks</span></div>
+    <div class="qtext">What does the following code snippet do?<br><code>ListNode* fun(ListNode* head, int x){ ListNode* front=head; int count=1; while(front!=NULL){ if(count&lt;=x){ front=front-&gt;next; } else { head=head-&gt;next; front=front-&gt;next; } count++; } return head; }</code></div>
+    <div class="ans-label">Answer — traced with list [10,20,30,40,50,60,70], x=3 (verified by code)</div>
+    <p>For the first <code>x</code> iterations, only <code>front</code> advances — <code>head</code> stays put. After that, <code>head</code> and <code>front</code> advance together until <code>front</code> falls off the end. Since <code>front</code> is <code>x</code> nodes ahead of <code>head</code> throughout the second phase, by the time <code>front</code> becomes NULL, <code>head</code> has advanced exactly <code>(length − x)</code> steps from the original head — landing on the node that is <code>x</code> nodes from the end.</p>
+    <p>For the 7-node example list with x=3: <code>fun</code> returns a pointer to <strong>[50, 60, 70]</strong> — the last 3 nodes.</p>
+    <p><strong>The function returns the sublist consisting of the last <code>x</code> nodes of the list.</strong></p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">Quiz-II 2024-25 · Q1.6</span><span class="marks">2 marks</span></div>
+    <div class="qtext">What will be the value of "sum" after the following code snippet terminates, for the list 1→2→3→4→5?<br><code>int sum=0; while(root!=NULL){ sum+=root-&gt;val; root=root-&gt;next; } printf("%d",sum);</code></div>
+    <div class="ans-label">Answer</div>
+    <p>A plain traversal-accumulate over the list: 1+2+3+4+5 = <strong>15</strong>.</p>
+  </div>
+
+  <div class="qbox" style="--accent:var(--teal);--accent-soft:var(--teal-soft);">
+    <div class="qmeta"><span class="qsrc">CIE-II 2024-25 · Q2a</span><span class="marks">10 marks</span></div>
+    <div class="qtext">You are given two non-empty linked lists, each representing a non-negative integer. The digits are stored in reverse order, one digit per node. Write a program to add the two numbers and return the result as a linked list.<br>Input: (2→4→5) + (5→7→2) &nbsp; Output: (7→1→8)</div>
+    <div class="ans-label">Answer — why "reverse order" makes this easy, verified by simulation</div>
+    <p>Because the least-significant digit is stored at the <em>head</em> of each list, adding two numbers digit-by-digit from the heads is the same direction as adding them by hand from the ones place — no reversal needed. Traverse both lists together, adding corresponding digits plus any carry from the previous step, and append <code>(sum % 10)</code> to the result while carrying <code>(sum / 10)</code> forward:</p>
+    <div class="formula-block">NODE addTwoNumbers(NODE l1, NODE l2) {
+  NODE dummy = getnode(); NODE tail = dummy;
+  <span class="c1">int</span> carry = 0;
+  <span class="c1">while</span> (l1 != NULL || l2 != NULL || carry) {
+    <span class="c1">int</span> x = (l1 != NULL) ? l1-&gt;info : 0;
+    <span class="c1">int</span> y = (l2 != NULL) ? l2-&gt;info : 0;
+    <span class="c1">int</span> sum = x + y + carry;
+    carry = sum / 10;
+    tail-&gt;link = getnode();
+    tail = tail-&gt;link;
+    tail-&gt;info = sum % 10;
+    <span class="c1">if</span> (l1) l1 = l1-&gt;link;
+    <span class="c1">if</span> (l2) l2 = l2-&gt;link;
+  }
+  tail-&gt;link = NULL;
+  <span class="c1">return</span> dummy-&gt;link;   <span class="cm">// skip the dummy head</span>
+}</div>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="JetBrains Mono, monospace" font-size="13" fill="#2A2C2F">
+        <text x="20" y="30">(2→4→5)</text>
+        <text x="20" y="55" fill="#5B6169">represents 5·100 + 4·10 + 2 = 542</text>
+        <text x="20" y="85">(5→7→2)</text>
+        <text x="20" y="110" fill="#5B6169">represents 2·100 + 7·10 + 5 = 275</text>
+      </g>
+      <text x="420" y="55" font-family="Inter" font-size="16" font-weight="700" fill="#12796F">542 + 275 = 817</text>
+      <text x="420" y="85" font-family="JetBrains Mono, monospace" font-size="14" fill="#12796F">→ result list (7→1→8)</text>
+    </svg>
+    <div class="cap">Fig 10. 542 + 275 = 817; encoded back into a reversed-digit list as 7→1→8 — matches the question's own given output exactly.</div>
+  </div>
+    <p>Verified: <code>(2→4→5)</code> encodes 542, <code>(5→7→2)</code> encodes 275, and 542 + 275 = <strong>817</strong>, which re-encodes as <strong>(7→1→8)</strong> — matching the question's stated output exactly.</p>
+  </div>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-reverse" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.1</span><h1>Reversing a Linked List</h1></div>
+  <p class="section-sub">Self-learning · iterative (three pointers) and recursive approaches</p>
+
+  <h2>Iterative: three pointers</h2>
+  <p>Walk the list once, turning each node's link to point backwards. You need <code>prev</code> (already-reversed part), <code>cur</code> (node being processed) and <code>next</code> (saved before you overwrite <code>cur-&gt;link</code>, otherwise the rest of the list is lost). Time O(n), extra space O(1).</p>
+  <pre class="formula-block">NODE* reverse(NODE *head) {
+    NODE *prev = NULL, *cur = head, *next;
+    while (cur != NULL) {
+        next = cur-&gt;link;     <span class="cm">/* 1. save the rest         */</span>
+        cur-&gt;link = prev;     <span class="cm">/* 2. reverse this link     */</span>
+        prev = cur;           <span class="cm">/* 3. advance prev          */</span>
+        cur  = next;          <span class="cm">/* 4. advance cur           */</span>
+    }
+    return prev;              <span class="cm">/* prev is the new head     */</span>
+}</pre>
+
+  <h2>Recursive</h2>
+  <p>Reverse everything after the head, then make the old second node point back to the head, and make the head the new tail. Base case: an empty list or one node is already reversed. Time O(n); extra space O(n) for the call stack (the call-stack behaviour is explained in the Unit II notes, Recursion part).</p>
+  <pre class="formula-block">NODE* reverse_rec(NODE *head) {
+    if (head == NULL || head-&gt;link == NULL) return head;   <span class="cm">/* base case */</span>
+    NODE *rest = reverse_rec(head-&gt;link);   <span class="cm">/* reverse the tail            */</span>
+    head-&gt;link-&gt;link = head;                <span class="cm">/* old 2nd node points back    */</span>
+    head-&gt;link = NULL;                      <span class="cm">/* head becomes the new tail   */</span>
+    return rest;                            <span class="cm">/* new head from the deepest call */</span>
+}</pre>
+
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Worked trace · verified in C</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Reverse 10 → 20 → 30 → 40 → 50 and show the pointer steps.</div>
+    <div class="ans-label">Iterative trace</div>
+    <table>
+      <tr><th>Pass</th><th>cur</th><th>Link set</th><th>prev after pass</th></tr>
+      <tr><td>1</td><td>10</td><td>10 → NULL</td><td>10</td></tr>
+      <tr><td>2</td><td>20</td><td>20 → 10</td><td>20</td></tr>
+      <tr><td>3</td><td>30</td><td>30 → 20</td><td>30</td></tr>
+      <tr><td>4</td><td>40</td><td>40 → 30</td><td>40</td></tr>
+      <tr><td>5</td><td>50</td><td>50 → 40</td><td>50</td></tr>
+    </table>
+    <p>Result: <code>50 → 40 → 30 → 20 → 10</code>. Both versions give this output when run.</p>
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-merge" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.2</span><h1>Merging and Splitting Linked Lists</h1></div>
+  <p class="section-sub">Self-learning · merge two sorted lists · split into halves or alternate nodes · joining lists</p>
+
+  <h2>Joining (concatenating) two lists</h2>
+  <p>Walk to the last node of the first list and set its link to the head of the second: O(n) for the walk, O(1) relinking. This is the quick "joining" advantage of linked lists. (With a circular list and a <code>last</code> pointer it becomes O(1).)</p>
+
+  <h2>Merging two sorted lists</h2>
+  <p>Compare the front nodes of both lists, attach the smaller to the result, and advance in that list. When one list runs out, attach the remainder of the other. No new nodes are created — existing nodes are just relinked. Time O(m + n).</p>
+  <pre class="formula-block">NODE* merge(NODE *a, NODE *b) {
+    NODE dummy, *t = &amp;dummy;      <span class="cm">/* dummy head avoids special cases */</span>
+    dummy.link = NULL;
+    while (a &amp;&amp; b) {
+        if (a-&gt;data &lt;= b-&gt;data) { t-&gt;link = a; a = a-&gt;link; }
+        else                      { t-&gt;link = b; b = b-&gt;link; }
+        t = t-&gt;link;
+    }
+    t-&gt;link = a ? a : b;           <span class="cm">/* attach the leftover list */</span>
+    return dummy.link;
+}</pre>
+  <p><strong>Example:</strong> merging <code>1→3→5→7</code> and <code>2→4→6→8→10</code> gives <code>1→2→3→4→5→6→7→8→10</code> (verified).</p>
+
+  <h2>Splitting a list</h2>
+  <ul>
+    <li><strong>Into front and back halves</strong> — use two pointers: <code>slow</code> moves one node, <code>fast</code> moves two. When <code>fast</code> reaches the end, <code>slow</code> is at the middle; cut after it. For <code>1→2→3→4→5→6→7</code> this gives <code>1→2→3→4</code> and <code>5→6→7</code> (the front gets the extra node).</li>
+    <li><strong>Into alternate nodes</strong> — send nodes at positions 1, 3, 5, … to one list and 2, 4, 6, … to the other. For the same list: <code>1→3→5→7</code> and <code>2→4→6</code>.</li>
+  </ul>
+  <pre class="formula-block">void split_half(NODE *h, NODE **front, NODE **back) {
+    NODE *slow = h, *fast = h-&gt;link;      <span class="cm">/* assumes h != NULL */</span>
+    while (fast &amp;&amp; fast-&gt;link) { slow = slow-&gt;link; fast = fast-&gt;link-&gt;link; }
+    *front = h;
+    *back  = slow-&gt;link;
+    slow-&gt;link = NULL;                   <span class="cm">/* cut the list */</span>
+}</pre>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-poly" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.3</span><h1>Polynomials &amp; Sparse Matrices</h1></div>
+  <p class="section-sub">Self-learning · polynomial representation and addition · sparse matrix representation</p>
+
+  <h2>Polynomial as a linked list</h2>
+  <p>Store one node per <strong>non-zero term</strong>, kept in decreasing order of exponent. Zero terms take no space, which is why a linked list suits polynomials such as <code>x^1000 + 1</code>.</p>
+  <pre class="formula-block">struct poly { int coef; int exp; struct poly *link; };</pre>
+  <p>Example: <code>5x³ + 4x² + 2x + 7</code> is <code>(5,3) → (4,2) → (2,1) → (7,0)</code>.</p>
+
+  <h3>Polynomial addition</h3>
+  <p>Use two pointers, one per polynomial, comparing exponents:</p>
+  <ol class="steps">
+    <li>If exponents are equal, add the coefficients; append a term if the sum is non-zero; advance both.</li>
+    <li>If one exponent is larger, copy that term to the result and advance only that pointer.</li>
+    <li>When one polynomial ends, copy the remaining terms of the other.</li>
+  </ol>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Worked example · verified</span><span class="marks">5 marks</span></div>
+    <div class="qtext">Add P1 = 5x³ + 4x² + 2x + 7 and P2 = 3x³ + 6x² + 9.</div>
+    <div class="ans-label">Answer</div>
+    <table>
+      <tr><th>Exponent</th><th>P1 term</th><th>P2 term</th><th>Result</th></tr>
+      <tr><td>3</td><td>5</td><td>3</td><td>8</td></tr>
+      <tr><td>2</td><td>4</td><td>6</td><td>10</td></tr>
+      <tr><td>1</td><td>2</td><td>—</td><td>2</td></tr>
+      <tr><td>0</td><td>7</td><td>9</td><td>16</td></tr>
+    </table>
+    <p>Sum = <code>8x³ + 10x² + 2x + 16</code>. Check at x = 2: P1(2) = 67, P2(2) = 57, and 8·8 + 10·4 + 2·2 + 16 = 124 = 67 + 57.</p>
+  </div>
+
+  <h3>Polynomial subtraction (and a single C routine for both)</h3>
+  <p>Subtraction <code>P1 − P2</code> is addition with every coefficient of P2 negated, so the same two-pointer merge works. The three cases change only slightly: equal exponents give <code>c1 − c2</code> (dropped if zero); a term present only in P1 is copied unchanged; a term present only in P2 is copied with its <strong>sign flipped</strong>. The routine below takes <code>sign = +1</code> for addition and <code>sign = −1</code> for subtraction. Time O(m + n), no node of the inputs is modified.</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write a C program to add and subtract two polynomials using linked lists. Use P1 = 5x³ + 4x² + 2x + 7 and P2 = 3x³ + 6x² + 9.</div>
+    <div class="ans-label">Answer — full program</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct poly { int coef, exp; struct poly *link; } POLY;
+
+POLY *append(POLY *head, POLY **tail, int c, int e) {
+    POLY *n = malloc(sizeof(POLY));
+    n-&gt;coef = c; n-&gt;exp = e; n-&gt;link = NULL;
+    if (head == NULL) head = n; else (*tail)-&gt;link = n;
+    *tail = n;
+    return head;
+}
+
+/* sign = +1 gives P1 + P2 ; sign = -1 gives P1 - P2 */
+POLY *combine(POLY *p, POLY *q, int sign) {
+    POLY *r = NULL, *t = NULL;
+    while (p &amp;&amp; q) {
+        if (p-&gt;exp == q-&gt;exp) {
+            int c = p-&gt;coef + sign * q-&gt;coef;
+            if (c != 0) r = append(r, &amp;t, c, p-&gt;exp);
+            p = p-&gt;link; q = q-&gt;link;
+        } else if (p-&gt;exp &gt; q-&gt;exp) {
+            r = append(r, &amp;t, p-&gt;coef, p-&gt;exp); p = p-&gt;link;
+        } else {
+            r = append(r, &amp;t, sign * q-&gt;coef, q-&gt;exp); q = q-&gt;link;
+        }
+    }
+    for (; p; p = p-&gt;link) r = append(r, &amp;t, p-&gt;coef, p-&gt;exp);
+    for (; q; q = q-&gt;link) r = append(r, &amp;t, sign * q-&gt;coef, q-&gt;exp);
+    return r;
+}
+
+void show(POLY *p) {
+    for (; p; p = p-&gt;link) printf("%+dx^%d ", p-&gt;coef, p-&gt;exp);
+    printf("\n");
+}
+int eval(POLY *p, int x) { int s = 0; for (; p; p = p-&gt;link) { int t = p-&gt;coef; for (int i = 0; i &lt; p-&gt;exp; i++) t *= x; s += t; } return s; }
+
+int main(void) {
+    POLY *a = NULL, *b = NULL, *ta, *tb;
+    a = append(a,&amp;ta,5,3); a = append(a,&amp;ta,4,2); a = append(a,&amp;ta,2,1); a = append(a,&amp;ta,7,0);
+    b = append(b,&amp;tb,3,3); b = append(b,&amp;tb,6,2); b = append(b,&amp;tb,9,0);
+    POLY *s = combine(a,b,+1), *d = combine(a,b,-1);
+    printf("P1+P2 = "); show(s);
+    printf("P1-P2 = "); show(d);
+    printf("x=2: P1=%d P2=%d sum=%d diff=%d\n", eval(a,2), eval(b,2), eval(s,2), eval(d,2));
+    /* cancel case */
+    POLY *z = combine(a,a,-1); printf("P1-P1 = %s\n", z ? "nonempty" : "empty (zero polynomial)");
+    return 0;
+}</pre>
+    <div class="ans-label">Output (compiled with gcc and run)</div>
+    <pre class="formula-block">P1+P2 = +8x^3 +10x^2 +2x^1 +16x^0
+P1-P2 = +2x^3 -2x^2 +2x^1 -2x^0
+x=2: P1=67 P2=57 sum=124 diff=10
+P1-P1 = empty (zero polynomial)</pre>
+    <table>
+      <tr><th>Exponent</th><th>P1 term</th><th>P2 term</th><th>P1 − P2</th></tr>
+      <tr><td>3</td><td>5</td><td>3</td><td>5 − 3 = 2</td></tr>
+      <tr><td>2</td><td>4</td><td>6</td><td>4 − 6 = −2</td></tr>
+      <tr><td>1</td><td>2</td><td>—</td><td>2 (copied)</td></tr>
+      <tr><td>0</td><td>7</td><td>9</td><td>7 − 9 = −2</td></tr>
+    </table>
+    <p>Difference = <code>2x³ − 2x² + 2x − 2</code>. Check at x = 2: P1(2) − P2(2) = 67 − 57 = 10, and 2·8 − 2·4 + 2·2 − 2 = 10. The sum (same P1, P2) is the <code>8x³ + 10x² + 2x + 16</code> already derived above. Note that <code>P1 − P1</code> gives no nodes at all, because zero results are never appended.</p>
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    The new deck covers polynomial addition only in outline. Subtraction and the full linked-list program are written here from standard material and were compiled and run.
+  </div>
+
+  <h2>Sparse matrix</h2>
+  <p>A <strong>sparse matrix</strong> has mostly zero entries. Storing it as a full 2-D array wastes memory, so only the non-zero elements are stored, each as a node <code>(row, col, value, link)</code>. Two common forms are a list of triplets, or one linked list per row.</p>
+  <pre class="formula-block">struct elem { int row, col, val; struct elem *link; };</pre>
+  <p>Example: the 4×5 matrix with non-zero entries 3 at (0,2), 22 at (1,0), −4 at (2,4) and 9 at (3,1) needs only <strong>4 nodes</strong> instead of 20 cells.</p>
+  <table>
+    <tr><th>Row</th><th>Col</th><th>Value</th></tr>
+    <tr><td>0</td><td>2</td><td>3</td></tr><tr><td>1</td><td>0</td><td>22</td></tr>
+    <tr><td>2</td><td>4</td><td>−4</td></tr><tr><td>3</td><td>1</td><td>9</td></tr>
+  </table>
+  <p>Saving: each node costs three integers plus a pointer, so the list wins when the number of non-zero entries is small compared with rows × columns.</p>
+  <h3>Sparse matrix multiplication</h3>
+  <p>To compute <code>C = A × B</code> (A is m×n, B is n×p) without expanding either matrix, keep both as lists of non-zero elements and multiply only matching pairs. A non-zero <code>a(i,k)</code> can combine only with a non-zero <code>b(k,j)</code> in the <strong>same inner index</strong> — that is, <code>a.col == b.row</code> — contributing <code>a.val × b.val</code> to <code>C(i,j)</code>. Several products can land on the same <code>(i,j)</code>, so each contribution is added into an ordered result list: if node <code>(i,j)</code> already exists its value is increased, otherwise a node is inserted in row-major position (the ordered-insert idea of §3.3). Work done is at most (non-zeros of A) × (non-zeros of B) comparisons, against m·n·p multiplications for dense arrays.</p>
+  <ol class="steps">
+    <li>For every element <code>a</code> of A, walk every element <code>b</code> of B.</li>
+    <li>If <code>a.col == b.row</code>, form the product <code>a.val × b.val</code> for position <code>(a.row, b.col)</code>.</li>
+    <li>Add it into the result list with <code>add_term</code> (accumulate if the position exists, else ordered insert).</li>
+    <li>Result entries that cancel to 0 may be left or removed; the result is the sparse form of C.</li>
+  </ol>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C and against dense multiplication</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write a C program to multiply two sparse matrices stored as linked lists. A is the 4×5 matrix above; B is 5×3 with non-zeros 2 at (0,1), 5 at (1,0), 1 at (2,0), 6 at (2,2) and 7 at (4,1).</div>
+    <div class="ans-label">Answer — full program</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct elem {
+    int row, col, val;
+    struct elem *link;
+} ELEM;
+
+/* insert (r,c,v) into list kept in row-major order; add to value if (r,c) exists */
+ELEM *add_term(ELEM *head, int r, int c, int v) {
+    ELEM *prev = NULL, *cur = head;
+    while (cur &amp;&amp; (cur-&gt;row &lt; r || (cur-&gt;row == r &amp;&amp; cur-&gt;col &lt; c))) {
+        prev = cur; cur = cur-&gt;link;
+    }
+    if (cur &amp;&amp; cur-&gt;row == r &amp;&amp; cur-&gt;col == c) {   /* same position: accumulate */
+        cur-&gt;val += v;
+        return head;
+    }
+    ELEM *n = malloc(sizeof(ELEM));
+    n-&gt;row = r; n-&gt;col = c; n-&gt;val = v; n-&gt;link = cur;
+    if (prev == NULL) return n;
+    prev-&gt;link = n;
+    return head;
+}
+
+/* C = A x B  (A is m x n, B is n x p) */
+ELEM *multiply(ELEM *A, ELEM *B) {
+    ELEM *C = NULL;
+    for (ELEM *a = A; a; a = a-&gt;link)
+        for (ELEM *b = B; b; b = b-&gt;link)
+            if (a-&gt;col == b-&gt;row)                  /* only matching inner index contributes */
+                C = add_term(C, a-&gt;row, b-&gt;col, a-&gt;val * b-&gt;val);
+    return C;
+}
+
+void show(const char *name, ELEM *h) {
+    printf("%s:", name);
+    for (; h; h = h-&gt;link) printf(" (%d,%d,%d)", h-&gt;row, h-&gt;col, h-&gt;val);
+    printf("\n");
+}
+
+int main(void) {
+    ELEM *A = NULL, *B = NULL;
+    A = add_term(A,0,2,3);  A = add_term(A,1,0,22);
+    A = add_term(A,2,4,-4); A = add_term(A,3,1,9);
+    B = add_term(B,0,1,2);  B = add_term(B,1,0,5);
+    B = add_term(B,2,2,6);  B = add_term(B,4,1,7);
+    B = add_term(B,2,0,1);
+    show("A", A); show("B", B);
+    ELEM *C = multiply(A, B);
+    show("C", C);
+    return 0;
+}</pre>
+    <div class="ans-label">Output (compiled with gcc and run)</div>
+    <pre class="formula-block">A: (0,2,3) (1,0,22) (2,4,-4) (3,1,9)
+B: (0,1,2) (1,0,5) (2,0,1) (2,2,6) (4,1,7)
+C: (0,0,3) (0,2,18) (1,1,44) (2,1,-28) (3,0,45)</pre>
+    <table>
+      <tr><th>a (row,col,val)</th><th>matching b (row=a.col)</th><th>Product goes to</th><th>Value</th></tr>
+      <tr><td>(0,2,3)</td><td>(2,0,1)</td><td>C(0,0)</td><td>3 × 1 = 3</td></tr>
+      <tr><td>(0,2,3)</td><td>(2,2,6)</td><td>C(0,2)</td><td>3 × 6 = 18</td></tr>
+      <tr><td>(1,0,22)</td><td>(0,1,2)</td><td>C(1,1)</td><td>22 × 2 = 44</td></tr>
+      <tr><td>(2,4,−4)</td><td>(4,1,7)</td><td>C(2,1)</td><td>−4 × 7 = −28</td></tr>
+      <tr><td>(3,1,9)</td><td>(1,0,5)</td><td>C(3,0)</td><td>9 × 5 = 45</td></tr>
+    </table>
+    <p>Only 5 products are needed. The dense result (checked by ordinary 4×5 · 5×3 multiplication) is <code>[[3,0,18],[0,44,0],[0,−28,0],[45,0,0]]</code>, which has exactly these five non-zeros. In this example no two products hit the same cell; if they did, <code>add_term</code> would add them.</p>
+  </div>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Only the sparse <em>representation</em> was in your materials; multiplication is added from standard material.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-apps" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.4</span><h1>Applications of Linked Lists</h1></div>
+  <p class="section-sub">Self-learning · round-robin scheduling · multilevel lists · managing dynamic collections</p>
+
+  <h2>Circular list for round-robin scheduling</h2>
+  <p>Round-robin gives each process a fixed <strong>time quantum</strong> in turn. A circular list models this: each node is a process, a <code>current</code> pointer moves to the next node after each quantum, and a finished process is deleted. When the pointer reaches the last process it automatically wraps to the first.</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Worked example · verified by simulation</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Processes P1, P2, P3 need 5, 3 and 7 units. Quantum = 2. When does each finish?</div>
+    <div class="ans-label">Answer</div>
+    <table>
+      <tr><th>Time slice</th><th>Runs</th><th>Clock after</th><th>Remaining</th></tr>
+      <tr><td>1</td><td>P1</td><td>2</td><td>P1=3</td></tr><tr><td>2</td><td>P2</td><td>4</td><td>P2=1</td></tr>
+      <tr><td>3</td><td>P3</td><td>6</td><td>P3=5</td></tr><tr><td>4</td><td>P1</td><td>8</td><td>P1=1</td></tr>
+      <tr><td>5</td><td>P2</td><td>9</td><td>P2 done</td></tr><tr><td>6</td><td>P3</td><td>11</td><td>P3=3</td></tr>
+      <tr><td>7</td><td>P1</td><td>12</td><td>P1 done</td></tr><tr><td>8</td><td>P3</td><td>14</td><td>P3=1</td></tr>
+      <tr><td>9</td><td>P3</td><td>15</td><td>P3 done</td></tr>
+    </table>
+    <p>Finish times: <strong>P2 = 9, P1 = 12, P3 = 15</strong>. Each time a process finishes, its node is deleted from the circle.</p>
+  </div>
+
+  <h2>Multilevel (hierarchical) linked lists</h2>
+  <p>A multilevel list gives each node a second pointer, <code>child</code>, that may point to a separate list at the next level, in addition to <code>next</code>. It models hierarchies such as a book's chapters → sections, or folders → files.</p>
+  <pre class="formula-block">struct node { int data; struct node *next; struct node *child; };</pre>
+  <p><strong>Flattening</strong>: traverse the main list; whenever a node has a child list, splice that child list in between the node and its <code>next</code>, then continue. The result is a single-level list.</p>
+
+  <h2>Managing dynamic collections</h2>
+  <p>Linked lists suit collections whose size changes unpredictably, because nodes are added and removed without shifting elements.</p>
+  <ul>
+    <li><strong>Train composition</strong> — a doubly list of coaches; attach or detach a coach anywhere in O(1) once located.</li>
+    <li><strong>Student records</strong> — nodes holding a <code>struct student</code> (roll, name, marks), usually kept sorted by roll number using ordered insert (§3.3).</li>
+    <li><strong>Inventory</strong> — nodes of item code, quantity and price; delete a node when stock is cleared.</li>
+  </ul>
+  <div class="callout key">
+    <span class="label">Exam tip</span>
+    For "which list would you use for …" questions: one-way traversal → SLL; cycling forever → circular; moving both ways → doubly. Always justify with the operation that dominates.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-josephus" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.5</span><h1>Josephus Problem (Circular Linked List)</h1></div>
+  <p class="section-sub">Lab · application of lists · n people in a circle, every k-th is eliminated</p>
+
+  <h2>The problem</h2>
+  <p>n people stand in a circle numbered 1 to n. Starting from person 1, count k people (including the starting one) and eliminate the k-th; counting resumes from the next person, and the circle closes up. This continues until one person remains — the <strong>survivor</strong>. The task is to print the elimination order and the survivor. A <strong>circular singly linked list</strong> is the natural model: the last node already links back to the first, so counting "wraps around" with no special case, and eliminating a person is a single unlink (§3.5).</p>
+
+  <h2>Algorithm</h2>
+  <ol class="steps">
+    <li>Build a circular list of n nodes holding 1…n (insert each new node after <code>last</code> and make it the new <code>last</code>).</li>
+    <li>Keep a pointer <code>prev</code> to the node <em>before</em> the one where counting starts (initially <code>last</code>, so counting starts at node 1).</li>
+    <li>Advance <code>prev</code> by k − 1 links; now <code>prev-&gt;link</code> is the k-th person.</li>
+    <li>Print it, set <code>prev-&gt;link = victim-&gt;link</code> (unlink) and free the victim. <code>prev</code> already precedes the next counting start.</li>
+    <li>Repeat while the list has more than one node (<code>prev-&gt;link != prev</code>). The remaining node is the survivor.</li>
+  </ol>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write a C program to solve the Josephus problem using a circular linked list for n = 7 and k = 3.</div>
+    <div class="ans-label">Answer — full program</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+typedef struct node { int data; struct node *link; } NODE;
+
+int main(void) {
+    int n = 7, k = 3;
+    NODE *last = NULL;                       /* build circular list 1..n */
+    for (int i = 1; i &lt;= n; i++) {
+        NODE *t = malloc(sizeof(NODE)); t-&gt;data = i;
+        if (!last) { t-&gt;link = t; } else { t-&gt;link = last-&gt;link; last-&gt;link = t; }
+        last = t;
+    }
+    NODE *prev = last;                       /* prev precedes the counting start (node 1) */
+    printf("Elimination order:");
+    while (prev-&gt;link != prev) {
+        for (int c = 1; c &lt; k; c++) prev = prev-&gt;link;   /* move k-1 steps */
+        NODE *victim = prev-&gt;link;
+        printf(" %d", victim-&gt;data);
+        prev-&gt;link = victim-&gt;link;           /* unlink */
+        free(victim);
+    }
+    printf("\nSurvivor: %d\n", prev-&gt;data);
+    return 0;
+}</pre>
+    <div class="ans-label">Output (compiled with gcc and run)</div>
+    <pre class="formula-block">Elimination order: 3 6 2 7 5 1
+Survivor: 4</pre>
+  </div>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 270" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrJ" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <line x1="217.1" y1="55.2" x2="249.0" y2="70.6" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="273.0" y1="98.7" x2="280.9" y2="133.1" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="273.9" y1="169.4" x2="251.9" y2="197.1" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="219.2" y1="214.3" x2="183.8" y2="214.3" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="150.0" y1="199.4" x2="127.9" y2="171.8" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="118.4" y1="136.1" x2="126.3" y2="101.6" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <line x1="148.3" y1="71.9" x2="180.2" y2="56.5" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrJ)"/>
+      <circle cx="200.0" cy="47.0" r="18" fill="#E4F3F0" stroke="#12796F" stroke-width="1.8"/><text x="200.0" y="52.0" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">1</text>
+      <circle cx="268.8" cy="80.1" r="18" fill="#E4F3F0" stroke="#12796F" stroke-width="1.8"/><text x="268.8" y="85.1" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">2</text>
+      <circle cx="285.8" cy="154.6" r="18" fill="#F7EEDD" stroke="#A66A0D" stroke-width="1.8"/><text x="285.8" y="159.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">3</text>
+      <circle cx="238.2" cy="214.3" r="18" fill="#F6E9F0" stroke="#93316B" stroke-width="1.8"/><text x="238.2" y="219.3" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">4</text>
+      <circle cx="161.8" cy="214.3" r="18" fill="#E4F3F0" stroke="#12796F" stroke-width="1.8"/><text x="161.8" y="219.3" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">5</text>
+      <circle cx="114.2" cy="154.6" r="18" fill="#E4F3F0" stroke="#12796F" stroke-width="1.8"/><text x="114.2" y="159.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">6</text>
+      <circle cx="131.2" cy="80.1" r="18" fill="#E4F3F0" stroke="#12796F" stroke-width="1.8"/><text x="131.2" y="85.1" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">7</text>
+      <text x="200" y="139" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">n = 7, k = 3</text>
+      <text x="400" y="70" font-family="Inter" font-size="13" fill="#A66A0D">Node 3: first one eliminated</text>
+      <text x="400" y="100" font-family="Inter" font-size="13" fill="#93316B">Node 4: the survivor</text>
+      <text x="400" y="130" font-family="Inter" font-size="13" fill="#12796F">Other nodes: removed later</text>
+      <text x="400" y="170" font-family="Inter" font-size="12" fill="#5B6169">Order out: 3, 6, 2, 7, 5, 1</text>
+      <text x="400" y="190" font-family="Inter" font-size="12" fill="#5B6169">Each arrow is a link; node 7 links to 1.</text>
+    </svg>
+    <div class="cap">Fig 11. Josephus circle for n = 7, k = 3 — a circular singly linked list; counting starts at node 1.</div>
+  </div>
+  <h3>Trace for n = 7, k = 3</h3>
+  <table>
+    <tr><th>Round</th><th>Count starts at</th><th>Circle before</th><th>Eliminated</th><th>Circle after (next count starts at its first entry)</th></tr>
+      <tr><td>1</td><td>1</td><td>1 2 3 4 5 6 7</td><td><strong>3</strong></td><td>4 5 6 7 1 2</td></tr>
+      <tr><td>2</td><td>4</td><td>4 5 6 7 1 2</td><td><strong>6</strong></td><td>7 1 2 4 5</td></tr>
+      <tr><td>3</td><td>7</td><td>7 1 2 4 5</td><td><strong>2</strong></td><td>4 5 7 1</td></tr>
+      <tr><td>4</td><td>4</td><td>4 5 7 1</td><td><strong>7</strong></td><td>1 4 5</td></tr>
+      <tr><td>5</td><td>1</td><td>1 4 5</td><td><strong>5</strong></td><td>1 4</td></tr>
+      <tr><td>6</td><td>1</td><td>1 4</td><td><strong>1</strong></td><td>4</td></tr>
+  </table>
+  <p>Elimination order <strong>3, 6, 2, 7, 5, 1</strong>; survivor <strong>4</strong>. Cost: each elimination walks k − 1 links, so O(n·k) time and O(n) space for the list.</p>
+
+  <h3>Formula check (recurrence)</h3>
+  <p>With positions numbered from 0, the survivor index obeys <code>J(1) = 0</code> and <code>J(m) = (J(m−1) + k) mod m</code>. For k = 3 this gives J(2..7) = 1, 1, 0, 3, 0, 3, so the survivor is person 3 + 1 = <strong>4</strong>, agreeing with the list simulation. Use the list method when the elimination <em>order</em> is needed and the recurrence when only the survivor is.</p>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    The Josephus problem is on the lab list but not in the Unit I deck. It is written here from standard material, and the C program was compiled and run.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="sl-loop" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+  <div class="section-head"><span class="tag">4.6</span><h1>Detect and Remove a Loop in a Linked List</h1></div>
+  <p class="section-sub">Lab · application of lists · Floyd's tortoise-and-hare, finding the loop start, breaking the loop</p>
+
+  <h2>What is a loop?</h2>
+  <p>A <strong>loop</strong> (cycle) exists when some node's <code>link</code> points back to an earlier node instead of ending in NULL — usually through a pointer bug. A traversal <code>while (p != NULL)</code> then never terminates. Two things must be done: <strong>detect</strong> it, and if present <strong>remove</strong> it by setting the offending link to NULL.</p>
+
+  <h2>Detection: Floyd's tortoise-and-hare (O(1) space)</h2>
+  <p>Use two pointers from the head: <code>slow</code> moves one node per step, <code>fast</code> moves two. If the list ends, <code>fast</code> reaches NULL and there is no loop. If there is a loop, both end up inside it and <code>fast</code> gains one node per step on <code>slow</code>, so they must meet. Time O(n), extra space O(1). The alternative — storing every visited node address in a hash set or marking nodes — uses O(n) extra space, which is why Floyd's method is preferred.</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program (Part A) · verified</span><span class="marks">4 marks</span></div>
+    <div class="qtext">Write a function to detect the cycle in a linked list.</div>
+    <div class="ans-label">Answer</div>
+    <pre class="formula-block">int has_cycle(NODE *head) {
+    NODE *slow = head, *fast = head;
+    while (fast &amp;&amp; fast-&gt;link) {          /* fast checked first: it reaches NULL first */
+        slow = slow-&gt;link;                /* 1 step  */
+        fast = fast-&gt;link-&gt;link;          /* 2 steps */
+        if (slow == fast) return 1;       /* they meet inside a loop */
+    }
+    return 0;                             /* fast fell off the end: no loop */
+}</pre>
+  </div>
+
+  <h2>Finding the loop's starting node</h2>
+  <p>Let <code>μ</code> be the number of nodes before the loop and <code>λ</code> the loop length. Suppose slow and fast meet at a point <code>x</code> nodes past the loop start. Slow has travelled <code>μ + x</code>; fast, twice as far, <code>2(μ + x)</code>, which equals <code>μ + x</code> plus some whole number of laps: <code>μ + x = m·λ</code>. Hence <code>μ = m·λ − x</code>: walking <code>μ</code> steps from the meeting point lands exactly on the loop start. So after the meeting, <strong>restart one pointer at the head</strong> and move both pointers one step at a time; they meet at the loop's first node.</p>
+
+  <h2>Removing the loop</h2>
+  <p>With the loop start <code>s</code> known, walk from <code>s</code> until <code>p-&gt;link == s</code>; that <code>p</code> is the last node of the loop. Setting <code>p-&gt;link = NULL</code> turns the list back into a plain list. (If the loop start is the head itself, the same walk still works.)</p>
+  <div class="qbox" style="--accent:var(--plum);--accent-soft:var(--plum-soft);">
+    <div class="qmeta"><span class="qsrc">Lab program · verified by running in C</span><span class="marks">8 marks</span></div>
+    <div class="qtext">Write a C program to detect a loop in a linked list, find where it begins and remove it. Test on 1→2→3→4→5→6→7 with node 7 linked back to node 4.</div>
+    <div class="ans-label">Answer — full program</div>
+    <pre class="formula-block">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+typedef struct node { int data; struct node *link; } NODE;
+
+NODE *push_back(NODE *head, NODE **tail, int v) {
+    NODE *n = malloc(sizeof(NODE)); n-&gt;data = v; n-&gt;link = NULL;
+    if (!head) head = n; else (*tail)-&gt;link = n;
+    *tail = n; return head;
+}
+int has_cycle(NODE *head) {
+    NODE *slow = head, *fast = head;
+    while (fast &amp;&amp; fast-&gt;link) {
+        slow = slow-&gt;link; fast = fast-&gt;link-&gt;link;
+        if (slow == fast) return 1;
+    }
+    return 0;
+}
+NODE *loop_start(NODE *head) {
+    NODE *slow = head, *fast = head;
+    while (fast &amp;&amp; fast-&gt;link) {
+        slow = slow-&gt;link; fast = fast-&gt;link-&gt;link;
+        if (slow == fast) {
+            printf("meeting node = %d\n", slow-&gt;data);
+            slow = head;                       /* restart one pointer at head */
+            while (slow != fast) { slow = slow-&gt;link; fast = fast-&gt;link; }
+            return slow;
+        }
+    }
+    return NULL;
+}
+int remove_loop(NODE *head) {
+    NODE *s = loop_start(head);
+    if (!s) return 0;
+    NODE *p = s;
+    while (p-&gt;link != s) p = p-&gt;link;          /* last node of the loop */
+    p-&gt;link = NULL;
+    return 1;
+}
+int main(void) {
+    NODE *h = NULL, *t = NULL, *n4 = NULL;
+    for (int i = 1; i &lt;= 7; i++) { h = push_back(h, &amp;t, i); if (i == 4) n4 = t; }
+    t-&gt;link = n4;                              /* 7 -&gt; 4 creates the loop */
+    printf("cycle? %d\n", has_cycle(h));
+    NODE *s = loop_start(h); printf("loop starts at %d\n", s-&gt;data);
+    int len = 1; for (NODE *p = s-&gt;link; p != s; p = p-&gt;link) len++;
+    printf("loop length %d\n", len);
+    remove_loop(h);
+    printf("after removal cycle? %d\nlist:", has_cycle(h));
+    for (NODE *p = h; p; p = p-&gt;link) printf(" %d", p-&gt;data);
+    printf("\n");
+    return 0;
+}</pre>
+    <div class="ans-label">Output (compiled with gcc and run)</div>
+    <pre class="formula-block">cycle? 1
+meeting node = 5
+loop starts at 4
+loop length 4
+meeting node = 5
+after removal cycle? 0
+list: 1 2 3 4 5 6 7</pre>
+    <p>(The meeting line prints twice because <code>remove_loop</code> calls <code>loop_start</code> again.)</p>
+  </div>
+  <div class="svg-wrap">
+    <svg viewBox="0 0 640 215" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrL" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5B6169"/></marker></defs>
+      <rect x="26" y="52" width="48" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.6"/><text x="50" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">1</text>
+      <rect x="106" y="52" width="48" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.6"/><text x="130" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">2</text>
+      <rect x="186" y="52" width="48" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.6"/><text x="210" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">3</text>
+      <rect x="266" y="52" width="48" height="36" rx="5" fill="#F6E9F0" stroke="#93316B" stroke-width="1.6"/><text x="290" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">4</text>
+      <rect x="346" y="52" width="48" height="36" rx="5" fill="#F7EEDD" stroke="#A66A0D" stroke-width="1.6"/><text x="370" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">5</text>
+      <rect x="426" y="52" width="48" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.6"/><text x="450" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">6</text>
+      <rect x="506" y="52" width="48" height="36" rx="5" fill="#E4F3F0" stroke="#12796F" stroke-width="1.6"/><text x="530" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#1C1E21">7</text>
+      <line x1="74" y1="70" x2="104" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <line x1="154" y1="70" x2="184" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <line x1="234" y1="70" x2="264" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <line x1="314" y1="70" x2="344" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <line x1="394" y1="70" x2="424" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <line x1="474" y1="70" x2="504" y2="70" stroke="#5B6169" stroke-width="1.5" marker-end="url(#arrL)"/>
+      <path d="M530,90 C530,170 290,170 290,92" fill="none" stroke="#93316B" stroke-width="1.6" marker-end="url(#arrL)"/>
+      <text x="130" y="30" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">tail before loop: 3 nodes</text>
+      <text x="290" y="30" text-anchor="middle" font-family="Inter" font-size="12" fill="#93316B">loop start</text>
+      <text x="370" y="116" text-anchor="middle" font-family="Inter" font-size="12" fill="#A66A0D">slow = fast</text>
+      <text x="410" y="205" text-anchor="middle" font-family="Inter" font-size="12" fill="#5B6169">loop length 4 (nodes 4, 5, 6, 7)</text>
+    </svg>
+    <div class="cap">Fig 12. A list 1→2→…→7 whose last node links back to node 4. Slow and fast meet at node 5; the loop starts at node 4.</div>
+  </div>
+  <h3>Trace on the example (μ = 3, λ = 4)</h3>
+  <table>
+    <tr><th>Step</th><th>slow</th><th>fast</th><th>Note</th></tr>
+    <tr><td>1</td><td>2</td><td>3</td><td></td></tr>
+    <tr><td>2</td><td>3</td><td>5</td><td></td></tr>
+    <tr><td>3</td><td>4</td><td>7</td><td>slow enters the loop</td></tr>
+    <tr><td>4</td><td>5</td><td>5</td><td>meet at node 5 (x = 1, and μ = λ − x = 3)</td></tr>
+  </table>
+  <p><strong>Phase 2</strong>: restart slow at node 1, keep fast at node 5, move one step each: (2, 6), (3, 7), (4, 4). They meet at node 4 — the loop start. The last loop node is 7 (since <code>7-&gt;link == 4</code>); set <code>7-&gt;link = NULL</code> and the list prints <code>1 2 3 4 5 6 7</code>.</p>
+  <div class="callout clarify">
+    <span class="label">Not in your materials — added for syllabus completeness</span>
+    Loop detection and removal is on the lab list but not in the Unit I deck. It is written here from standard material, and the C program was compiled and run.
+  </div>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+<section class="page section" id="quick-revision" style="--accent:var(--ink);--accent-soft:var(--amber-soft);">
+  <div class="section-head"><span class="tag">QR</span><h1>Quick Revision</h1></div>
+  <p class="section-sub">One-page cheat sheet — Unit I: introduction, memory allocation, linked lists</p>
+
+  <h2>Basics</h2>
+  <ul>
+    <li>Primitive: int, float, char, pointer. Non-primitive: array, structure, stack, queue, list, tree, graph. Non-primitive splits into linear and non-linear.</li>
+    <li>ADT = what operations do, not how. Static (array, compile-time) vs dynamic (linked list, run-time).</li>
+    <li>Static allocation: compile time, fixed, fast, stack/data area. Dynamic: run time, heap, flexible, must free.</li>
+  </ul>
+
+  <h2>Memory functions</h2>
+  <div class="formula-block">malloc(size)          → uninitialised block
+calloc(n, size)        → n blocks, zero-filled
+realloc(ptr, newsize)  → resize; reassign the returned pointer
+free(ptr); ptr = NULL; → release</div>
+
+  <h2>Linked lists</h2>
+  <table>
+    <tr><th>Type</th><th>Node</th><th>End</th><th>Key point</th></tr>
+    <tr><td>Singly</td><td>data, link</td><td>NULL</td><td>Delete needs a trailing prev pointer</td></tr>
+    <tr><td>Circular</td><td>data, link</td><td>last → first</td><td>Use <code>last</code> pointer: O(1) both ends; traverse with do-while</td></tr>
+    <tr><td>Doubly</td><td>llink, data, rlink</td><td>NULL both sides</td><td>Delete a node knowing only that node</td></tr>
+    <tr><td>Circular doubly</td><td>prev, data, next</td><td>head.prev = last</td><td>Handle the one-node case separately</td></tr>
+  </table>
+  <ul>
+    <li>Insert front O(1); insert rear O(n) without a tail pointer; header node removes the front special case.</li>
+    <li>Delete in the middle: <code>prev-&gt;link = cur-&gt;link; free(cur)</code>.</li>
+  </ul>
+
+  <h2>Self-learning one-liners</h2>
+  <ul>
+    <li><strong>Reverse</strong>: prev/cur/next — save next, flip link, advance. Recursive: reverse rest, <code>head-&gt;link-&gt;link = head; head-&gt;link = NULL</code>.</li>
+    <li><strong>Merge sorted</strong>: dummy head, attach smaller, attach leftover. <strong>Split</strong>: slow/fast pointers.</li>
+    <li><strong>Polynomial</strong>: nodes (coef, exp), decreasing exp; add = merge by exponent, adding equal ones. <strong>Sparse matrix</strong>: store only non-zero (row, col, value).</li>
+    <li><strong>Round-robin</strong>: circular list of processes, quantum per node, delete on finish.</li>
+    <li><strong>Poly subtract</strong>: same merge as add with P2's coefficients negated (<code>sign = −1</code>); drop zero results. <strong>Sparse multiply</strong>: for each a, each b with <code>a.col == b.row</code>, add <code>a.val·b.val</code> into C(a.row, b.col) with ordered insert.</li>
+    <li><strong>Josephus</strong>: circular list, advance <code>prev</code> k−1 links, unlink <code>prev-&gt;link</code>, repeat until <code>prev-&gt;link == prev</code>. n=7, k=3 → 3 6 2 7 5 1, survivor 4. Recurrence <code>J(m) = (J(m−1)+k) mod m</code>.</li>
+    <li><strong>Loop</strong>: slow(1)/fast(2) meet ⇒ cycle; restart one pointer at head, move both 1 step ⇒ they meet at the loop start; set last loop node's link to NULL.</li>
+  </ul>
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+<section class="page section" id="question-bank" style="--accent:var(--ink);--accent-soft:var(--amber-soft);">
+  <div class="section-head"><span class="tag">QB</span><h1>Question Bank</h1></div>
+  <p class="section-sub">Past-paper questions for the new Unit I, plus predicted self-learning questions</p>
+
+  <div class="callout clarify">
+    <span class="label">Scope note</span>
+    Only Unit I questions (data structure basics, dynamic memory allocation, linked lists) are indexed. Queue questions from the same papers now belong to the new Unit III and are in the <code>old-syllabus</code> copy of the previous Unit 2 notes. The "likely questions" table is a prediction from the syllabus self-learning list and the style of past papers — it is not taken from a real paper.
+  </div>
+
+  <h2>Introduction</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q1.3 · 2M</td><td>List the differences between Linear and Non-Linear data structures.</td><td>→ <a href="#sec-1-1">§1.1 Concepts &amp; Types of DS</a></td></tr>
+  </table>
+  <h2>Memory Allocation</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">CIE 21-22 Test-I · Q2b · 3M</td><td>Explain with syntax any two dynamic memory allocation functions.</td><td>→ <a href="#sec-2-1">§2.2 malloc, calloc, free, realloc</a></td></tr>
+    <tr><td class="mono">CIE-II 2024-25 · Q1b · 4M</td><td>Differentiate between arrays and dynamic memory allocation.</td><td>→ <a href="#sec-2-1">§2.2</a></td></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q1.9 · 2M</td><td>Predict the output: <code>calloc</code> then pointer reassignment to a string literal.</td><td>→ <a href="#sec-2-1">§2.2</a> <span class="pill">solved example added</span></td></tr>
+  </table>
+  <h2>Linked Lists</h2>
+
+  <table>
+    <tr><th>Source · Marks</th><th>Question</th><th>Answered at</th></tr>
+    <tr><td class="mono">CIE-II 2021-22 · Q1.1 · 2M</td><td>What does FUN() print for a 10-node SLL (loop stops when q-&gt;next-&gt;next==NULL)?</td><td>→ <a href="#sec-3-6">§3.9 Solved Numericals — Linked Lists</a></td></tr>
+    <tr><td class="mono">CIE-II 2021-22 · Q1.2 · 2M</td><td>Bytes allocated by <code>malloc(sizeof(struct node *))</code>.</td><td>→ <a href="#sec-3-6">§3.9</a></td></tr>
+    <tr><td class="mono">CIE-II 2021-22 · Q2a · 7M</td><td>SLL functions: replace all nodes with data x by y; create an ordered list.</td><td>→ <a href="#sec-3-3">§3.3 SLL: Deletion &amp; Ordered Insert</a></td></tr>
+    <tr><td class="mono">Quiz-II 2024-25 · Q1.1 · 2M</td><td>Recursive FUN() output for list 1→2→3→4→5→6.</td><td>→ <a href="#sec-3-6">§3.9</a></td></tr>
+    <tr><td class="mono">Quiz-II 2024-25 · Q1.5 · 2M</td><td>What does <code>ListNode* fun(head, x)</code> do?</td><td>→ <a href="#sec-3-6">§3.9</a></td></tr>
+    <tr><td class="mono">Quiz-II 2024-25 · Q1.6 · 2M</td><td>Value of "sum" after traversing 1→2→3→4→5.</td><td>→ <a href="#sec-3-6">§3.9</a></td></tr>
+    <tr><td class="mono">CIE-II 2024-25 · Q1a · 6M</td><td>With an example, explain differences between SLL, DLL, and circular linked list.</td><td>→ <a href="#sec-3-1">§3.1 Definition, Terminology &amp; Types</a>, <a href="#sec-cll">§3.5</a>, <a href="#sec-dll">§3.6</a></td></tr>
+    <tr><td class="mono">CIE-II 2024-25 · Q2a · 10M</td><td>Add two numbers represented as reversed-digit linked lists.</td><td>→ <a href="#sec-3-6">§3.9</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td class="mono">CIE-II 2024-25 · Q4a · 6M</td><td>Search node with value K in an SLL; insert as last node if not found.</td><td>→ <a href="#sec-3-3">§3.3</a></td></tr>
+    <tr><td class="mono">SEE Jan/Feb 2025 · Q1.6 · 2M</td><td>List any 4 differences between a Singly-linked list and a Doubly linked list.</td><td>→ <a href="#sec-dll">§3.6</a></td></tr>
+      <tr><td class="mono">SEE Jan/Feb 2025 · Part B Q5a · 8M</td><td>Program to implement the Queue data structure using a linked list.</td><td>→ <a href="#sec-3-5">§3.8 Stack &amp; Queue via SLL</a></td></tr>
+  </table>
+  <h2>Likely questions — self-learning topics</h2>
+  <table>
+    <tr><th>Likelihood</th><th>Likely question</th><th>Answered at</th></tr>
+    <tr><td>Very likely</td><td>Write a function to reverse a singly linked list (iterative and recursive).</td><td>→ <a href="#sl-reverse">§4.1</a></td></tr>
+    <tr><td>Very likely</td><td>Merge two sorted linked lists; split a list into two halves.</td><td>→ <a href="#sl-merge">§4.2</a></td></tr>
+    <tr><td>Likely</td><td>Represent a polynomial using a linked list and write the addition algorithm.</td><td>→ <a href="#sl-poly">§4.3</a></td></tr>
+    <tr><td>Likely</td><td>Explain sparse-matrix representation using linked lists.</td><td>→ <a href="#sl-poly">§4.3</a></td></tr>
+    <tr><td>Likely</td><td>How is a circular linked list used for round-robin scheduling?</td><td>→ <a href="#sl-apps">§4.4</a></td></tr>
+    <tr><td>Possible</td><td>Multilevel/hierarchical linked list: node structure and flattening.</td><td>→ <a href="#sl-apps">§4.4</a></td></tr>
+    <tr><td>Likely</td><td>Delete a node from the beginning/end/position of a circular doubly linked list.</td><td>→ <a href="#sec-cdll">§3.7</a></td></tr>
+    <tr><td>Likely</td><td>Differences between static and dynamic memory allocation; malloc vs calloc.</td><td>→ <a href="#sec-static-dynamic">§2.1</a></td></tr>
+    <tr><td>Likely</td><td>Subtract two polynomials stored as linked lists (C program).</td><td>→ <a href="#sl-poly">§4.3</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td>Likely</td><td>Multiply two sparse matrices stored as linked lists.</td><td>→ <a href="#sl-poly">§4.3</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td>Likely</td><td>Josephus problem using a circular linked list (n = 7, k = 3).</td><td>→ <a href="#sl-josephus">§4.5</a> <span class="pill">solved example added</span></td></tr>
+    <tr><td>Likely</td><td>Detect and remove a loop in a linked list; find where it starts.</td><td>→ <a href="#sl-loop">§4.6</a> <span class="pill">solved example added</span></td></tr>
+  </table>
+
+  <a class="backtotop" href="#index">↑ Back to index</a>
+</section>
+
+
+</div>
+</div>
+
+<script>
+const sections=document.querySelectorAll('.section[id]'),navLinks=document.querySelectorAll('.navlink');
+const setActive=()=>{let cur='';const y=window.scrollY+140;
+ sections.forEach(s=>{if(s.offsetTop<=y)cur=s.id});
+ navLinks.forEach(l=>{l.style.color='';l.style.fontWeight='';
+  if(l.getAttribute('href')==='#'+cur){l.style.color='var(--blue)';l.style.fontWeight='600'}})};
+window.addEventListener('scroll',setActive);setActive();
+(function(){var root=document.documentElement,b=document.getElementById('themeToggle'),ico=document.getElementById('themeIco'),lbl=document.getElementById('themeLbl');
+ function paint(){var d=root.getAttribute('data-theme')==='dark';ico.textContent=d?'☀️':'🌙';lbl.textContent=d?'Light':'Dark';b.setAttribute('aria-pressed',d?'true':'false')}
+ b.addEventListener('click',function(){root.setAttribute('data-theme',root.getAttribute('data-theme')==='dark'?'light':'dark');paint()});
+ paint();})();
+</script>
+</body>
+</html>

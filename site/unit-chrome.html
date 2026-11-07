@@ -1,0 +1,99 @@
+<!-- site chrome: injected by site/build.py, not part of the source notes -->
+<style>
+.sitebar{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 32px)}
+.sitebar a,.sitebar button{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 12.5px 'Inter',system-ui,sans-serif;cursor:pointer;box-shadow:var(--shadow);text-decoration:none}
+.sitebar a:hover,.sitebar button:hover{border-color:var(--blue);text-decoration:none}
+.sitebar .primary{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+:root[data-theme="dark"] .sitebar .primary,:root[data-theme="dark"] .sd-form button.go{color:#14161A}
+.sitebar .stamp{font:500 11px 'JetBrains Mono',monospace;color:var(--ink-faint);background:var(--surface);border:1px solid var(--line-soft);border-radius:999px;padding:5px 10px}
+.sitebar a:focus-visible,.sitebar button:focus-visible,.sd-form :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media(max-width:640px){.sitebar .stamp,.sitebar .lbl-long{display:none}.sitebar a,.sitebar button{padding:9px 12px}}
+@media print{.sitebar,.sd{display:none!important}}
+.sd{border:1px solid var(--line);border-radius:12px;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25);width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px)}
+.sd::backdrop{background:rgba(20,22,26,.45)}
+.sd-form{padding:22px 24px;display:flex;flex-direction:column;gap:14px;font-family:'Inter',system-ui,sans-serif}
+.sd-form h2{font-family:'Newsreader',Georgia,serif;font-size:21px;margin:0}
+.sd-form p.hint{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.5}
+.sd-form label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.sd-form select,.sd-form textarea{font:14px/1.5 'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 11px;text-transform:none;letter-spacing:0;font-weight:400;width:100%}
+.sd-form textarea{resize:vertical;min-height:90px}
+.sd-form .row{display:grid;grid-template-columns:1fr 1.6fr;gap:12px}
+@media(max-width:520px){.sd-form .row{grid-template-columns:1fr}}
+.sd-form .actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.sd-form .actions a{font-size:13px;color:var(--blue)}
+.sd-form .btns{display:flex;gap:8px}
+.sd-form button{padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px 'Inter',system-ui,sans-serif;cursor:pointer}
+.sd-form button.go{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+.sd-form .err{color:var(--plum);font-size:13px;margin:-6px 0 0;display:none}
+</style>
+<div class="sitebar" role="navigation" aria-label="Site">
+  <span class="stamp" title="Version of this page">Updated {{UPDATED_HUMAN}} · {{VERSION}}</span>
+  <a href="../" title="All units">⌂ <span class="lbl-long">All units</span></a>
+  <a href="index.html" download="{{DOWNLOAD_NAME}}" title="Save this unit for offline use">⬇ <span class="lbl-long">Download</span></a>
+  <button type="button" class="primary" id="sdOpen" title="Report an error or suggest a change">✎ <span>Suggest<span class="lbl-long"> / report</span></span></button>
+</div>
+<dialog class="sd" id="sd" aria-labelledby="sdTitle">
+  <form class="sd-form" method="dialog" id="sdForm">
+    <h2 id="sdTitle">Suggest a change or report an error</h2>
+    <p class="hint">Fill this in and press <b>Continue</b>. GitHub opens in a new tab with everything filled in. Check it and press <b>Submit new issue</b> there. You need to be signed in to GitHub.</p>
+    <div class="row">
+      <label>Type
+        <select id="sdType">
+          <option>Error</option>
+          <option>Missing topic</option>
+          <option>Unclear explanation</option>
+          <option>Suggestion</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label>Section
+        <select id="sdSection"></select>
+      </label>
+    </div>
+    <label>What's wrong or missing?
+      <textarea id="sdDesc" placeholder="e.g. In the circular queue trace, the rear index after enqueue(70) should be 0, not 1." required></textarea>
+    </label>
+    <p class="err" id="sdErr">Please describe the issue first.</p>
+    <label>Suggested fix or source (optional)
+      <textarea id="sdFix" placeholder="e.g. Page 12 of the queues deck shows the correct value."></textarea>
+    </label>
+    <div class="actions">
+      <a href="https://github.com/{{REPO}}/issues?q=is%3Aissue+in%3Atitle+%22Unit+{{UNIT_N}}%22" target="_blank" rel="noopener">See existing reports for this unit ↗</a>
+      <div class="btns">
+        <button type="button" id="sdCancel">Cancel</button>
+        <button type="button" class="go" id="sdGo">Continue on GitHub ↗</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+<script>
+(function(){
+  var REPO="{{REPO}}", UNIT={{UNIT_N}}, UNIT_TITLE="{{UNIT_TITLE_JS}}", VERSION="{{VERSION}}", UPDATED="{{UPDATED}}";
+  var d=document.getElementById('sd'), sel=document.getElementById('sdSection');
+  var secs=[].slice.call(document.querySelectorAll('section.section[id]'));
+  function label(s){var t=s.querySelector('.section-head .tag'),h=s.querySelector('.section-head h1');
+    return ((t?t.textContent.trim()+' ':'')+(h?h.textContent.trim():s.id)).replace(/\s+/g,' ');}
+  var o=document.createElement('option');o.value='';o.textContent='Whole unit / general';sel.appendChild(o);
+  secs.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=label(s);sel.appendChild(o);});
+  function current(){var y=window.scrollY+140,cur='';secs.forEach(function(s){if(s.offsetTop<=y)cur=s.id});return cur;}
+  function open(){sel.value=current();document.getElementById('sdErr').style.display='none';
+    if(d.showModal){d.showModal();}else{d.setAttribute('open','');}
+    setTimeout(function(){document.getElementById('sdDesc').focus()},30);}
+  function close(){if(d.close){d.close();}else{d.removeAttribute('open');}}
+  document.getElementById('sdOpen').addEventListener('click',open);
+  document.getElementById('sdCancel').addEventListener('click',close);
+  document.getElementById('sdGo').addEventListener('click',function(){
+    var desc=document.getElementById('sdDesc').value.trim(), fix=document.getElementById('sdFix').value.trim();
+    if(!desc){document.getElementById('sdErr').style.display='block';document.getElementById('sdDesc').focus();return;}
+    var type=document.getElementById('sdType').value, sid=sel.value, sname=sid?sel.options[sel.selectedIndex].textContent:'Whole unit';
+    var link=location.origin+location.pathname+(sid?'#'+sid:'');
+    var short=desc.replace(/\s+/g,' '); if(short.length>60) short=short.slice(0,57)+'…';
+    var title='[Unit '+UNIT+(sid?' · '+sname.split(' ')[0]:'')+'] '+type+': '+short;
+    var body='**Type:** '+type+'\n**Unit:** '+UNIT+' — '+UNIT_TITLE+'\n**Section:** '+sname+'\n**Link:** '+link+
+      '\n**Page version:** '+VERSION+' (updated '+UPDATED+')\n\n### Description\n'+desc+
+      (fix?'\n\n### Suggested fix / source\n'+fix:'')+'\n';
+    var url='https://github.com/'+REPO+'/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
+    window.open(url,'_blank','noopener'); close();
+  });
+})();
+</script>

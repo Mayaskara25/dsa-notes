@@ -1,0 +1,16 @@
+services:
+  - type: web
+    runtime: static
+    name: dsa-notes
+    buildCommand: python3 site/build.py
+    staticPublishPath: public
+    headers:
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex, nofollow
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin

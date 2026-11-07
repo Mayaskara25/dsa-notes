@@ -1,0 +1,11 @@
+# Publish only the five guides and the site files.
+# Everything else in this folder (scratch, transcripts, page renders,
+# old-syllabus copies, content models, build pipelines) stays local.
+/*
+!/.gitignore
+!/README.md
+!/render.yaml
+!/DSA - Unit [1-5] - Exam Notes.html
+!/site/
+/public/
+__pycache__/

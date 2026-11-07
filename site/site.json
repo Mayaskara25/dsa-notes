@@ -1,0 +1,59 @@
+{
+  "title": "DSA Exam Notes",
+  "course": "Data Structures and Applications",
+  "subtitle": "New syllabus · 5 units · 9 hours each",
+  "repo": "Mayaskara25/dsa-notes",
+  "units": [
+    {
+      "n": 1,
+      "source": "DSA - Unit 1 - Exam Notes.html",
+      "title": "Introduction & Linked Lists",
+      "topics": "ADT, data types, static vs dynamic memory, singly / doubly / circular lists, polynomials, sparse matrices, Josephus, loop detection",
+      "lab": "syllabus-map",
+      "accent": "#1D4E89",
+      "updated": "2026-11-07"
+    },
+    {
+      "n": 2,
+      "source": "DSA - Unit 2 - Exam Notes.html",
+      "title": "Stacks",
+      "topics": "Stack ADT, array & linked stacks, infix / postfix / prefix conversion and evaluation, parenthesis balancing, recursion, Tower of Hanoi",
+      "lab": "syllabus-map",
+      "accent": "#4C3F91",
+      "updated": "2026-11-07"
+    },
+    {
+      "n": 3,
+      "source": "DSA - Unit 3 - Exam Notes.html",
+      "title": "Queues",
+      "topics": "Simple, circular, deque and priority queues, array & linked implementations, multiple queues, scheduling, ring buffers, Josephus, BFS",
+      "lab": "sec-4-1",
+      "accent": "#12796F",
+      "updated": "2026-11-07"
+    },
+    {
+      "n": 4,
+      "source": "DSA - Unit 4 - Exam Notes.html",
+      "title": "Trees",
+      "topics": "N-ary trees & forests, binary trees, BST operations, traversals, Morris traversal, LCA, expression trees, threaded binary trees",
+      "lab": "lab-programs",
+      "accent": "#93316B",
+      "updated": "2026-11-07"
+    },
+    {
+      "n": 5,
+      "source": "DSA - Unit 5 - Exam Notes.html",
+      "title": "Heaps, Advanced Trees, Graphs & Hashing",
+      "topics": "Binary heap & heap sort, AVL, B / B+ trees, splay trees, tries, graph representation, BFS / DFS, open & closed hashing",
+      "lab": "lab-index",
+      "accent": "#A66A0D",
+      "updated": "2026-11-07"
+    }
+  ],
+  "changelog": [
+    { "date": "2026-11-07", "units": [3, 4, 5], "text": "Units 3–5 rebuilt for the new syllabus: Queues is now Unit 3, Trees is Unit 4 (threaded trees moved in), Heaps merged into Unit 5 with B-trees, BFS/DFS and graph applications added." },
+    { "date": "2026-11-07", "units": [1, 2], "text": "Lab programs added: Josephus, loop detection, polynomial subtraction, sparse matrix multiplication (Unit 1); prefix evaluation and iterative Tower of Hanoi (Unit 2)." },
+    { "date": "2026-11-07", "units": [4, 5], "text": "Corrected: threaded-tree thread lists, a max-heap insertion figure, the standard vs compressed trie figure, and the B+ tree construction trace." },
+    { "date": "2026-10-10", "units": [1, 2], "text": "Units 1–2 re-aligned to the new syllabus (linked lists moved to Unit 1, stacks to Unit 2)." }
+  ]
+}
